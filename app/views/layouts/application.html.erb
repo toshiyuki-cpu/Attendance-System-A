@@ -1,13 +1,21 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
   <head>
     <title><%= full_title(yield(:title)) %>| AttendanceApp</title>
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    
+    <%= render 'layouts/shim' %> <!-- パーシャルを定義　HTML shimがこの１行で収まる -->
+    
   </head>
-
+  
   <body>
-    <%= yield %>
+    
+    <%= render 'layouts/header' %> <!-- パーシャルを定義　headerの内容がこの１行で収まる -->
+    
+    <div class="container">
+      <%= yield %>
+    </div>
   </body>
 </html>
