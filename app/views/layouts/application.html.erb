@@ -16,6 +16,7 @@
     
     <div class="container">
       <%= yield %>
+      <%= debug(params) if Rails.env.development? %> <!--真(true)であればdebug(params)が表示される
     </div>
   </body>
 </html>
