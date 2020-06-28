@@ -5,6 +5,7 @@
     <%= form_with(model: @user, local: true) do |f| %> <!--ヘルパーメソッド　フォームを自動的に構築する-->
                                         <!-- do はform_withが１つの変数を持つブロックを取ることを表している-->
  <!--ブロック変数であるfは、HTML要素に対応するメソッドが呼び出されると、@userのカラムを設定するために設計されたHTMLを返してくれます。-->
+    <%= render 'shared/error_messages' %> <!--パーシャル-->
       <%= f.label :name, class: "label-signup" %>
       <%= f.text_field :name, class: "form-control" %>
       <%= f.label :email, class: "label-signup" %>

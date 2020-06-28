@@ -1,0 +1,14 @@
+<!--パーシャル-->
+<% if @user.errors.any? %> <!--@userに対してエラーが発生しているかどうかの条件式-->
+  <div id="error_explanation">
+      <div class="alert alert-danger">
+        The form contains <%= pluralize(@user.errors.count, "error") %>.
+        <!--pluralizeは英語専用のテキストヘルパー-->
+      </div>
+      <ul>
+        <% @user.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+  </div>
+<% end %>
