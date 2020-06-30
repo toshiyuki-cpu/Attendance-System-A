@@ -3,9 +3,26 @@
    <%= link_to "勤怠システム", root_path, id: "logo" %>  <!-- viewではpathを使う-->
    <nav>
      <ul class="nav navbar-nav navbar-right">
-     　 <li><%= link_to "トップへ", root_path %></li>  <!-- viewではpathを使う-->
-       <li><%= link_to "ログイン", login_path %></li>
-     </ul>
+        <li><%= link_to "トップへ", root_path %></li>  <!-- viewではpathを使う-->
+        <% if logged_in? %>
+           <li class="dropdown">
+             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+             アカウント<b class="caret"></b>
+             </a>
+             <ul class="dropdown-menu">
+               <li><%= link_to "勤怠情報", current_user %></li>
+               <li><%= link_to "設定", '#' %></li>
+               <li class="divider"></li>
+               <li>
+                 <%= link_to "ログアウト", logout_path, method: :delete %>
+                 <!--ログアウト処理はHTTPリクエストがDELETEなので、引数にmethod: :deleteというハッシュを渡している-->
+               </li>
+             </ul>
+          </li>
+         <% else %>
+          <li><%= link_to "ログイン", login_path %></li>
+         <% end %>
+      </ul>
    </nav>
   </div>
 </header>
