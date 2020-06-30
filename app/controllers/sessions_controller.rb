@@ -8,7 +8,12 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:session][:password]) # &&は取得したユーザーオブジェクトが有効か判定するために使用
       log_in user #引数として指定するためのカッコ()を省略して記述 log_in(user)
                   #log_inメソッドの機能で、ユーザーIDを一時的セッションの中に安全に記憶するようになった
-      redirect_to user
+                  
+      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
+      # チェックボックスの値を評価します。オンの時はユーザー情報を記憶します。オフの場合は記憶しません。
+      # 三項演算子　[条件式] ? [真（true）の場合実行される処理] : [偽（false）の場合実行される処理]
+      
+      redirect_to user 
     else
       flash.now[:danger] = '認証に失敗しました。' # .nowはリダイレクトはしないがフラッシュを表示したい時
       render :new
@@ -16,7 +21,7 @@ class SessionsController < ApplicationController
   end
   
   def destroy
-    log_out
+    log_out if logged_in?
     flash[:success] = 'ログアウトしました。'
     redirect_to root_path
   end
