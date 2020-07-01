@@ -44,6 +44,11 @@ module SessionsHelper #アプリケーションコントローラーにヘルパ
     end
   end
   
+  # 渡されたユーザーがログイン済みのユーザーであればtrueを返します。
+  def current_user?(user)
+    user == current_user
+  end
+  
   def logged_in? #ログイン状態を論理値（trueかfalse）で返すヘルパーメソッド（logged_in?）を定義
     !current_user.nil? #trueはログイン状態、falseはログアウト状態 否定演算子!
   end

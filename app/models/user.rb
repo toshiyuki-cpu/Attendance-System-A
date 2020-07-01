@@ -15,12 +15,13 @@ class User < ApplicationRecord #Userモデル
   has_secure_password #パスワードをそのままの文字列ではなく、ハッシュ化した状態の文字列でデータベースに保存
                       # ハッシュ化とは、入力されたデータ（パスワード）を元に戻せないデータにする処理
                       
-  validates :password, presence: true, length: { minimum: 6 }
+  validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
 #has_secure_passwordを追加することで(bcryptと言うgemをインストール)
 #1.ハッシュ化したパスワードを、データベースのpassword_digestというカラムに保存できるようになる。
 #2.ペアとなる仮想的なカラムであるpasswordとpassword_confirmationが使えるようになる。さらに存在性と値が一致するかどうかの検証も追加される。
 #3.authenticateメソッドが使用可能となる。
 #このメソッドは引数の文字列がパスワードと一致した場合オブジェクトを返し、パスワードが一致しない場合はfalseを返す。
+# allow_nil: trueはユーザー情報更新でパスワード入力しなくても更新できるメソッド
 
 # 渡された文字列のハッシュ値を返す
   def User.digest(string)
