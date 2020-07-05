@@ -11,6 +11,10 @@ class User < ApplicationRecord #Userモデル
   validates :email, presence: true, length: { maximum: 100 },
                     format: { with: VALID_EMAIL_REGEX }, #formatオプション（有効なメアドだけにマッチする）
                     uniqueness: true #一意性（他に同じデータがない）
+                    
+  validates :department, length: { in: 2..30 }, allow_blank: true
+  # inオプション「2文字以上かつ30文字以下」という検証を追加
+  #allow_blank: true 値が空文字""の場合バリデーションをスルー
   
   has_secure_password #パスワードをそのままの文字列ではなく、ハッシュ化した状態の文字列でデータベースに保存
                       # ハッシュ化とは、入力されたデータ（パスワード）を元に戻せないデータにする処理

@@ -55,7 +55,7 @@ class UsersController < ApplicationController
   private #Web経由で外部のユーザーが知る必要は無いため、次に記すようにRubyのprivateキーワードを用いて外部からは使用できないようにする
   
   def user_params #このメソッドは前述したparams[:user]の代わり
-    params.require(:user).permit(:name, :email, :password, :password_confirmation) #Storong Parameter
+    params.require(:user).permit(:name, :email, :department, :password, :password_confirmation) #Storong Parameter
     #必須となるパラメータと許可されたパラメータを指定することができる
     #paramsハッシュでは:userキーを必須とする
   end
