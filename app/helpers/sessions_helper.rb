@@ -52,4 +52,21 @@ module SessionsHelper #アプリケーションコントローラーにヘルパ
   def logged_in? #ログイン状態を論理値（trueかfalse）で返すヘルパーメソッド（logged_in?）を定義
     !current_user.nil? #trueはログイン状態、falseはログアウト状態 否定演算子!
   end
+  
+  # 記憶しているURL(またはデフォルトURL)にリダイレクトします。
+  def redirect_back_or(default_url)
+    # URLを記憶しておく手段として、一時的セッションであるsessionハッシュを使います。
+    # キーには一目でわかるよう:forwarding_urlを指定
+    redirect_to(session[:forwarding_url] || default_url)
+    #session[:forwarding_url]がnilではなければその値を使い、nilなら右側のdefault_urlの値をリダイレクト先の引数として使います。
+    #直後にsession.delete(:forwarding_url)で一時的セッションを破棄している点にも注目です。
+    #ここで記憶したURLを削除しておかないと、次回ログインした時にも記憶されているURLへ転送されてしまいます。
+    session.delete(:forwarding_url)
+  end
+  
+  # アクセスしようとしたURLを記憶します。
+  def store_location
+    # 記憶したいURLはrequestオブジェクトを使い、request.original_urlと記述する事で取得できます
+    session[:forwarding_url] = request.original_url if request.get?
+  end
 end

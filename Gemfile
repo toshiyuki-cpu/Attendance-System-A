@@ -2,7 +2,10 @@ source 'https://rubygems.org'
 
 gem 'rails',        '~> 5.1.6'
 gem 'bcrypt' #has_secure_passwordの為
+gem 'faker' #サンプルユーザーを複数まとめてコマンド一発で作成する
 gem 'bootstrap-sass'
+gem 'will_paginate' #ページネーション機能を追加
+gem 'bootstrap-will_paginate' #ページネーションのデザインをお手軽に良くする
 gem 'puma',         '~> 3.7'
 gem 'sass-rails',   '~> 5.0'
 gem 'uglifier',     '>= 1.3.0'

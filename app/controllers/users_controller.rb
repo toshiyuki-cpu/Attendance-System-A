@@ -1,7 +1,16 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update]
-  before_action :logged_in_user, only: [:show, :edit, :update] # ログイン済みのユーザー
-  before_action :current_user, only: [:edit, :update] # アクセスしたユーザーが現在ログインしているユーザーか
+  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy] # ログイン済みのユーザー
+  before_action :correct_user, only: [:edit, :update] # アクセスしたユーザーが現在ログインしているユーザーか
+  before_action :admin_user, only: :destroy
+  
+  def index
+    # @users = User.all 
+    #ページネーションを判定できるオブジェクトに置き換える
+    @users = User.paginate(page: params[:page])
+    #paginateではキーが:pageで値がページ番号のハッシュを引数にとります。
+    #User.paginateは:pageパラメータに基づき、データベースからひとかたまりのデータを取得
+  end
   
   def show
    # @user = User.find(params[:id])
@@ -37,6 +46,12 @@ class UsersController < ApplicationController
     end
   end
   
+  def destroy
+    @user.destroy
+    flash[:success] = "#{@user.name}のデータを削除しました。"
+    redirect_to users_url
+  end
+  
   private #Web経由で外部のユーザーが知る必要は無いため、次に記すようにRubyのprivateキーワードを用いて外部からは使用できないようにする
   
   def user_params #このメソッドは前述したparams[:user]の代わり
@@ -55,14 +70,20 @@ class UsersController < ApplicationController
   #ログイン済みのユーザーか確認
   def logged_in_user
     unless logged_in? # unlessは条件式がfalseの場合のみ記述した処理が実行される構文
+      store_location
       flash[:danger] = "ログインしてください。"
       redirect_to login_url
     end
   end
   
   # アクセスしたユーザーが現在ログインしているユーザーか確認
-  def current_user
+  def correct_user
     #@user = User.find(params[:id]) # アクセスしたユーザーを判定するため
-    redirect_to(root_url) unless current_user?(user) #current_user?(user) sessionsヘルパーで定義してある
+    redirect_to(root_url) unless current_user?(@user) #current_user?(user) sessionsヘルパーで定義してある
+  end
+  
+  # システム管理権限所有かどうか判定
+  def admin_user
+    redirect_to root_url unless current_user.admin?
   end
 end
