@@ -7,19 +7,20 @@
   <table class="table table-condensed table-hover" id="table-users">
     <thead>
       <tr>
-        <th><%= User.human_attribute_name :name %></th>
+        <th><%= User.human_attribute_name :exmple %></th>
       </tr>
     </thead>
     
     <% @users.each do |user| %>
       <tr>
-        <td><%= link_to user.name, user %></td>
-        <td>
-          <% if current_user.admin? && !current_user?(user) %>
+        <td><%= user.name %> <!-- link_to入れない-->
+          </br><%= "|" %> 
             <%= link_to "削除", user, method: :delete,
-            data: { confirm: "削除してよろしいですか？" },
-            class: "btn btn-primary" %>
-            <% end %>
+              data: { confirm: "削除してよろしいですか？" },
+              class: "btn btn-primary" %>
+          </br>
+          <%= link_to "編集", '#', class: "btn btn-primary" %>
+          <td>
         </td>
       </tr>
     <% end %>

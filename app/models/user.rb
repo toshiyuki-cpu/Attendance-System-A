@@ -16,6 +16,10 @@ class User < ApplicationRecord #Userモデル
   # inオプション「2文字以上かつ30文字以下」という検証を追加
   #allow_blank: true 値が空文字""の場合バリデーションをスルー
   
+  validates :basic_time, presence: true
+  
+  validates :work_time, presence: true
+  
   has_secure_password #パスワードをそのままの文字列ではなく、ハッシュ化した状態の文字列でデータベースに保存
                       # ハッシュ化とは、入力されたデータ（パスワード）を元に戻せないデータにする処理
                       
