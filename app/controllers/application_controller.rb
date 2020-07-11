@@ -3,5 +3,8 @@ class ApplicationController < ActionController::Base
   include SessionsHelper
 #コントローラでヘルパーを使いたい場合はモジュールを読み込ませる必要があるが、
 #全コントローラの親クラスであるapplication_controller.rbにこのモジュールを読み込ませることで、
-#どのコントローラでもヘルパーに定義したメソッドが使えるようになりる
+#どのコントローラでもヘルパーに定義したメソッドが使えるようになる
+
+  # $ グローバル変数は極端に言うとプログラムのどこからでも呼び出すことのできる変数
+  $days_of_the_week = %w{日 月 火 水 木 金 土} # Rubyのリテラル表記
 end

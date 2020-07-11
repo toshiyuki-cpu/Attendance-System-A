@@ -1,6 +1,12 @@
 class User < ApplicationRecord #Userモデル
+  #Userモデルからみた場合、Attendanceとの関係は1（User）対多（Attendance）
+  # has_many ~と記述　多数所持するため、複数形（attendances）となっている
+  # ユーザーが削除された場合、関連する勤怠データも同時に自動で削除されるよう設定 dependent: :destroy
+  has_many :attendances, dependent: :destroy
+  
 # 「remember_token」という仮想の属性を作成します。
   attr_accessor :remember_token
+  
 # before_saveとはActive Recordのコールバックメソッド
   before_save { self.email = email.downcase } #現在のメールアドレス（self.email）の値をdowncaseメソッドを使って小文字に変換
   
