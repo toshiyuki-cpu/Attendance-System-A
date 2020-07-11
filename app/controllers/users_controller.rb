@@ -59,6 +59,17 @@ class UsersController < ApplicationController
   
   def update_basic_info
     #@user = User.find(params[:id]) set_userへ
+    if @user.update_attributes(basic_info_params) # update_attributes バリデーションを通す
+      flash[:success] = "#{@user.name}の基本情報を更新しました。"
+    else
+      flash[:danger] = "#{@user.name}の更新は失敗しました。<br>" + @user.errors.full_messages.join("<br>")
+      # 今回は単純に文字列を連結（+により）してみました。
+      # @user.errors.full_messagesは配列のため、joinメソッドを使って要素ごとに、で区切るよう指定しています
+      # flash変数に任意のエラーメッセージとバリデーションにより生成されたエラーメッセージを合わせて代入して表示
+      # application_controllerの<%= msg %>にhtml_safeメソッドを繋げています。
+      #この実装により、エラーメッセージを配列の要素ごとに区切る際に指定した<br>がHTMLとして有効になり改行される仕組み
+    end
+    redirect_to users_url
   end
   
   private #Web経由で外部のユーザーが知る必要は無いため、次に記すようにRubyのprivateキーワードを用いて外部からは使用できないようにする
@@ -67,6 +78,10 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email, :department, :password, :password_confirmation) #Storong Parameter
     #必須となるパラメータと許可されたパラメータを指定することができる
     #paramsハッシュでは:userキーを必須とする
+  end
+  
+  def basic_info_params
+    params.require(:user).permit(:department, :basic_time, :work_time)
   end
   
   # beforeフィルター
