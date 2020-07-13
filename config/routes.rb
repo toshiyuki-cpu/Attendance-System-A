@@ -13,5 +13,11 @@ Rails.application.routes.draw do
     get 'edit_basic-info'
     patch 'update_basic_info'
   end
+  resources :attendances, only: :update # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます
+  # Usersリソースのブロック内に記述しているため、設定されるルーティングは
+  # HTTP　PATCH
+  # URL /users/:user_id/attendances/:id　　params[:user_id]でユーザーIDが取得できる
+  # PATH user_attendance_path	
+  # コントローラー#アクション　attendances#update　となる
  end
 end

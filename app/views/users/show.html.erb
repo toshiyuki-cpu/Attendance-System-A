@@ -71,11 +71,19 @@
               <font color="#0033cc">
           <% end %>
 					<%= $days_of_the_week[day.worked_on.wday] %></td> 
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
+				<td>
+					<%= l(day.started_at, format: :hour) if day.started_at.present? %>
+					<!--後置きのifによって、started_atの値が存在する場合のみ表示できるよう制御しています-->
+				</td>
+				<td><%= l(day.started_at, format: :minute) if day.started_at.present? %></td>
+				<td>
+					<!--Attendances Helperにattendance_state(attendance)を定義した為下記の記述になる-->
+					<% if btn_text = attendance_state(day) %>
+						<%= link_to "#{btn_text}", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
+					<% end %>
+				</td>
+				<td><%= l(day.finished_at, format: :hour) if day.finished_at.present? %></td>
+				<td><%= l(day.finished_at, format: :minute) if day.finished_at.present? %></td>
 				<td></td>
 				<td></td>
 				<td></td>
