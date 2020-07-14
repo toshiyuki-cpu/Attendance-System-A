@@ -14,6 +14,13 @@ module AttendancesHelper
     # どれにも当てはまらなかった場合はfalseを返します。
     false
   end
+  
+  # 出勤時間と退勤時間を受け取り、在社時間を計算して返します。
+  def working_times(start, finish)
+    format("%.2f", (((finish - start) / 60) / 60.0))
+      #追加したworking_timesメソッドでは、2つの引数を設定しています。
+      #そして、受け取った引数を使って時間の計算処理をして値を返す仕組み
+  end
 end
     # Attendances Helperにより下記のshow.html.erbの記述はいらなくなる
 #	<% if (Date.current == day.worked_on) && day.started_at.nil? %>

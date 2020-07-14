@@ -19,6 +19,10 @@ class UsersController < ApplicationController
                             # Railsのメソッドであるbeginning_of_monthを繋げることで、当月の初日を取得することが可能
    #@last_day = @first_day.end_of_month
                         # end_of_monthは当月の終日を取得することが可能
+    @worked_sum = @attendances.where.not(started_at: nil).count
+    # countメソッドは配列の要素数を取得することができます
+    #「1ヶ月分の勤怠データの中で、出勤時間が何も無い状態では無いものの数を代入」
+    # @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
   end
   
   def new
