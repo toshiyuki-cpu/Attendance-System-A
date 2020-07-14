@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   member do #生成されたurlにuserを識別するための:idが自動で追加されます
     get 'edit_basic-info'
     patch 'update_basic_info'
+    get 'attendances/edit_one_month'
   end
   resources :attendances, only: :update # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます
   # Usersリソースのブロック内に記述しているため、設定されるルーティングは

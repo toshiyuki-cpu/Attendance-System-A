@@ -26,6 +26,15 @@
 	</table>
 </div>
 
+<div class="btn btn-users-show" >
+	<%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
+	<!--paramsハッシュにdateキーとして、@first_dayを指定しています。
+	       これで受け取ったparams[:date]をもとに、どの月の情報を表示するか判断できるようになります-->
+	<%=link_to "CSV出力", '#', class: "btn btn-primary" %>
+	</br>
+	<%= link_to "勤怠修正ログ (承認済)", '#', class: "btn btn-primary" %>
+</div>
+
 <div>
 	<table class="table table-bordered table-condensed table-hover" id="table-attendances">
 		<thead>
@@ -114,7 +123,9 @@
 				<td colspan="6"></td> 
 				<td>在社時間合計</td>
 				<td colspan="5"></td>
-				<td rowspan="2">所属長承認</br>未申請</td>
+				<td rowspan="2">所属長承認</br>未申請
+				</br><%= link_to "申請", '#', class: "btn btn-primary" %>
+				</td>
 			</tr>
 			<tr>
 				<td colspan="2"><%= @attendances.count %></td>

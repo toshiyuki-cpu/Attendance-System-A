@@ -93,30 +93,31 @@ class UsersController < ApplicationController
     params.require(:user).permit(:department, :basic_time, :work_time)
   end
   
+  # applocation_controllerへ移動　１２２行目まで
   # beforeフィルター
   
   # paramsハッシュからユーザーを取得します。
-  def set_user # show,edit,updateアクションの@user = User.find(params[:id])をset_userとして定義
-    @user = User.find(params[:id])
-  end
+  #def set_user # show,edit,updateアクションの@user = User.find(params[:id])をset_userとして定義
+   # @user = User.find(params[:id])
+  #end
   
   #ログイン済みのユーザーか確認
-  def logged_in_user
-    unless logged_in? # unlessは条件式がfalseの場合のみ記述した処理が実行される構文
-      store_location
-      flash[:danger] = "ログインしてください。"
-      redirect_to login_url
-    end
-  end
+  #def logged_in_user
+   # unless logged_in? # unlessは条件式がfalseの場合のみ記述した処理が実行される構文
+    #  store_location
+     # flash[:danger] = "ログインしてください。"
+      #redirect_to login_url
+    #end
+  #end
   
   # アクセスしたユーザーが現在ログインしているユーザーか確認
-  def correct_user
+  #def correct_user
     #@user = User.find(params[:id]) # アクセスしたユーザーを判定するため
-    redirect_to(root_url) unless current_user?(@user) #current_user?(user) sessionsヘルパーで定義してある
-  end
+   # redirect_to(root_url) unless current_user?(@user) #current_user?(user) sessionsヘルパーで定義してある
+  #end
   
   # システム管理権限所有かどうか判定
-  def admin_user
-    redirect_to root_url unless current_user.admin?
-  end
+  #def admin_user
+   # redirect_to root_url unless current_user.admin?
+  #end
 end

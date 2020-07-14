@@ -8,6 +8,33 @@ class ApplicationController < ActionController::Base
   # $ グローバル変数は極端に言うとプログラムのどこからでも呼び出すことのできる変数
   $days_of_the_week = %w{日 月 火 水 木 金 土} # Rubyのリテラル表記
   
+  # beforeフィルター users_controllerから引越し　１１行目から３６行目まで
+  
+  # paramsハッシュからユーザーを取得します。
+  def set_user # show,edit,updateアクションの@user = User.find(params[:id])をset_userとして定義
+    @user = User.find(params[:id])
+  end
+  
+  #ログイン済みのユーザーか確認
+  def logged_in_user
+    unless logged_in? # unlessは条件式がfalseの場合のみ記述した処理が実行される構文
+      store_location
+      flash[:danger] = "ログインしてください。"
+      redirect_to login_url
+    end
+  end
+  
+  # アクセスしたユーザーが現在ログインしているユーザーか確認
+  def correct_user
+    #@user = User.find(params[:id]) # アクセスしたユーザーを判定するため
+    redirect_to(root_url) unless current_user?(@user) #current_user?(user) sessionsヘルパーで定義してある
+  end
+  
+  # システム管理権限所有かどうか判定
+  def admin_user
+    redirect_to root_url unless current_user.admin?
+  end
+  
   # ページ出力前に1ヶ月分のデータの存在を確認・セットします。
   def set_one_month
     # @first_day = Date.current.beginning_of_month
