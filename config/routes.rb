@@ -10,9 +10,10 @@ Rails.application.routes.draw do
   resources :users do #4つの基本操作（POST GET PATCH DELETE）が定義されている
   
   member do #生成されたurlにuserを識別するための:idが自動で追加されます
-    get 'edit_basic-info'
-    patch 'update_basic_info'
-    get 'attendances/edit_one_month'
+    get 'edit_basic-info' #ルーティング設定してアクションを定義
+    patch 'update_basic_info' #ルーティング設定してアクションを定義
+    get 'attendances/edit_one_month' #ルーティング設定してアクションを定義
+    patch 'attendances/update_one_month' #ルーティング設定してアクションを定義
   end
   resources :attendances, only: :update # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます
   # Usersリソースのブロック内に記述しているため、設定されるルーティングは

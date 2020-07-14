@@ -17,8 +17,20 @@ class Attendance < ApplicationRecord #AttendanceモデルからみたUserモデ�
   #存在性の検証などではvalidatesのようにsが入りましたが、今回のパターンだと不要
   #この記述によりfinished_at_is_invalid_without_a_started_atを検証の際に呼び出します
   
+  # 出勤・退勤時間どちらも存在する時、出勤時間より早い退勤時間は無効
+  validate :started_at_than_finished_at_fast_if_invalid
+  
   def finished_at_is_invalid_without_a_started_at
     errors.add(:started_at, "が必要です") if started_at.blank? && finished_at.present?
                                              #「出勤時間が無い、かつ退勤時間が存在する場合」、trueとなって処理が実行される
+  end
+  
+  def started_at_than_finished_at_fast_if_invalid
+    #validateクラスメソッドを使って新しく定義したカスタムメソッドを呼び出します。
+    #しかし、今回に限っては設定したエラーメッセージをアプリケーション上で表示することはありません。
+    #今回は例外処理を発生させるためにこのようなカスタムメソッドを作成
+    if started_at.present? && finished_at.present?
+      errors.add(:started_at, "より早い退勤時間は無効です") if started_at > finished_at
+    end
   end
 end

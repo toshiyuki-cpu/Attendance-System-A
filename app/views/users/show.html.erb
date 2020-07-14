@@ -106,7 +106,7 @@
 						<!--format("%.2f", (((finish - start) / 60) / 60.0))-->
 						<% end %>
 				</td>
-				<td></td>
+				<td><%= day.note %></td>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -123,7 +123,8 @@
 				<td colspan="6"></td> 
 				<td>在社時間合計</td>
 				<td colspan="5"></td>
-				<td rowspan="2">所属長承認</br>未申請
+				<td rowspan="2">所属長承認
+				</br>未申請
 				</br><%= link_to "申請", '#', class: "btn btn-primary" %>
 				</td>
 			</tr>

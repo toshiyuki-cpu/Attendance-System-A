@@ -28,6 +28,45 @@ class AttendancesController < ApplicationController
     redirect_to @user
   end
   
-  def edit_one_month
+  def edit_one_month #ルーティングattendances/edit_one_monthを設定してからアクションを定義
   end
+  
+  def update_one_month #ルーティングattendances/update_one_monthを設定してからアクションを定義
+    ActiveRecord::Base.transaction do # トランザクションを開始します。
+    attendances_params.each do |id, item|
+      #id,itemはattendances_params（Attendanceモデルオブジェクト）の中の
+      #{"1" => {"started_at"=>"10:00", "finished_at"=>"18:00", "note"=>"シフトA"},
+      attendance = Attendance.find(id)
+      attendance.update_attributes!(item)
+      #今回のように!をつけている場合はfalseでは無く例外処理を返します
+      #繰り返し処理で複数のオブジェクトのデータを更新する場合は、これらの処理が全て正常に終了することを保証することが大事です。
+      #あるデータは更新できたが、あるデータは更新できていなかった。となるとデータの整合性がなくなってしまいます
+      end
+    end
+    flash[:success] = "１ヶ月分の勤怠情報を更新しました。"
+    redirect_to user_url(date: params[:date])
+  rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+    flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
+    redirect_to attendances_edit_one_month_user_url(date: params[:date])
+  end
+  
+  private
+  
+  # 1ヶ月分の勤怠情報を扱います。
+  def attendances_params
+    params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+  end
+  #paramsハッシュの中の、
+  #:userがキーのハッシュの中の、
+  #:attendancesがキーのハッシュの中の
+  #idがキーで、各カラム名がキーとなり、値がバリューとなった
+  #この説明ですが、これらを上記のコードと合わせていくと・・・
+  #paramsハッシュの中の・・・params
+  #:userがキーのハッシュの中の・・・require(:user)
+  #:attendancesがキーのハッシュの中にネストされたidと各カラムの値があるハッシュ
+  #・・・permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+  #このメソッドでパラメータを取得すると次のようになります
+  #{"1" => {"started_at"=>"10:00", "finished_at"=>"18:00", "note"=>"シフトA"},
+  #{"2"=> {"started_at"=>"11:00", "finished_at"=>"19:00", "note"=>"シフトB"},
+  #{"3"=> {"started_at"=>"12:00", "finished_at"=>"20:00", "note"=>"シフトC"}
 end
