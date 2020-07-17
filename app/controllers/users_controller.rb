@@ -62,6 +62,11 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
   
+  #出勤社員一覧
+  def attend_employees
+    #@user = working_users
+  end
+  
   def edit_basic_info
     #@user = User.find(params[:id]) set_userへ
   end
