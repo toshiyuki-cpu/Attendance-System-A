@@ -5,6 +5,11 @@
   text-align: center;
 }
 
+/* 勤怠修正ログ */
+.attendance-edit-log {
+  margin-top: 5px;
+}
+
 /* ユーザー勤怠情報テーブル */
 
 #table-attendances {
@@ -17,7 +22,6 @@
     text-align: center;
   }
 }
-
 
 /* 入力フォーム */
 

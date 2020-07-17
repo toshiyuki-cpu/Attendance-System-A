@@ -1,11 +1,12 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: :edit_one_month
+  before_action :set_user, only: [:edit_one_month, :update_one_month]
   before_action :logged_in_user, only: [:update, :edit_one_month]
+  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
   before_action :set_one_month, only: :edit_one_month
   
   #定数は下記のように大文字表記
   #更新エラー用のテキストを2ヶ所で使用しているため、このように定義
-  UPDATE＿ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
+  UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
   
   def update
     @user = User.find(params[:user_id])
@@ -16,7 +17,7 @@ class AttendancesController < ApplicationController
         # update_attributes バリデーションを通す
         flash[:info] = "おはようございます！"
       else
-        flash[:danger] = UPDATE＿ERROR_MSG
+        flash[:danger] = UPDATE_ERROR_MSG
       end
     elsif @attendance.finished_at.nil?
       if @attendance.update_attributes(finished_at: Time.current.change(sec: 0))
@@ -69,4 +70,16 @@ class AttendancesController < ApplicationController
   #{"1" => {"started_at"=>"10:00", "finished_at"=>"18:00", "note"=>"シフトA"},
   #{"2"=> {"started_at"=>"11:00", "finished_at"=>"19:00", "note"=>"シフトB"},
   #{"3"=> {"started_at"=>"12:00", "finished_at"=>"20:00", "note"=>"シフトC"}
+  
+  # beforeフィルター
+  # 管理権限者、または現在ログインしているユーザーを許可します。
+  def admin_or_correct_user
+    #どちらかの条件式がtrueか、どちらもtrueの時には何も実行されない処理。
+    #このフィルターに引っかかった場合は、トップページへ強制移動
+    @user = User.find(params[:user_id]) if @user.blank?
+    unless current_user?(@user) || current_user.admin?
+      flash[:danger] = "編集権限がありません。"
+        redirect_to(root_url)
+    end  
+  end
 end
