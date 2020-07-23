@@ -17,8 +17,8 @@
 		</tr>
 		
 		<tr>
-			<td>所属：<%= @user.department.present? ? @user.department : "未所属" %></td>
-	<!--@userのユーザーオブジェクトにdepartmentが存在するか？存在する場合はその値を、存在しない場合は"未所属"という文字列を出力-->
+			<td>所属：<%= @user.affiliation.present? ? @user.affiliation : "未所属" %></td>
+	<!--@userのユーザーオブジェクトにaffiliationが存在するか？存在する場合はその値を、存在しない場合は"未所属"という文字列を出力-->
 			<td>氏名 :<%= @user.name %></td>
 			<td>コード</td>
 			<td></td>

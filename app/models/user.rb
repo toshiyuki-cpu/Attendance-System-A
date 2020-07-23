@@ -18,7 +18,7 @@ class User < ApplicationRecord #Userモデル
                     format: { with: VALID_EMAIL_REGEX }, #formatオプション（有効なメアドだけにマッチする）
                     uniqueness: true #一意性（他に同じデータがない）
                     
-  validates :department, length: { in: 2..30 }, allow_blank: true
+  validates :affiliation, length: { in: 2..30 }, allow_blank: true
   # inオプション「2文字以上かつ30文字以下」という検証を追加
   #allow_blank: true 値が空文字""の場合バリデーションをスルー
   
