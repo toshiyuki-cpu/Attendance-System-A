@@ -98,6 +98,7 @@ class UsersController < ApplicationController
     params.require(:user).permit(:department, :basic_time, :work_time)
   end
   
+  
   # applocation_controllerへ移動　１２２行目まで
   # beforeフィルター
   
