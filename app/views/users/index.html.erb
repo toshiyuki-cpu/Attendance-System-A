@@ -9,13 +9,15 @@
         <p><%= user.name %></p>
         <p>|
         <%= link_to "削除", user, method: :delete,
-          data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %></P>
+          data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
+        </P>
           
     <div class="jumbotron">
       <div>
-        <p><%= link_to "編集", edit_basic_info_user_path(user), remote: true, class: "btn btn-lg btn-primary" %></p>
+        <a><%= link_to "編集", edit_basic_info_user_path(user), remote: true, class: "btn btn-lg btn-primary" %></a>
       </div>                                             <!--remote: trueがモーダルウインドウ表示のために必要な記述-->
     </div>
+  
     <% end %>
   </div>
 </div>
