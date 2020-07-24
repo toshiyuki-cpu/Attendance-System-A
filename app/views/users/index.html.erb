@@ -1,47 +1,25 @@
 <% provide(:title, 'All Users') %>
-
 <h1>ユーザー一覧</h1>
 
 <div class="col-md-10 col-md-offset-1">
   <%= will_paginate %>
-  <table class="table table-condensed table-hover" id="table-users">
-    <thead>
-      <tr>
-        <th><%= User.human_attribute_name :name %></th>
-        <th class="center"><%= User.human_attribute_name :affiliation %></th>
-        <% if current_user.admin? %>
-        <th class="center"><%= User.human_attribute_name :basic_time %></th>
-        <th class="center"><%= User.human_attribute_name :work_time %></th>
-        <% end %>
-        <th></th>
-      </tr>
-    </thead>
-    
-    <% @users.each do |user| %>
-      <tr>
-        <td>
-          <% if current_user.admin? %>
-            <%= link_to user.name, user %> 
-          <% else %>
-            <%= user.name %>
-          <% end %>
-        </td>
-        <td class="center"><%= user.affiliation.present? ? user.affiliation : "未所属" %></td>
-        <% if current_user.admin? %>
-          <td class="center"><%= format_basic_info(user.basic_time) %></td>
-          <td class="center"><%= format_basic_info(user.work_time) %></td>
-        <% end %>
-        <td class="center">
-          <% if current_user.admin? && !current_user?(user) %>
-            <%= link_to "基本情報の修正", edit_basic_info_user_path(user), remote: true, class: "btn btn-primary" %>
-                                                          <!--remote: trueがモーダルウインドウ表示のために必要な記述-->
-            <%= link_to "削除", user, method: :delete,
-              data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
-          <% end %>
-        </td>
-      </tr>
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <% @users.each do |user| %>
+        <p><%= user.name %></p>
+        <p>|
+        <%= link_to "削除", user, method: :delete,
+          data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %></P>
+          
+    <div class="jumbotron">
+      <div>
+        <p><%= link_to "編集", edit_basic_info_user_path(user), remote: true, class: "btn btn-lg btn-primary" %></p>
+      </div>                                             <!--remote: trueがモーダルウインドウ表示のために必要な記述-->
+    </div>
     <% end %>
-  </table>
+  </div>
+</div>
+    
   <%= will_paginate %>
 </div>
 
