@@ -1,28 +1,32 @@
 <% provide(:title, 'All Users') %>
+<% provide(:class_text, 'user--edit') %>
+<% provide(:button_text, '更新') %>
 <h1>ユーザー一覧</h1>
 
 <div class="col-md-10 col-md-offset-1">
   <%= will_paginate %>
   <div class="row">
-    <div class="col-md-10 col-md-offset-1">
-      <% @users.each do |user| %>
+    <% @users.each do |user| %>
         <p><%= user.name %></p>
-        <p>|
+        <p>⬛️
         <%= link_to "削除", user, method: :delete,
           data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
         </P>
-          
-    <div class="jumbotron">
-      <div>
-        <a><%= link_to "編集", edit_user_path(current_user), class: "btn btn-lg btn-primary" %></a>
-      </div>                                             <!--remote: trueがモーダルウインドウ表示のために必要な記述-->
-    </div>
-  
+     <div class="well well-sm"> <!--.wellクラスは、灰色の背景色と少々のパディングを持ち、要素の周りに丸みのある境界線を追加-->
+       <div>
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="collapse" data-target="#demo">編集</button>
+          <div id="demo" class="collapse">
+Bootstrapは、モバイルファーストウェブサイトを開発するための最も一般的なHTML、CSS、およびJavaScriptフレームワークです。<br/>
+BootstrapはWeb開発のための無料のフロントエンドフレームワークです。<br/>
+Bootstrapには、タイポグラフィ、フォーム、ボタン、テーブル、ナビゲーション、モーダル、画像カルーセルなどのJavaScriptテンプレートとオプションのJavaScriptプラグイン用のHTMLおよびCSSベースのデザインテンプレートが含まれています。<br/>
+Bootstrapを使用すると、レスポンシブデザインを簡単に作成することができます
+          </div>
+       </div>
+      </div>
     <% end %>
   </div>
 </div>
-    
-  <%= will_paginate %>
+    <%= will_paginate %>
 </div>
 
 <!--モーダルウインドウ表示-->
