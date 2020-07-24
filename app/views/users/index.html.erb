@@ -14,7 +14,7 @@
           
     <div class="jumbotron">
       <div>
-        <a><%= link_to "編集", edit_basic_info_user_path(user), remote: true, class: "btn btn-lg btn-primary" %></a>
+        <a><%= link_to "編集", edit_user_path(current_user), class: "btn btn-lg btn-primary" %></a>
       </div>                                             <!--remote: trueがモーダルウインドウ表示のために必要な記述-->
     </div>
   
@@ -26,7 +26,7 @@
 </div>
 
 <!--モーダルウインドウ表示-->
-<div id="edit-basic-info" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<!--<div id="edit-basic-info" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>-->
 
 <!--次はモーダルウインドウ部分となるパーシャルファイルと、
 パーシャルをモーダルウインドウとして表示するためのJavaScriptファイルを作りましょう
