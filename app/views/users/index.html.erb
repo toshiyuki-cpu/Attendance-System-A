@@ -14,12 +14,13 @@
         </P>
      <div class="well well-sm"> <!--.wellクラスは、灰色の背景色と少々のパディングを持ち、要素の周りに丸みのある境界線を追加-->
        <div>
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="collapse" data-target="#demo">編集</button>
-          <div id="demo" class="collapse">
-Bootstrapは、モバイルファーストウェブサイトを開発するための最も一般的なHTML、CSS、およびJavaScriptフレームワークです。<br/>
-BootstrapはWeb開発のための無料のフロントエンドフレームワークです。<br/>
-Bootstrapには、タイポグラフィ、フォーム、ボタン、テーブル、ナビゲーション、モーダル、画像カルーセルなどのJavaScriptテンプレートとオプションのJavaScriptプラグイン用のHTMLおよびCSSベースのデザインテンプレートが含まれています。<br/>
-Bootstrapを使用すると、レスポンシブデザインを簡単に作成することができます
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="collapse" data-target="#demo<%= user.id %>">編集</button>
+                                                                                        <!-- user.idを渡して各ユーザーに紐付け -->
+          <div id="demo<%= user.id %>" class="collapse"><!-- user.idを渡して各ユーザーに紐付け -->
+            <%= render 'form', { user: user } %> <!-- render partial: 'form', locals: { user: user } でも可。 -->
+                                                 <!--データを渡すには、 render メソッドの locals オプションを利用
+                                                     locals オプションにはオブジェクトを渡します。
+                                                      オブジェクトのキー名がパーシャル内で参照できる値になります-->
           </div>
        </div>
       </div>

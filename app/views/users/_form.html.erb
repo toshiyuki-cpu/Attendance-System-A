@@ -1,7 +1,8 @@
  <!--フォーム用のパーシャル-->
- <%= form_with(model: @user, local: true) do |f| %> 
+ <%= form_with(model: user, local: true) do |f| %> <!--アコーデオンに表示させる為@userからuserに変更-->
                                        
-    <%= render 'shared/error_messages', object: @user %> <!--パーシャル-->
+    <%= render 'shared/error_messages', object: user %> <!--パーシャル--><!--アコーデオンに表示させる為@userからuserに変更-->
+                                                  <!--アコーディオン表示させる為_error.messages.html.erbも変更する-->
     
       <%= f.label :name, class: "label-#{yield(:class_text)}" %>
       <%= f.text_field :name, class: "form-control" %>

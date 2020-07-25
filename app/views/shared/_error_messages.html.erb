@@ -1,11 +1,11 @@
 <!--パーシャル-->
-<% if @user.errors.any? %> <!--@userに対してエラーが発生しているかどうかの条件式-->
+<% if object.errors.any? %> <!--アコーディオンに表示させる為@userからobjectに変更。@userに対してエラーが発生しているかどうかの条件式-->
   <div id="error_explanation">
       <div class="alert alert-danger">
-        入力エラーが<%= @user.errors.count %>件ありました。
+        入力エラーが<%= object.errors.count %>件ありました。<!--@user.errors.count-->
       </div>
       <ul>
-        <% @user.errors.full_messages.each do |msg| %>
+        <% object.errors.full_messages.each do |msg| %> <!--@user.errors.full_messages.each do |msg|-->
           <li><%= msg %></li>
         <% end %>
       </ul>
