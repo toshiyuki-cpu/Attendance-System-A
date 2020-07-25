@@ -6,7 +6,7 @@ User.create!(name: "Sample User",
              password_confirmation: "password",
              admin: true) #最初のユーザーだけadmin属性をtrueに設定
 
-10.times do |n|
+50.times do |n|
   name  = Faker::Name.name
   email = "sample-#{n+1}@email.com"
   password = "password"

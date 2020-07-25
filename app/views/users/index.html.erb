@@ -1,8 +1,22 @@
 <% provide(:title, 'All Users') %>
 <% provide(:class_text, 'user--edit') %>
 <% provide(:button_text, '更新') %>
-<h1>ユーザー一覧</h1>
 
+<div class="center">
+  <% if params[:search].blank? %>
+   <h1>ユーザー一覧</h1>
+   <% else %>
+   <h1>検索結果</h1>
+   <% end %>
+</div>
+<!--検索機能　user.rbとusers_controllerにも定義-->
+<div class="search-button">
+  <P>ユーザー名検索</P>
+  <%= form_tag(users_path, :method => "get") do %>  
+    <%= text_field_tag :search, params[:search], placeholder: 'キーワードを入力' %>  
+    <%= submit_tag "検索", :name => nil %>  
+  <% end %>
+</div>  
 <div class="col-md-10 col-md-offset-1">
   <%= will_paginate %>
   <div class="row">

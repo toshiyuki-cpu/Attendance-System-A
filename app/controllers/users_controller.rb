@@ -8,9 +8,10 @@ class UsersController < ApplicationController
   def index
     # @users = User.all 
     #ページネーションを判定できるオブジェクトに置き換える
-    @users = User.paginate(page: params[:page])
     #paginateではキーが:pageで値がページ番号のハッシュを引数にとります。
     #User.paginateは:pageパラメータに基づき、データベースからひとかたまりのデータを取得
+    #@users = User.paginate(page: params[:page])　検索フォーム無しの場合
+    @users = User.paginate(page: params[:page]).search(params[:search])
   end
   
   def show

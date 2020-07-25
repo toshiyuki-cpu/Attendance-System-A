@@ -37,6 +37,14 @@ class User < ApplicationRecord #Userモデル
 #このメソッドは引数の文字列がパスワードと一致した場合オブジェクトを返し、パスワードが一致しない場合はfalseを返す。
 # allow_nil: trueはユーザー情報更新でパスワード入力しなくても更新できるメソッド
 
+  def self.search(search) #ここでのself.はUser.を意味する 
+    if search
+      where(['name LIKE ?', "%#{search}%"]) #検索とnameの部分一致を表示。User.は省略
+    else
+      all #全て表示。User.は省略
+    end
+  end
+
 # 渡された文字列のハッシュ値を返す
   def User.digest(string)
     cost = 
