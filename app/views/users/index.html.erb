@@ -10,14 +10,20 @@
    <% end %>
 </div>
 <!--検索機能　user.rbとusers_controllerにも定義-->
-<div class="search-button">
+<div class="col-md-2 col-md-offset-5 input-group">
   <P>ユーザー名検索</P>
-  <%= form_tag(users_path, :method => "get") do %>  
-    <%= text_field_tag :search, params[:search], placeholder: 'キーワードを入力' %>  
-    <%= submit_tag "検索", :name => nil %>  
+  <%= form_tag(users_path, :method => "get") do %> <!--method: :getでもOK-->
+  <span class="input-group-btn">
+    <%= text_field_tag :search, params[:search], placeholder: 'キーワードを入力', class: "form-control" %>  
+    <%= submit_tag "検索", :name => nil, class: "btn btn-primary" %> <!--name: :nilでもOK-->
+  </span>
+  <%= link_to :back do %><button class="btn btn-default btn-return">戻る</button>
   <% end %>
+</div>
+<% end %>
 </div>  
-<div class="col-md-10 col-md-offset-1">
+
+<div class="col-md-8 col-md-offset-2">
   <%= will_paginate %>
   <div class="row">
     <% @users.each do |user| %>
@@ -40,8 +46,9 @@
       </div>
     <% end %>
   </div>
+  <%= will_paginate %>
 </div>
-    <%= will_paginate %>
+
 </div>
 
 <!--モーダルウインドウ表示-->
