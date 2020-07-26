@@ -11,7 +11,8 @@ class UsersController < ApplicationController
     #paginateではキーが:pageで値がページ番号のハッシュを引数にとります。
     #User.paginateは:pageパラメータに基づき、データベースからひとかたまりのデータを取得
     #@users = User.paginate(page: params[:page])　検索フォーム無しの場合
-    @users = User.paginate(page: params[:page]).search(params[:search])
+    #@users = User.paginate(page: params[:page]).search(params[:search]) 検索フォーム有りの場合
+    @users = User.paginate(page: params[:page]).search(params[:search]).where.not(admin: true) #where.not(admin: true)管理者を表示させない
   end
   
   def show
