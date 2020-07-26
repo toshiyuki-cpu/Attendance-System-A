@@ -9,6 +9,13 @@
    <h1>検索結果</h1>
    <% end %>
 </div>
+
+<!--CSVをインポート-->
+<div class="col-md-2 col-md-offset-1">
+   <%= file_field_tag "upload" %>
+   </br><%= submit_tag "CSVをインポート", class: "btn btn-primary btn-csv" %>
+</div>
+
 <!--検索機能　user.rbとusers_controllerにも定義-->
 <div class="col-md-2 col-md-offset-5 input-group">
   <P>ユーザー名検索</P>
@@ -23,26 +30,20 @@
 <% end %>
 </div> 
 
-<div class="col-md-5 col-md-offset-2">
-   <%= file_field_tag "upload" %>
-   <%= submit_tag "CSVをインポート", class: "btn btn-primary" %>
-</div>
-
-
 <div class="col-md-8 col-md-offset-2">
   <%= will_paginate %>
   <div class="row">
     <% @users.each do |user| %>
-        <p><%= user.name %></p>
-        <p>⬛️
-        <%= link_to "削除", user, method: :delete,
-          data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
-        </P>
-     <div class="well well-sm"> <!--.wellクラスは、灰色の背景色と少々のパディングを持ち、要素の周りに丸みのある境界線を追加-->
-       <div>
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="collapse" data-target="#demo<%= user.id %>">編集</button>
+      <p><%= user.name %></p>
+      <p>⬛️
+      <%= link_to "削除", user, method: :delete,
+        data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %>
+      </P>
+        <div class="well well-sm"> <!--.wellクラスは、灰色の背景色と少々のパディングを持ち、要素の周りに丸みのある境界線を追加-->
+          <div>
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="collapse" data-target="#demo<%= user.id %>">編集</button>
                                                                                         <!-- user.idを渡して各ユーザーに紐付け -->
-          <div id="demo<%= user.id %>" class="collapse"><!-- user.idを渡して各ユーザーに紐付け -->
+            <div id="demo<%= user.id %>" class="collapse"><!-- user.idを渡して各ユーザーに紐付け -->
             <%= render 'form', { user: user } %> <!-- render partial: 'form', locals: { user: user } でも可。 -->
                                                  <!--データを渡すには、 render メソッドの locals オプションを利用
                                                      locals オプションにはオブジェクトを渡します。
