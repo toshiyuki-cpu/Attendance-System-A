@@ -1,0 +1,39 @@
+<% provide(:title, '拠点') %>
+<% provide(:class_text, 'base--edit') %>
+<% provide(:button_text, '更新') %>
+
+<h1>拠点一覧</h1>
+
+<div>
+  <table class="table table-bordered table-condensed table-hover base-table">
+    <thead>
+      <tr>
+        <td></td>
+        <td></td>
+        <td>拠点番号</td>
+        <td>拠点名</td>
+        <td>勤怠種類</td>
+      </tr>
+    </thead>
+    <% @bases.each do |base| %>
+    <tbody>
+      <tr>
+        <td><%= link_to "編集", '#', class: "btn btn-primary" %></td>
+        <td><%= link_to "削除", @base, method: :delete,
+          data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %></td>
+        <td><%= @base.base_number %></td>
+        <td><%= @base.base_name %></td>
+        <td><%= @base.base_type %></td>
+      </tr>
+    </tbody>
+    <% end %>
+  </table>
+</div>
+
+<div>
+  
+</div>
+
+<div class="well well-sm">
+  <button type="button" class="btn btn-primary btn-lg">拠点情報追加</button>
+</div>
