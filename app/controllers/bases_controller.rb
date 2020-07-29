@@ -12,10 +12,24 @@ class BasesController < ApplicationController
   def create
     @base = Base.new(base_params)
     if @base.save
-      flash[:success] = '#{@base.base_name}の拠点情報を追加しました。' #:successというキーには保存に成功した時のメッセージを代入
-      redirect_to bases_url #左記のように記述できる　redirect_to user_url(@user)
+      flash[:success] = "拠点の#{@base.base_name}を追加しました。" #:successというキーには保存に成功した時のメッセージを代入
+      redirect_to bases_url(@base) #左記のように記述できる　redirect_to user_url(@user)
     else
       render :new
+    end
+  end
+  
+  def edit
+    @base = Base.find(params[:id])
+  end
+  
+  def update
+    @base = Base.find(params[:id])
+    if @base.update_attributes(base_params)
+      flash[:success] = "拠点情報を修正しました。"
+      redirect_to bases_url
+    else
+      render :edit
     end
   end
   
