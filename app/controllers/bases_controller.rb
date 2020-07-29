@@ -2,7 +2,7 @@ class BasesController < ApplicationController
   
   def index
     @bases = Base.all
-    @base = Base.new
+    #@base = Base.new
   end
   
   def show
@@ -19,7 +19,7 @@ class BasesController < ApplicationController
   end
   
   def destroy
-    #@user = User.find(params[:id]) set_userへ
+    @base = Base.find(params[:id]) #set_userへ
     @base.destroy
     flash[:success] = "#{@base.base_name}のデータを削除しました。"
     redirect_to bases_url
