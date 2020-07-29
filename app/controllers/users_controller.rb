@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info] # ログイン済みのユーザー
-  #before_action :correct_user, only: [:edit, :update] # アクセスしたユーザーが現在ログインしているユーザーか
+  before_action :correct_user, only: [:edit, :update] # アクセスしたユーザーが現在ログインしているユーザーか
   before_action :correct_user, only: :edit #ユーザー一覧から更新する為updateを削除
   before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info]
   before_action :set_one_month, only: :show
@@ -52,7 +52,7 @@ class UsersController < ApplicationController
     if @user.update_attributes(user_params) 
       # user controllerのvalidationにallow_nil: trueオプションを追加するとパスワード入力しなくても更新できる
       flash[:success] = "ユーザー情報を更新しました。"
-      redirect_to @user
+      redirect_to users_url
     else
       render :edit
     end

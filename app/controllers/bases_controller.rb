@@ -5,7 +5,8 @@ class BasesController < ApplicationController
     #@base = Base.new
   end
   
-  def show
+  def new
+    @base = Base.new
   end
   
   def create
