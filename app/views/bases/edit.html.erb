@@ -15,7 +15,7 @@
       <%= f.text_field :base_name, class: "form-control" %>
       
       <%= f.label :base_type, class: "label-baseedit" %>
-      <%= f.select :base_type, [['出勤', 1], ['退勤', 2]], { selected: 1 }, { id: "base_id", class: "label-baseedit-select" } %>
+      <%= f.select :base_type, [['出勤', "出勤"], ['退勤', "退勤"]], { selected: 1 }, { id: "base_id", class: "label-baseedit-select" } %>
       
        <%= f.submit "修正する" , class: "btn btn-primary btn-block btn-baseedit" %>
     <% end %>

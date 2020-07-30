@@ -16,7 +16,7 @@
     <% @bases.each do |base| %>
     <tbody>
       <tr>
-        <td><%= link_to "修正", edit_basis_path(current_user), class: "btn btn-primary" %></td>
+        <td><%= link_to "修正", edit_basis_path(base.id), class: "btn btn-primary" %></td>
         <td><%= link_to "削除", base, method: :delete,
           data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary" %></td>
         <td><%= base.base_number %></td>
@@ -33,5 +33,7 @@
 </div>
 
 <div class="well well-sm">
-  <button type="button", new_basis_path(current_user), class="btn btn-primary btn-lg">拠点情報追加</button>
+  <div>
+    <%= link_to "拠点情報追加", new_basis_path(current_user), class: "btn btn-primary btn-lg" %>
+  </div>
 </div>

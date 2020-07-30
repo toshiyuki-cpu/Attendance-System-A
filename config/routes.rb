@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   delete '/logout', to: 'sessions#destroy'
   
   resources :users, :bases do #4つの基本操作（POST GET PATCH DELETE）が定義されている
+  get '/edit_basis', to: 'bases#edit'
   
   member do #生成されたurlにuserを識別するための:idが自動で追加されます
     get 'attend_employees' #出勤中社員一覧
