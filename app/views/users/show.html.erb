@@ -55,7 +55,7 @@
 				<th colspan="2">終了予定時間</th>
 				<th rowspan="2">時間外残業</th>
 				<th rowspan="2">業務処理内容</th>
-				<th rowspan="2">指示書確認印</th>
+				<th rowspan="2">指示書確認<%= "\u329e" %></th>
 			</tr>
 			<tr>
 				<th>時</th>
@@ -73,7 +73,7 @@
 			<% @attendances.each do |day| %> <!--# 範囲オブジェクトとして扱う-->
 			<!--@attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(worked_on)-->
 			<tr>
-				<td></td>　　　　　　　　　　　　　　　<!--format: :~と記述することで、指定のフォーマットを指定できます-->
+				<td><%= link_to "残業申請", '#', class: "btn btn-primary btn" %></td>　　　　　　　　　　　　　　　<!--format: :~と記述することで、指定のフォーマットを指定できます-->
 				<td><%= l(day.worked_on, format: :short) %></td> <!--config/localesディレクトリにあるja.ymlロケールファイルを参照-->
 				<td>
 					<% if day.worked_on.wday == 0 %> <!--日曜日の色　赤-->
