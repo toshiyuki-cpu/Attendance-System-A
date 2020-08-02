@@ -7,8 +7,13 @@ Rails.application.routes.draw do
   post   '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
   
-  resources :users, :bases do #4つの基本操作（POST GET PATCH DELETE）が定義されている
-  get '/edit_basis', to: 'bases#edit'
+  resources :bases do
+    member do
+      get '/edit_basis', to: 'bases#edit'
+    end
+  end
+  
+  resources :users do #4つの基本操作（POST GET PATCH DELETE）が定義されている
   
   member do #生成されたurlにuserを識別するための:idが自動で追加されます
     get 'attend_employees' #出勤中社員一覧
@@ -16,6 +21,7 @@ Rails.application.routes.draw do
     patch 'update_basic_info' #ルーティング設定してアクションを定義
     get 'attendances/edit_one_month' #ルーティング設定してアクションを定義
     patch 'attendances/update_one_month' #ルーティング設定してアクションを定義
+    get 'attendances/edit_log' #勤怠ログ
   end
     
   resources :attendances, only: :update # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます

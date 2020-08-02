@@ -34,7 +34,7 @@
 	       これで受け取ったparams[:date]をもとに、どの月の情報を表示するか判断できるようになります-->
 	<%=link_to "CSV出力", '#', class: "btn btn-primary" %>
 	</br>
-	<%= link_to "勤怠修正ログ (承認済)", '#', class: "btn btn-primary attendance-edit-log" %>
+	<%= link_to "勤怠修正ログ (承認済)", attendances_edit_log_user_path, class: "btn btn-primary attendance-edit-log" %>
 </div>
 
 <div>
