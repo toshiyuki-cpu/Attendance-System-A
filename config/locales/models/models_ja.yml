@@ -18,6 +18,7 @@ ja:
           basic_work_time: 基本勤務時間
           designated_work_start_time: 指定勤務開始時間
           designated_work_end_time: 指定勤務終了時間
+          overtime_work_end_plan: 終了予定時刻
           password: パスワード
           password_confirmation: パスワード確認
           created_at: 作成日
