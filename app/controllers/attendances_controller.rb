@@ -54,6 +54,12 @@ class AttendancesController < ApplicationController
   def edit_log
   end
   
+  def edit_overtime_work_end_plan
+  end
+  
+  def update_overtime_work_end_plan
+  end
+  
   private
   
   # 1ヶ月分の勤怠情報を扱います。
