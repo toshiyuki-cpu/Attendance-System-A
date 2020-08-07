@@ -1,0 +1,42 @@
+<% provide(:class_text, 'overtime_work_end_plan') %>
+<% provide(:button_text, '申請する') %>
+
+
+<h3>【残業申請】</h3>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_with(model: @user, local: true, method: :patch) do |f| %>
+    <table class="table table-bordered table-condensed table-hover" id="table-overtime_work_end_plan">
+      <thead>
+        <tr>
+          <th>日付</th>
+          <th>曜日</th>
+          <th>終了予定時刻</th>
+          <th>翌日</th>
+          <th>業務処理内容</th>
+          <th>指示書確認<%= "\u329e" %></th>
+        </tr>
+      </thead>  
+      <tbody>
+       <% @attendances.each do |day|%>
+       <%= f.fields_for "attendances[]", day do |attendance| %>
+        <td><%= l(day.worked_on, format: :short) %></td>
+        <td>
+          <% if day.worked_on.wday == 0 %> <!--日曜日の色　赤-->
+              <font color="#ff000">
+          <% elsif day.worked_on.wday == 6 %> <!--土曜日の色　青-->
+              <font color="#0033cc">
+          <% end %>
+					<%= $days_of_the_week[day.worked_on.wday] %>
+        </td>
+        <td><%= attendance.time_field :overtime_work_end_plan, readonly: true, class: "form-control" %></td>
+        <td><%= f.check_box :checkbox %></td>
+        <td><%= attendance.text_field :note, class: "form-control" %></td>
+        <td><%= attendance.text_field :note, class: "form-control" %></td>
+      <% end %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<% end %>
