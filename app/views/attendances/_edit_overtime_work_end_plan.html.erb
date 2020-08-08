@@ -1,7 +1,7 @@
 <% provide(:class_text, 'overtime_work_end_plan') %>
 <% provide(:button_text, '申請する') %>
 
-<%= form_with(model: @user, url: attendances_update_overtime_work_end_plan_user_path(date: day.worked_on), local: true, method: :patch) do |f| %>
+<%= form_with(model: @user, url: attendances_update_overtime_work_end_plan_user_path(@user), local: true, method: :patch) do |f| %>
   <div class="modal-dialog modal-lg modal-dialog-center">
     <div class="modal-content">
       <div class="modal-header">
@@ -25,25 +25,23 @@
                 </tr>
               </thead>      
               <tbody>
-              <% @attendances.each do |day|%>
-                <%= f.fields_for "attendances[]", day do |attendance| %>
-                <td><%= l(day.worked_on, format: :short) %></td>
+                <td><%= l(@attendance.worked_on, format: :short) %></td>
                 <td>
-                  <% if day.worked_on.wday == 0 %> <!--日曜日の色　赤-->
+                  <% if @attendance.worked_on.wday == 0 %> <!--日曜日の色　赤-->
                     <font color="#ff000">
-                  <% elsif day.worked_on.wday == 6 %> <!--土曜日の色　青-->
+                  <% elsif @attendance.worked_on.wday == 6 %> <!--土曜日の色　青-->
                     <font color="#0033cc">
                   <% end %>
-					          <%= $days_of_the_week[day.worked_on.wday] %>
+                  <%= $days_of_the_week[@attendance.worked_on.wday] %>
                 </td>
-                <td><%= attendance.time_field :overtime_work_end_plan, readonly: true, class: "form-control" %></td>
+                <td><%= f.time_field :overtime_work_end_plan, readonly: true, class: "form-control" %></td>
                 <td><%= f.check_box :checkbox %></td>
-                <td><%= attendance.text_field :note, class: "form-control" %></td>
-                <td><%= attendance.text_field :note, class: "form-control" %></td>
-                <% end %>
+                <td><%= f.text_field :note, class: "form-control" %></td>
+                <td><%= f.text_field :note, class: "form-control" %></td>
               </tbody>
+            </table>
             <div class="center">
-              <%= f.submit yield(:button_text), class: "btn btn-default btn-<%= #{yield(:class_text)} %>" %>
+              <%= f.submit yield(:button_text), class: "btn btn-default btn-#{yield(:class_text)}" %>
             </div>
           </div>
         </div>

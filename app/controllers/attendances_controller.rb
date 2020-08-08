@@ -55,12 +55,14 @@ class AttendancesController < ApplicationController
   end
   
   def edit_overtime_work_end_plan
-    @user = User.find(params[:user_id])
+    @user = User.find(params[:id])
+    
     @attendance = Attendance.find(params[:id])
+    
   end
   
   def update_overtime_work_end_plan
-    @user = User.find(params[:user_id])
+    @user = User.find(params[:id])
     @attendance = Attendance.find(params[:id])
   end
   
@@ -69,6 +71,10 @@ class AttendancesController < ApplicationController
   # 1ヶ月分の勤怠情報を扱います。
   def attendances_params
     params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+  end
+  
+  def overtime_work_end_plan_params
+    params.require(:user).permit(attendances: [:overtime_work_end_plan, :note])[:attendances]
   end
   #paramsハッシュの中の、
   #:userがキーのハッシュの中の、
