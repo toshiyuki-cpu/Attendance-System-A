@@ -55,9 +55,13 @@ class AttendancesController < ApplicationController
   end
   
   def edit_overtime_work_end_plan
+    @user = User.find(params[:user_id])
+    @attendance = Attendance.find(params[:id])
   end
   
   def update_overtime_work_end_plan
+    @user = User.find(params[:user_id])
+    @attendance = Attendance.find(params[:id])
   end
   
   private

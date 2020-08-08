@@ -1,11 +1,12 @@
 <% provide(:class_text, 'overtime_work_end_plan') %>
 <% provide(:button_text, '申請する') %>
 
-
-<h3>【残業申請】</h3>
+<%= form_with(model: @user, url: attendances_update_overtime_work_end_plan(date: day.worked_on), local: true, method: :patch) do |f| %>
+<div>
+  <h3>【残業申請】</h3>
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
-    <%= form_with(model: @user, local: true, method: :patch) do |f| %>
+    
     <table class="table table-bordered table-condensed table-hover" id="table-overtime_work_end_plan">
       <thead>
         <tr>
@@ -19,7 +20,7 @@
       </thead>  
       <tbody>
        <% @attendances.each do |day|%>
-       <%= f.fields_for "attendances[]", day do |attendance| %>
+         <%= f.fields_for "attendances[]", day do |attendance| %>
         <td><%= l(day.worked_on, format: :short) %></td>
         <td>
           <% if day.worked_on.wday == 0 %> <!--日曜日の色　赤-->
@@ -34,9 +35,9 @@
         <td><%= attendance.text_field :note, class: "form-control" %></td>
         <td><%= attendance.text_field :note, class: "form-control" %></td>
       <% end %>
-      <% end %>
       </tbody>
     </table>
   </div>
+</div>
 </div>
 <% end %>
