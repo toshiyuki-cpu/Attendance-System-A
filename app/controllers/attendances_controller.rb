@@ -63,8 +63,7 @@ class AttendancesController < ApplicationController
   end
   
   def update_overtime_work_end_plan
-    @user = User.find(params[:id])
-    @attendance = Attendance.find(params[:id])
+    
   end
   
   private
@@ -75,7 +74,7 @@ class AttendancesController < ApplicationController
   end
   
   def overtime_work_end_plan_params
-    params.require(:user).permit(attendances: [:overtime_work_end_plan, :note])[:attendances]
+    params.require(:user).permit(attendances: [:overtime_work_end_plan, :note, :confirmation])[:attendances]
   end
   #paramsハッシュの中の、
   #:userがキーのハッシュの中の、
