@@ -25,19 +25,24 @@
                 </tr>
               </thead>      
               <tbody>
-                <td><%= l(@day, format: :short) %></td>
-                <td>
-                  <% if @day.wday == 0 %> <!--日曜日の色　赤-->
-                    <font color="#ff000">
-                  <% elsif @day.wday == 6 %> <!--土曜日の色　青-->
-                    <font color="#0033cc">
-                  <% end %>
-                  <%= $days_of_the_week[@day.wday] %>
-                </td>
-                <td><%= f.time_select :overtime_work_end_plan, readonly: true, class: "form-control" %></td>
-                <td><%= f.check_box :checkbox %></td>
-                <td><%= f.text_field :note, class: "form-control" %></td>
-                <td><%= f.select :confirmation, [['上長A', "上長A"], ['上長B', "上長B"]], { selected: 1 }, { id: "overtime_id", class: "form-control"} %></td>
+                <% @attendances.each do |day| %>
+                <%= f.fields_for "attendances[]", day do |attendance| %>
+                  <td><%= l(Date.current, format: :short) %></td>
+                  <td>
+                    <% if Date.current == 0 %> <!--日曜日の色　赤-->
+                      <font color="#ff000">
+                    <% elsif Date.current == 6 %> <!--土曜日の色　青-->
+                      <font color="#0033cc">
+                    <% end %>
+                    <%= $days_of_the_week[Date.current.wday] %>
+                  </td>
+                  <td><%= attendance.time_select :overtime_work_end_plan, readonly: true, class: "form-control" %></td>
+                  <td><%= f.check_box :checkbox %></td>
+                  <td><%= attendance.text_field :note, class: "form-control" %></td>
+                  <td><%= attendance.select :confirmation, [['上長A', "上長A"], ['上長B', "上長B"]], { selected: 1 }, { id: "overtime_id", class: "form-control"} %></td>
+                <% end %>
+                <% break %>
+               <% end %>
               </tbody>
             </table>
             <div class="center">
