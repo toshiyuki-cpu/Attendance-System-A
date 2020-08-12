@@ -2,7 +2,7 @@ class AttendancesController < ApplicationController
   before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overtime_work_end_plan, :update_overtime_work_end_plan]
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
-  before_action :set_one_month, only: [:edit_one_month, :edit_overtime_work_end_plan]
+  before_action :set_one_month, only: [:edit_one_month, :edit_overtime_work_end_plan, :update_overtime_work_end_plan]
   
   #定数は下記のように大文字表記
   #更新エラー用のテキストを2ヶ所で使用しているため、このように定義
@@ -55,22 +55,21 @@ class AttendancesController < ApplicationController
   end
   
   def edit_overtime_work_end_plan
-    #@user = User.find(params[:id])
-
-    #@attendance = Attendance.find(params[:id])
-  
-    #@attendance = @user.attendances.find(params[:id])
+    
+    #@day = Date.current
+    #@user = User.find(params[:date])
+    #@user = User.attendances.find(params[:id])
+    #@attendance = User.attendance.find(params[:date])
+    #@day = Date.parse(params[:day])
+    #@attendance = @user.attendances.find(params[:user_id])
+    
   end
   
   def update_overtime_work_end_plan
+    #@user = User.find(params[:user_id])
+    
     #@attendance = Attendance.find(params[:id])
-    if @user.update_attributes(overtime_work_end_plan_params) 
-      # user controllerのvalidationにallow_nil: trueオプションを追加するとパスワード入力しなくても更新できる
-      flash[:success] = "ユーザー情報を更新しました。"
-      redirect_to users_url
-    else
-      render :show
-    end
+    
   end
   
   private

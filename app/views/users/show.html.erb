@@ -73,7 +73,7 @@
 			<% @attendances.each do |day| %> <!--# 範囲オブジェクトとして扱う-->
 			<!--@attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(worked_on)-->
 			<tr>
-				<td><%= link_to "残業申請", attendances_edit_overtime_work_end_plan_user_path(@user), remote: true, class: "btn btn-primary" %></td><!--format: :~と記述することで、指定のフォーマットを指定できます-->
+				<td><%= link_to "残業申請", attendances_edit_overtime_work_end_plan_user_path(date: day.worked_on), remote: true, class: "btn btn-primary" %></td><!--format: :~と記述することで、指定のフォーマットを指定できます-->
 				<td><%= l(day.worked_on, format: :short) %></td> <!--config/localesディレクトリにあるja.ymlロケールファイルを参照-->
 				<td>
 					<% if day.worked_on.wday == 0 %> <!--日曜日の色　赤-->
@@ -109,8 +109,8 @@
 						<% end %>
 				</td>
 				<td><%= day.note %></td>
-				<td><%= l(day.overtime_work_end_plan, format: :hour) %></td>
-				<td><%= l(day.overtime_work_end_plan, format: :minute) %></td>
+				<td></td>
+				<td></td>
 				<td></td>
 				<td></td>
 				<td></td>
