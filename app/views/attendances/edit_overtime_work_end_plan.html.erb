@@ -1,7 +1,7 @@
 <% provide(:class_text, 'overtime_work_end_plan') %>
 <% provide(:button_text, '申請する') %>
 
-<%= form_with(model: @user, url: attendances_update_overtime_work_end_plan_user_path(date: day.worked_on), local: true, method: :patch) do |f| %>
+<%= form_with(model: @user, url: attendances_update_overtime_work_end_plan_user_path(date: @worked_on), local: true, method: :patch) do |f| %>
         <h1 class="modal-title">【残業申請】</h1>
       <div class="modal-body">
         <div class="row">

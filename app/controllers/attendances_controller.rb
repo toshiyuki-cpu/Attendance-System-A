@@ -55,13 +55,8 @@ class AttendancesController < ApplicationController
   end
   
   def edit_overtime_work_end_plan
-    
-    #@day = Date.current
-    #@user = User.find(params[:date])
-    #@user = User.attendances.find(params[:id])
-    #@attendance = User.attendance.find(params[:date])
-    #@day = Date.parse(params[:day])
-    #@attendance = @user.attendances.find(params[:user_id])
+    #set_user定義
+    #set_one_month定義
     
   end
   
