@@ -38,8 +38,8 @@
                   </td>
                   <td><%= attendance.time_select :overtime_work_end_plan, readonly: true, class: "form-control" %></td>
                   <td><%= f.check_box :checkbox %></td>
-                  <td><%= attendance.text_field :note, class: "form-control" %></td>
-                  <td><%= attendance.select :confirmation, [['上長A', "上長A"], ['上長B', "上長B"]], { selected: 1 }, { id: "overtime_id", class: "form-control"} %></td>
+                  <td><%= f.text_field :note, class: "form-control" %></td>
+                  <td><%= f.select :confirmation, [['上長A', "上長A"], ['上長B', "上長B"]], { selected: 1 }, { id: "overtime_id", class: "form-control"} %></td>
                 <% end %>
                 <% break %>
                <% end %>

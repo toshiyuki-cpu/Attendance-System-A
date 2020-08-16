@@ -64,7 +64,13 @@ class AttendancesController < ApplicationController
     #@user = User.find(params[:user_id])
     
     #@attendance = Attendance.find(params[:id])
-    
+    overtime_work_end_plan_params.each do |id, item|
+      #id,itemはattendances_params（Attendanceモデルオブジェクト）の中
+      attendance = Attendance.find(id)
+      attendance.update_attributes!(item)
+    end
+    flash[:success] = "１ヶ月分の勤怠情報を更新しました。"
+    redirect_to user_url(date: params[:date])
   end
   
   private
