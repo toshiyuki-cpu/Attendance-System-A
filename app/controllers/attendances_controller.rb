@@ -81,7 +81,7 @@ class AttendancesController < ApplicationController
   end
   
   def overtime_work_end_plan_params
-    params.require(:user).permit(attendances: [:overtime_work_end_plan, :checkbox, :overtime_content, :confirmation])[:attendances]
+    params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day_check, :overtime_content, :confirmation])[:attendances]
   end
   #paramsハッシュの中の、
   #:userがキーのハッシュの中の、

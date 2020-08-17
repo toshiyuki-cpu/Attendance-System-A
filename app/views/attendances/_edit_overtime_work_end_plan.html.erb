@@ -21,7 +21,7 @@
                   <th>終了予定時刻</th>
                   <th>翌日</th>
                   <th>業務処理内容</th>
-                  <th>指示書確認<%= "\u329e" %></th>
+                  <th>指示者確認<%= "\u329e" %></th>
                 </tr>
               </thead>      
               <tbody>
@@ -37,7 +37,7 @@
                     <%= $days_of_the_week[day.worked_on.wday] %>
                   </td>
                   <td><%= attendance.time_select :overtime_work_end_plan, readonly: true, class: "form-control" %></td>
-                  <td><%= f.check_box :checkbox %></td>
+                  <td><%= attendance.check_box :next_day_check %></td>
                   <td><%= attendance.text_field :overtime_content, class: "form-control" %></td>
                   <td><%= f.select :confirmation, [['上長A', "上長A"], ['上長B', "上長B"]], { selected: 1 }, { id: "overtime_id", class: "form-control"} %></td>
                 <% end %>
