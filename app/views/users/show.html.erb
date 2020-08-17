@@ -112,7 +112,7 @@
 				<td><%= l(day.overtime_work_end_plan, format: :hour) if day.overtime_work_end_plan.present? %></td>
 				<td><%= l(day.overtime_work_end_plan, format: :minute) if day.overtime_work_end_plan.present? %></td>
 				<td></td>
-				<td></td>
+				<td><%= day.overtime_content %></td>
 				<td></td>
 			</tr>
 			<% end %>

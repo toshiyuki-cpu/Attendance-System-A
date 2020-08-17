@@ -69,7 +69,7 @@ class AttendancesController < ApplicationController
       attendance = Attendance.find(id)
       attendance.update_attributes!(item)
     end
-    flash[:success] = "１ヶ月分の勤怠情報を更新しました。"
+    flash[:success] = "残業を申請しました。"
     redirect_to user_url(date: params[:date])
   end
   
@@ -81,7 +81,7 @@ class AttendancesController < ApplicationController
   end
   
   def overtime_work_end_plan_params
-    params.require(:user).permit(attendances: [:overtime_work_end_plan, :checkbox, :note, :confirmation])[:attendances]
+    params.require(:user).permit(attendances: [:overtime_work_end_plan, :checkbox, :overtime_content, :confirmation])[:attendances]
   end
   #paramsハッシュの中の、
   #:userがキーのハッシュの中の、
