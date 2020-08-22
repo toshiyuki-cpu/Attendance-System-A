@@ -19,6 +19,9 @@ ja:
           designated_work_start_time: 指定勤務開始時間
           designated_work_end_time: 指定勤務終了時間
           overtime_work_end_plan: 終了予定時刻
+          hours_of_overtime: 時間外残業
+          overtime_content: 業務処理内容
+          select_superior_id: 指示者確認
           password: パスワード
           password_confirmation: パスワード確認
           created_at: 作成日
