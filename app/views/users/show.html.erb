@@ -21,7 +21,7 @@
 	<!--@userのユーザーオブジェクトにaffiliationが存在するか？存在する場合はその値を、存在しない場合は"未所属"という文字列を出力-->
 			<td>氏名 :<%= @user.name %></td>
 			<td>コード</td>
-			<td></td>
+			<td><%= @user.employee_number %></td>
 			<td>出勤日数 : <%= @worked_sum %>日</td>
 			<td>締め : <%= l(@last_day, format: :short) %></td>
 		</tr>
@@ -111,9 +111,9 @@
 				<td><%= day.note %></td>
 				<td><%= l(day.overtime_work_end_plan, format: :hour) if day.overtime_work_end_plan.present? %></td>
 				<td><%= l(day.overtime_work_end_plan, format: :minute) if day.overtime_work_end_plan.present? %></td>
-				<td></td>
+				<td><%= day.hours_of_overtime %></td>
 				<td><%= day.overtime_content %></td>
-				<td></td>
+				<td><%= day.select_superior_id %></td>
 			</tr>
 			<% end %>
 		</tbody>

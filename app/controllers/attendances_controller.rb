@@ -68,9 +68,14 @@ class AttendancesController < ApplicationController
       #id,itemはattendances_params（Attendanceモデルオブジェクト）の中
       attendance = Attendance.find(id)
       attendance.update_attributes!(item)
+      
     end
     flash[:success] = "残業を申請しました。"
     redirect_to user_url(date: params[:date])
+  end
+  
+  def hours_of_overtime
+  
   end
   
   private
@@ -81,7 +86,7 @@ class AttendancesController < ApplicationController
   end
   
   def overtime_work_end_plan_params
-    params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day_check, :overtime_content, :confirmation])[:attendances]
+    params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day_check, :overtime_content, :select_superior_id])[:attendances]
   end
   #paramsハッシュの中の、
   #:userがキーのハッシュの中の、
