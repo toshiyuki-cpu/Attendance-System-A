@@ -18,9 +18,20 @@ module AttendancesHelper
   # 出勤時間と退勤時間を受け取り、在社時間を計算して返します。
   def working_times(start, finish)
     format("%.2f", (((finish - start) / 60) / 60.0))
+    
       # 追加したworking_timesメソッドでは、2つの引数を設定しています。
-      # そして、受け取った引数を使って時間の計算処理をして値を返す仕組み
+      # そして、受け取った引数��使って時間の計算処理をして値を返す仕組み
   end
+  
+  # 時間外残業
+  #def hours_of_overtime(end_time, day.end_plan)
+    #(overtime_work_end_plan.hour - designated_work_end_time.hour) + (overtime_work_end_plan.min - designated_work_end_time.min) / 60.00 
+    #format("%.2f", (((end_plan - end_time) / 60) / 60.0))
+    #hour = end_plan.hour - end_time.hour
+    #min = end_plan.min - end_time.min
+    #@total_time = hour + min / 60.00
+  #end
+  #end
 end
     # Attendances Helperにより下記のshow.html.erbの記述はいらなくなる
 #	<% if (Date.current == day.worked_on) && day.started_at.nil? %>

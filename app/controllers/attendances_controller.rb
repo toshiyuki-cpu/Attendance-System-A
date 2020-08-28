@@ -85,6 +85,7 @@ class AttendancesController < ApplicationController
     params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
   end
   
+  # 残業申請のパラメーター
   def overtime_work_end_plan_params
     params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day_check, :overtime_content, :select_superior_id])[:attendances]
   end

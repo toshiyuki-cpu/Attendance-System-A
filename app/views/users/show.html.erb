@@ -106,12 +106,18 @@
 						<!--attendance helperに定義済み-->
 						<!--working_times(start, finish)-->
 						<!--format("%.2f", (((finish - start) / 60) / 60.0))-->
-						<% end %>
+					<% end %>
 				</td>
 				<td><%= day.note %></td>
 				<td><%= l(day.overtime_work_end_plan, format: :hour) if day.overtime_work_end_plan.present? %></td>
 				<td><%= l(day.overtime_work_end_plan, format: :minute) if day.overtime_work_end_plan.present? %></td>
-				<td><%= day.hours_of_overtime %></td>
+				<td>
+					<% if day.started_at.present? %>
+						
+						<%= format("%.2f", (day.overtime_work_end_plan.hour - @user.designated_work_end_time.hour) + (day.overtime_work_end_plan.min - @user.designated_work_end_time.min) / 60.00) %>
+		
+					<% end %>
+					</td>
 				<td><%= day.overtime_content %></td>
 				<td><%= day.select_superior_id %></td>
 			</tr>
