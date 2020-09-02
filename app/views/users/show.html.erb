@@ -73,7 +73,8 @@
 			<% @attendances.each do |day| %> <!--# 範囲オブジェクトとして扱う-->
 			<!--@attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(worked_on)-->
 			<tr>
-				<td><%= link_to "残業申請", attendances_edit_overtime_work_end_plan_user_path(date: day.worked_on), remote: true, class: "btn btn-primary" %></td><!--format: :~と記述することで、指定のフォーマットを指定できます-->
+				<td><%= link_to "残業申請", attendances_edit_overtime_work_end_plan_user_path(date: day.worked_on), 
+																				remote: true, class: "btn btn-primary" %></td>
 				<td><%= l(day.worked_on, format: :short) %></td> <!--config/localesディレクトリにあるja.ymlロケールファイルを参照-->
 				<td>
 					<% if day.worked_on.wday == 0 %> <!--日曜日の色　赤-->
@@ -112,8 +113,8 @@
 				<td><%= l(day.overtime_work_end_plan, format: :hour) if day.overtime_work_end_plan.present? %></td>
 				<td><%= l(day.overtime_work_end_plan, format: :minute) if day.overtime_work_end_plan.present? %></td>
 				<td>
-					<% if day.started_at.present? %>
-							<%= hours_of_overtime(@user.designated_work_end_time, day.overtime_work_end_plan, day.next_day_check) %>
+					<% if day.started_at.present? && day.overtime_work_end_plan.present? %>
+							<%= hours_of_overtime(@user.designated_work_end_time, day.overtime_work_end_plan) %>
 					<% end %>
 				</td>
 				<td><%= day.overtime_content %></td>

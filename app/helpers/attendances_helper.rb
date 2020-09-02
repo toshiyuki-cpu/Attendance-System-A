@@ -23,13 +23,24 @@ module AttendancesHelper
   end
   
   # 時間外残業
-  def hours_of_overtime(end_time, end_plan, day_check)
-    if day_check == "1" #チェック有りなら
-      format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
-    else
+  #def hours_of_overtime
+    #format("%.2f", (day.overtime_work_end_plan.hour - @user.designated_work_end_time.hour) + 
+						#(day.overtime_work_end_plan.min - @user.designated_work_end_time.min) / 60.00)
+  #end
+  def hours_of_overtime(end_time, end_plan)
+    #if day_check == "1" #チェック有りなら
+      #format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
+    #else
       format("%.2f", (end_plan.hour - end_time.hour) + (end_plan.min - end_time.min) / 60.00)
-    end
+        
+      #format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
+    #end
   end
+  
+  #def next_day(end_time, end_plan)
+      #next_day_check == "1" #チェック有りなら
+      #format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
+  #end
 end  
 # Attendances Helperにより下記のshow.html.erbの記述はいらなくなる
 #	<% if (Date.current == day.worked_on) && day.started_at.nil? %>

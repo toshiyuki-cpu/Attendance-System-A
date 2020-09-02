@@ -37,7 +37,7 @@
                     <%= $days_of_the_week[day.worked_on.wday] %>
                   </td>
                   <td><%= attendance.time_select :overtime_work_end_plan, readonly: true, class: "form-control" %></td>
-                  <td><%= attendance.check_box :next_day_check %></td>
+                  <td><%= f.check_box :next_day_check %></td>
                   <td><%= attendance.text_field :overtime_content, class: "form-control" %></td>
                   <td><%= attendance.select :select_superior_id, [['上長A', "上長A"], ['上長B', "上長B"]], { selected: 1 }, { id: "overtime_id@", class: "form-control"} %></td>
                 <% end %>
