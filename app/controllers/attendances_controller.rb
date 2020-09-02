@@ -57,7 +57,6 @@ class AttendancesController < ApplicationController
   def edit_overtime_work_end_plan
     #set_user定義
     #set_one_month定義
-    
   end
   
   def update_overtime_work_end_plan
