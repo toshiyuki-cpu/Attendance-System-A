@@ -53,7 +53,7 @@
 				<th rowspan="2">在社時間</th>
 				<th rowspan="2">備考</th>
 				<th colspan="2">終了予定時間</th>
-				<th rowspan="2">時間外残業</th>
+				<th rowspan="2">時間外時間</th>
 				<th rowspan="2">業務処理内容</th>
 				<th rowspan="2">指示者確認<%= "\u329e" %></th>
 			</tr>
@@ -114,7 +114,11 @@
 				<td><%= l(day.overtime_work_end_plan, format: :minute) if day.overtime_work_end_plan.present? %></td>
 				<td>
 					<% if day.started_at.present? && day.overtime_work_end_plan.present? %>
-							<%= hours_of_overtime(@user.designated_work_end_time, day.overtime_work_end_plan) %>
+					
+          		<%= overtime_next_day(@user.designated_work_end_time, day.overtime_work_end_plan) %>
+       			
+          		<%= hours_of_overtime(@user.designated_work_end_time, day.overtime_work_end_plan) %>
+       		
 					<% end %>
 				</td>
 				<td><%= day.overtime_content %></td>

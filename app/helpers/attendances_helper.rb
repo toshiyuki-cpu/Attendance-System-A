@@ -22,7 +22,7 @@ module AttendancesHelper
       # そして、受け取った引数��使って時間の計算処理をして値を返す仕組み
   end
   
-  # 時間外残業
+  # 時間外時間
   #def hours_of_overtime
     #format("%.2f", (day.overtime_work_end_plan.hour - @user.designated_work_end_time.hour) + 
 						#(day.overtime_work_end_plan.min - @user.designated_work_end_time.min) / 60.00)
@@ -37,10 +37,11 @@ module AttendancesHelper
     #end
   end
   
-  #def next_day(end_time, end_plan)
-      #next_day_check == "1" #チェック有りなら
-      #format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
-  #end
+  def overtime_next_day(end_time, end_plan)
+    #if next_day == "1" #チェック有りなら
+      format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
+    #end
+  end
 end  
 # Attendances Helperにより下記のshow.html.erbの記述はいらなくなる
 #	<% if (Date.current == day.worked_on) && day.started_at.nil? %>

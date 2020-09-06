@@ -60,12 +60,15 @@ class AttendancesController < ApplicationController
   end
   
   def update_overtime_work_end_plan
+    
     #@user = User.find(params[:user_id])
     #@attendance = Attendance.find(params[:id])
     overtime_work_end_plan_params.each do |id, item|
       #id,itemはattendances_params（Attendanceモデルオブジェクト）の中
       attendance = Attendance.find(id)
-      attendance.update_attributes!(item)
+      attendance.update_attributes(item)
+      
+       
     end
     #if attendance.update_attributes(overtime_work_end_plan_params)
       flash[:success] = "残業を申請しました。"
