@@ -39,7 +39,7 @@ module AttendancesHelper
   
   def overtime_next_day(end_time, end_plan)
     #if next_day == "1" #チェック有りなら
-      format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
+      format("%.2f", (24 - end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
     #end
   end
 end  

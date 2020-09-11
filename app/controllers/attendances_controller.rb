@@ -57,6 +57,7 @@ class AttendancesController < ApplicationController
   def edit_overtime_work_end_plan
     #set_user定義
     #set_one_month定義
+    
   end
   
   def update_overtime_work_end_plan
@@ -67,8 +68,6 @@ class AttendancesController < ApplicationController
       #id,itemはattendances_params（Attendanceモデルオブジェクト）の中
       attendance = Attendance.find(id)
       attendance.update_attributes(item)
-      
-       
     end
     #if attendance.update_attributes(overtime_work_end_plan_params)
       flash[:success] = "残業を申請しました。"
@@ -77,11 +76,6 @@ class AttendancesController < ApplicationController
      # flash[:danger] = "出社時間が入力されていません。"
       #redirect_to user_url(date: params[:date])
     #end
-  end
-  
-  
-  def hours_of_overtime
-  
   end
   
   private
