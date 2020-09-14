@@ -19,6 +19,10 @@ gem 'annotate'
 group :development, :test do
   gem 'sqlite3'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'better_errors' # エラー画面をわかりやすく整形してくれる
+  gem 'binding_of_caller' # better_errorsの画面上にirb/pry(PERL)を表示する
+  gem 'pry-rails' # binding.pry使えるようになる
+  gem 'pry-byebug' # binding.pry で止めたところからステップ実行ができる
 end
 
 group :development do
