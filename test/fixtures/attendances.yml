@@ -5,6 +5,7 @@
 #  id                     :integer          not null, primary key
 #  finished_at            :datetime
 #  hours_of_overtime      :string
+#  next_day               :boolean
 #  note                   :string
 #  overtime_content       :string
 #  overtime_work_end_plan :datetime
