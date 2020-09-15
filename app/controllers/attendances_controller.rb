@@ -87,7 +87,7 @@ class AttendancesController < ApplicationController
   
   # 残業申請のパラメーター
   def overtime_work_end_plan_params
-    params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day_check, :overtime_content, :select_superior_id])[:attendances]
+    params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id])[:attendances]
   end
   #paramsハッシュの中の、
   #:userがキーのハッシュの中の、
