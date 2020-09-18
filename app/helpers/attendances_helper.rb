@@ -28,7 +28,7 @@ module AttendancesHelper
 						#(day.overtime_work_end_plan.min - @user.designated_work_end_time.min) / 60.00)
   #end
   def hours_of_overtime(next_day, end_time, end_plan)
-    if next_day == "1" #チェック有りなら
+    if next_day # ifの条件はbooleanが必要。next_dayにはbooleanがはいってる
       format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
     else
       format("%.2f", (end_plan.hour - end_time.hour) + (end_plan.min - end_time.min) / 60.00)
