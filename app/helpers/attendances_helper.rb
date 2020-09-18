@@ -27,14 +27,12 @@ module AttendancesHelper
     #format("%.2f", (day.overtime_work_end_plan.hour - @user.designated_work_end_time.hour) + 
 						#(day.overtime_work_end_plan.min - @user.designated_work_end_time.min) / 60.00)
   #end
-  def hours_of_overtime(end_time, end_plan, next_day)
-    #if day_check == "1" #チェック有りなら
-      #format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
-    #else
+  def hours_of_overtime(next_day, end_time, end_plan)
+    if next_day == "1" #チェック有りなら
+      format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
+    else
       format("%.2f", (end_plan.hour - end_time.hour) + (end_plan.min - end_time.min) / 60.00)
-        
-      #format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
-    #end
+    end
   end
 end  
 # Attendances Helperにより下記のshow.html.erbの記述はいらなくなる

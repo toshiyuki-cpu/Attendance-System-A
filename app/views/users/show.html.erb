@@ -114,7 +114,7 @@
 				<td><%= l(day.overtime_work_end_plan, format: :minute) if day.overtime_work_end_plan.present? %></td>
 				<td>
 					<% if day.started_at.present? && day.overtime_work_end_plan.present? %>
-          		<%= hours_of_overtime(@user.designated_work_end_time, day.overtime_work_end_plan, day.next_day) %>
+          		<%= hours_of_overtime(day.next_day, @user.designated_work_end_time, day.overtime_work_end_plan) %>
 					<% end %>
 				</td>
 				<td><%= day.overtime_content %></td>
