@@ -14,6 +14,7 @@
 #  name                       :string
 #  password_digest            :string
 #  remember_digest            :string
+#  role                       :string
 #  uid                        :string
 #  work_time                  :datetime         default(Mon, 07 Sep 2020 07:30:00 JST +09:00)
 #  created_at                 :datetime         not null
