@@ -2,7 +2,5 @@ en:
   enumerize:
     user:
       role:
-        admin: '管理者'
-        superiorA: '上長A'
-        superiorB: '上長B'
+        superior: '上長'
         employee: '社員'
