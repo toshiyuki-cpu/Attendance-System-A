@@ -39,7 +39,7 @@
                   <td><%= attendance.time_field :overtime_work_end_plan, class: "form-control" %></td>
                   <td><%= attendance.check_box :next_day %></td>
                   <td><%= attendance.text_field :overtime_content, class: "form-control" %></td>
-                  <td><%= attendance.select :select_superior_id, [['上長A', "上長A"], ['上長B', "上長B"]], { selected: 1 }, {class: "form-control"} %></td>
+                  <td><%= attendance.select :select_superior_id, User.with_role(:superior).map { |u| [u.name, u.id] }, { selected: 1 }, {class: "form-control"} %></td>
                 <% end %>
                 <% break %>
                <% end %>
