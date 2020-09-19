@@ -1,7 +1,6 @@
 # coding: utf-8
 
 # 管理者の作成
-
 User.create!(name: "Admin User",
              email: "sample@email.com",
              role: 'admin',
