@@ -5,18 +5,18 @@
 #  id                         :integer          not null, primary key
 #  admin                      :boolean          default(FALSE)
 #  affiliation                :string
-#  basic_time                 :datetime         default(Mon, 07 Sep 2020 08:00:00 JST +09:00)
+#  basic_time                 :datetime         default(Sat, 19 Sep 2020 08:00:00 JST +09:00)
 #  basic_work_time            :datetime
-#  designated_work_end_time   :datetime         default(Mon, 07 Sep 2020 18:00:00 JST +09:00)
-#  designated_work_start_time :datetime         default(Mon, 07 Sep 2020 09:00:00 JST +09:00)
+#  designated_work_end_time   :datetime         default(Sat, 19 Sep 2020 18:00:00 JST +09:00)
+#  designated_work_start_time :datetime         default(Sat, 19 Sep 2020 09:00:00 JST +09:00)
 #  email                      :string
 #  employee_number            :string
 #  name                       :string
 #  password_digest            :string
 #  remember_digest            :string
-#  role                       :string
+#  role                       :string           default("employee"), not null
 #  uid                        :string
-#  work_time                  :datetime         default(Mon, 07 Sep 2020 07:30:00 JST +09:00)
+#  work_time                  :datetime         default(Sat, 19 Sep 2020 07:30:00 JST +09:00)
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
 #
@@ -28,7 +28,11 @@ class User < ApplicationRecord #Userモデル
   #Userモデルからみた場合、Attendanceとの関係は1（User）対多（Attendance）
   # has_many ~と記述　多数所持するため、複数形（attendances）となっている
   # ユーザーが削除された場合、関連する勤怠データも同時に自動で削除されるよう設定 dependent: :destroy
+  
+  extend Enumerize
   has_many :attendances, dependent: :destroy
+  
+  enumerize :role, in: %i(admin employee), default: :employee, scope: true
   
 # 「remember_token」という仮想の属性を作成します。
   attr_accessor :remember_token
