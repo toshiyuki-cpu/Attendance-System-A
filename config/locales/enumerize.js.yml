@@ -1,0 +1,8 @@
+en:
+  enumerize:
+    user:
+      role:
+        admin: '管理者'
+        superiorA: '上長A'
+        superiorB: '上長B'
+        employee: '社員'

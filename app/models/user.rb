@@ -32,7 +32,7 @@ class User < ApplicationRecord #Userモデル
   extend Enumerize
   has_many :attendances, dependent: :destroy
   
-  enumerize :role, in: %i(admin employee), default: :employee, scope: true
+  enumerize :role, in: %i(superior employee), default: :employee, scope: true
   
 # 「remember_token」という仮想の属性を作成します。
   attr_accessor :remember_token
