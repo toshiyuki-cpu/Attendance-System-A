@@ -1,6 +1,7 @@
-en:
+ja:
   enumerize:
     user:
       role:
+        admin: '管理者'
         superior: '上長'
         employee: '社員'
