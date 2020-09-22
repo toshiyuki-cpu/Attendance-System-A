@@ -8,6 +8,7 @@
 #  next_day               :boolean
 #  note                   :string
 #  overtime_content       :string
+#  overtime_status        :string
 #  overtime_work_end_plan :datetime
 #  started_at             :datetime
 #  worked_on              :date
@@ -26,6 +27,8 @@ class Attendance < ApplicationRecord #AttendanceモデルからみたUserモデ�
 #Attendanceモデルが生成され、コードでは、Userモデルと1対1の関係を示すbelongs_to :userというコードが記述されています。
 #これは先ほど実行したコマンドにuser:referenceという引数を含めたためです。
 #この引数を使うと、自動的にuser_id属性が追加されActiveRecordがUserモデルとAttendanceモデルを紐付ける準備をしてくれます
+  extend Enumerize
+  enumerize :overtime_status, in: %i(applying approval negation cancel), scope: true
   
   validates :worked_on, presence: true
   #worked_onはどの日付の勤怠情報かを判断する上で必須,存在性の検証が必要なのはworked_on

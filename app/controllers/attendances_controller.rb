@@ -67,6 +67,8 @@ class AttendancesController < ApplicationController
     overtime_work_end_plan_params.each do |id, item|
       #id,itemはattendances_params（Attendanceモデルオブジェクト）の中
       attendance = Attendance.find(id)
+      # ここにステータスを挿入
+      attendance.overtime_status
       attendance.update_attributes(item)
     end
     #if attendance.update_attributes(overtime_work_end_plan_params)
@@ -87,7 +89,7 @@ class AttendancesController < ApplicationController
   
   # 残業申請のパラメーター
   def overtime_work_end_plan_params
-    params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id])[:attendances]
+    params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day, :overtime_content, :overtime_status])[:attendances]
   end
   #paramsハッシュの中の、
   #:userがキーのハッシュの中の、

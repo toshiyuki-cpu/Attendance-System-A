@@ -39,7 +39,7 @@
                   <td><%= attendance.time_field :overtime_work_end_plan, class: "form-control", required: true %></td>
                   <td><%= attendance.check_box :next_day %></td>
                   <td><%= attendance.text_field :overtime_content, class: "form-control", required: true %></td>
-                  <td><%= attendance.select :select_superior_id, User.with_role(:superior).map { |u| [u.name, u.id] }, 
+                  <td><%= attendance.select :overtime_status, User.with_role(:superior).map { |u| [u.name, u.id] }, 
                                       { include_blank: '選択してください' }, {class: "form-control", required: true} %></td>
                                       <!-- with_role は Enumerize で追加された scope -->
                 <% end %>
