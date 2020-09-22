@@ -15,6 +15,8 @@ module AttendancesHelper
     false
   end
   
+  #def overtime_apply
+  
   # 出勤時間と退勤時間を受け取り、在社時間を計算して返します。
   def working_times(start, finish)
     format("%.2f", (((finish - start) / 60) / 60.0))
@@ -23,10 +25,6 @@ module AttendancesHelper
   end
   
   # 時間外時間
-  #def hours_of_overtime
-    #format("%.2f", (day.overtime_work_end_plan.hour - @user.designated_work_end_time.hour) + 
-						#(day.overtime_work_end_plan.min - @user.designated_work_end_time.min) / 60.00)
-  #end
   def hours_of_overtime(next_day, end_time, end_plan)
     if next_day # ifの条件はbooleanが必要。next_dayにはbooleanがはいってる
       format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 

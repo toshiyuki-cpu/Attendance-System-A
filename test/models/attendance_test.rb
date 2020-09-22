@@ -8,6 +8,7 @@
 #  next_day               :boolean
 #  note                   :string
 #  overtime_content       :string
+#  overtime_status        :string
 #  overtime_work_end_plan :datetime
 #  started_at             :datetime
 #  worked_on              :date
