@@ -5,10 +5,6 @@
   text-align: center;
 }
 
-/* 勤怠修正ログ */
-.attendance-edit-log {
-  margin-top: 5px;
-}
 
 /* ユーザー勤怠情報テーブル */
 
@@ -61,5 +57,12 @@
   td {
     vertical-align: middle;
     text-align: center;
+  }
+}
+
+/* 上長勤怠ページ、申請通知お知らせ項目 */
+.notice {
+  p {
+    margin: 0 0 3px;
   }
 }

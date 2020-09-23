@@ -28,12 +28,19 @@
 	</table>
 </div>
 
+<% if @user.role.superior? %>
+<div class="notice">
+	<p>【 所属長承認申請のお知らせ 】</p>
+	<p>【 勤怠変更申請のお知らせ 】</p>
+	<p>【 残業申請のお知らせ 】</p>
+</div>
+<% end %>
+
 <div class="btn btn-users-show" >
 	<%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
 	<!--paramsハッシュにdateキーとして、@first_dayを指定しています。
 	       これで受け取ったparams[:date]をもとに、どの月の情報を表示するか判断できるようになります-->
 	<%=link_to "CSV出力", '#', class: "btn btn-primary" %>
-	</br>
 	<%= link_to "勤怠修正ログ (承認済)", attendances_edit_log_user_path, class: "btn btn-primary attendance-edit-log" %>
 </div>
 

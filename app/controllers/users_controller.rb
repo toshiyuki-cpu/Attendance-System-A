@@ -23,7 +23,6 @@ class UsersController < ApplicationController
    #@last_day = @first_day.end_of_month
                         # end_of_monthは当月の終日を取得することが可能
     @worked_sum = @attendances.where.not(started_at: nil).count
-    
     # countメソッドは配列の要素数を取得することができます
     #「1ヶ月分の勤怠データの中で、出勤時間が何も無い状態では無いものの数を代入」
     # @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
@@ -37,7 +36,7 @@ class UsersController < ApplicationController
     @user = User.new(user_params) #(params[:user]) userコントローラーにシンボルparams[:user]として渡している
     if @user.save
       log_in @user # 保存成功後、ログインします。このメソッドによりリダイレクトされたページではログイン状態のレイアウトが表示される
-      flash[:success] = '新規作成に成功しました。' #:successというキーには保存に成功した時のメッセージを代入
+      flash[:success] = '新規作成に成功しま��た。' #:successというキーには保存に成功した時のメッセージを代入
       redirect_to @user #左記のように記述できる　redirect_to user_url(@user)
     else
       render :new
