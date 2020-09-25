@@ -32,7 +32,11 @@
 <div class="notice">
 	<p>【 所属長承認申請のお知らせ 】</p>
 	<p>【 勤怠変更申請のお知らせ 】</p>
-	<p>【 残業申請のお知らせ 】</p>
+	<p>【 残業申請のお知らせ 】
+		<% unless @overtime_status.count == 0 %>
+			<%= link_to " #{@overtime_status.count}件の通知があります", '#', class: "notice-superior" %>
+		<% end %>
+	</p>
 </div>
 <% end %>
 

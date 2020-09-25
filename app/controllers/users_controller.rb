@@ -28,9 +28,10 @@ class UsersController < ApplicationController
     #@attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
     # @user = User.find(params[:user_id])
        #@attendance = Attendance.find(params[:id])
-      
-       #@attendance.overtime_status.true?
-      #@attendance.overtime_status = :applying
+     
+      @overtime_status = Attendance.where(overtime_status: 'applying')
+      # @overtime_status = Attendance.where(select_superior_id: 2, overtime_status: 'applying')
+      # @overtime_status = Attendance.where(select_superior_id: 3, overtime_status: 'applying')
   end
   
   def new
