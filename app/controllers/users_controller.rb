@@ -26,12 +26,9 @@ class UsersController < ApplicationController
     # countメソッドは配列の要素数を取得することができます
     #「1ヶ月分の勤怠データの中で、出勤時間が何も無い状態では無いものの数を代入」
     #@attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
-    # @user = User.find(params[:user_id])
-       #@attendance = Attendance.find(params[:id])
-     
-      @overtime_status = Attendance.where(overtime_status: 'applying')
-      # @overtime_status = Attendance.where(select_superior_id: 2, overtime_status: 'applying')
-      # @overtime_status = Attendance.where(select_superior_id: 3, overtime_status: 'applying')
+    
+   # 残業申請お知らせ通知
+      @overtime_status = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying')
   end
   
   def new
