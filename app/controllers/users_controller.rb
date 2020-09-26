@@ -23,10 +23,12 @@ class UsersController < ApplicationController
    #@last_day = @first_day.end_of_month
                         # end_of_monthは当月の終日を取得することが可能
     @worked_sum = @attendances.where.not(started_at: nil).count
-    
     # countメソッドは配列の要素数を取得することができます
     #「1ヶ月分の勤怠データの中で、出勤時間が何も無い状態では無いものの数を代入」
-    # @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
+    #@attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
+    
+   # 残業申請お知らせ通知
+      @overtime_appliyings = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying')
   end
   
   def new
