@@ -28,7 +28,7 @@ class UsersController < ApplicationController
     #@attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
     
    # 残業申請お知らせ通知
-      @overtime_status = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying')
+      @overtime_appliyings = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying')
   end
   
   def new
