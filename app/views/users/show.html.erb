@@ -38,7 +38,6 @@
 		<% end %>
 	</p>
 </div>
-<% end %>
 <!-- 一般社員から受信した残業申請内容 -->
 <div>
   <table class="table table-bordered table-condensed table-hover received-application-details-table">
@@ -66,7 +65,7 @@
         <td><%= @user.designated_work_end_time.strftime("%R") %></td>
         <td><%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %></td>
         <td><%= attendance.overtime_content %></td>
-        <td></td>
+        <td><%=  %></td>
         <td></td>
         <td><%= link_to '確認', '#', class: "btn btn-primary" %></td>
       </tr>
@@ -74,6 +73,7 @@
   	<% end %>
   </table>
 </div>
+<% end %>
 
 <div class="btn btn-users-show" >
 	<%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
