@@ -59,7 +59,7 @@
     <% @overtime_appliyings.each do |attendance| %>
     <tbody>
       <tr>
-      	<td><%= attendance.user_id %></td>
+      	<td><%= attendance.user.name %></td>
         <td><%= l(attendance.worked_on, format: :short) %></td>
         <td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
         <td><%= attendance.overtime_work_end_plan.strftime("%R") %></td>
