@@ -1,0 +1,161 @@
+<% provide(:title, @user.name) %>
+<!--rowspan:縦結合、colspan：横結合-->
+<div>
+	<table class="table table-bordered table-condensed user-table">
+		<tr>
+			<td>
+				<%= link_to "◀️", user_path(date: @first_day.prev_month), class: "btn btn-info" %>
+				<!--@first_day = params[:date].nil? ? Date.current.beginning_of_month : params[:date].to_date-->
+				【<%= l(@first_day, format: :middle) %>】時間管理表
+				<%= link_to "▶️", user_path(date: @first_day.next_month), class: "btn btn-info" %>
+				</td>
+			<td>指定勤務開始時間 : <%= @user.designated_work_start_time.strftime("%R") %><br/>
+			<!--T.strftime 時刻を format 文字列に従って文字列に変換した結果を返します。-->
+					指定勤務終了時間 : <%= @user.designated_work_end_time.strftime("%R") %></td> <!-- <br/>で改行できる -->
+			<td colspan="3"><br/>基本時間 : <%= format_basic_info(@user.basic_time) %></td>
+			<td><br/>初日 : <%= l(@first_day, format: :short) %></td>
+		</tr>
+		
+		<tr>
+			<td>所属：<%= @user.affiliation.present? ? @user.affiliation : "未所属" %></td>
+	<!--@userのユーザーオブジェクトにaffiliationが存在するか？存在する場合はその値を、存在しない場合は"未所属"という文字列を出力-->
+			<td>氏名 :<%= @user.name %></td>
+			<td>コード</td>
+			<td><%= @user.employee_number %></td>
+			<td>出勤日数 : <%= @worked_sum %>日</td>
+			<td>締め : <%= l(@last_day, format: :short) %></td>
+		</tr>
+	</table>
+</div>
+
+<% if @user.role.superior? %>
+	<div class="notice">
+		<p>【 所属長承認申請のお知らせ 】</p>
+		<p>【 勤怠変更申請のお知らせ 】</p>
+	<p>【 残業申請のお知らせ 】
+		<% if @overtime_appliyings.present? %>
+			<%= link_to " #{@overtime_appliyings.count}件の通知があります", '#', class: "notice-superior" %>
+		<% end %>
+	</p>
+</div>
+<% end %>
+
+<div class="btn btn-users-show" >
+	<%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
+	<!--paramsハッシュにdateキーとして、@first_dayを指定しています。
+	       これで受け取ったparams[:date]をもとに、どの月の情報を表示するか判断できるようになります-->
+	<%=link_to "CSV出力", '#', class: "btn btn-primary" %>
+	<%= link_to "勤怠修正ログ (承認済)", attendances_edit_log_user_path, class: "btn btn-primary attendance-edit-log" %>
+</div>
+
+<div>
+	<table class="table table-bordered table-condensed table-hover" id="table-attendances">
+		<thead>
+			<tr>
+				<th rowspan="3">残業申請</th>
+				<th rowspan="3">日付</th>
+				<th rowspan="3">曜日</th>
+				<th colspan="8">実績</th>
+				<th colspan="5">所定外勤務</th>
+			</tr>
+			<tr>
+				<th colspan="3">出社</th>
+				<th colspan="3">退社</th>
+				<th rowspan="2">在社時間</th>
+				<th rowspan="2">備考</th>
+				<th colspan="2">終了予定時間</th>
+				<th rowspan="2">時間外時間</th>
+				<th rowspan="2">業務処理内容</th>
+				<th rowspan="2">指示者確認<%= "\u329e" %></th>
+			</tr>
+			<tr>
+				<th>時</th>
+				<th>分</th>
+				<th></th>
+				<th>時</th>
+				<th>分</th>
+				<th></th>
+				<th>時</th>
+				<th>分</th>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<% @attendances.each do |day| %> <!--# 範囲オブジェクトとして扱う-->
+			<!--@attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(worked_on)-->
+			<tr>
+				<td><%= link_to "残業申請", attendances_edit_overtime_work_end_plan_user_path(date: day.worked_on), 
+																				remote: true, class: "btn btn-primary" %></td>
+				<td><%= l(day.worked_on, format: :short) %></td> <!--config/localesディレクトリにあるja.ymlロケールファイルを参照-->
+				<td>
+					<% if day.worked_on.wday == 0 %> <!--日曜日の色　赤-->
+              <font color="#ff000">
+          <% elsif day.worked_on.wday == 6 %> <!--土曜日の色　青-->
+              <font color="#0033cc">
+          <% end %>
+					<%= $days_of_the_week[day.worked_on.wday] %></td> 
+				<td>
+					<%= l(day.started_at, format: :hour) if day.started_at.present? %>
+					<!--後置きのifによって、started_atの値が存在する場合のみ表示できるよう制御しています-->
+				</td>
+				<td><%= l(day.started_at, format: :minute) if day.started_at.present? %></td>
+				<td>
+					<!--Attendances Helperにattendance_state(attendance)を定義した為下記の記述になる-->
+					<% if btn_text = attendance_state(day) %>
+						<%= link_to "#{btn_text}", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
+					<% end %>
+				</td>
+				<td><%= l(day.finished_at, format: :hour) if day.finished_at.present? %></td>
+				<td><%= l(day.finished_at, format: :minute) if day.finished_at.present? %></td>
+				<td></td>
+				<td>
+					<% if day.started_at.present? && day.finished_at.present? %>
+					<!--繰り返し処理中の勤怠データに、started_atとfinished_atの値が存在するかを判定するもの-->
+						<%= str_times = working_times(day.started_at, day.finished_at) %>
+						<!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
+						<!--繰り返し処理の中で累計在社時間の計算は完了します。あとは@total_working_times変数をフッター部分に表示すればOKという仕組み-->
+						<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+						<!--attendance helperに定義済み-->
+						<!--working_times(start, finish)-->
+						<!--format("%.2f", (((finish - start) / 60) / 60.0))-->
+					<% end %>
+				</td>
+				<td><%= day.note %></td>
+				<td><%= l(day.overtime_work_end_plan, format: :hour) if day.overtime_work_end_plan.present? %></td>
+				<td><%= l(day.overtime_work_end_plan, format: :minute) if day.overtime_work_end_plan.present? %></td>
+				<td>
+					<% if day.started_at.present? && day.overtime_work_end_plan.present? %>
+          		<%= hours_of_overtime(day.next_day, @user.designated_work_end_time, day.overtime_work_end_plan) %>
+					<% end %>
+				</td>
+				<td><%= day.overtime_content %></td>
+				<td><%= day.overtime_status_text %></td>　<!-- _text加えることにより日本語に変換-->
+			</tr>
+			<% end %>
+		</tbody>
+		
+		<tfoot>
+			<tr>
+				<td rowspan="2"></td>　　　　　　　　　　　　
+				<td colspan="2">累計日数</td>
+				<td colspan="6"></td> 
+				<td>在社時間合計</td>
+				<td colspan="5"></td>
+				<td rowspan="2">所属長承認
+				</br>未申請
+				</br><%= link_to "承認申請", '#', class: "btn btn-primary" %>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><%= @attendances.count %></td>
+				<!--@attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(worked_on)-->
+				<td colspan="6"></td>
+				<td><%= format("%.2f", @total_working_times.to_f)%></td> 
+				<td colspan="5"></td>
+			</tr>
+		</tfoot>
+	</table>
+</div>
+
+<!--モーダルウインドウ表示-->
+<div id="edit-overtime-work-end-plan" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
