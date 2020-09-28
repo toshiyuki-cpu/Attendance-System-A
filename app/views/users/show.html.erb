@@ -65,7 +65,7 @@
         <td><%= @user.designated_work_end_time.strftime("%R") %></td>
         <td><%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %></td>
         <td><%= attendance.overtime_content %></td>
-        <td><%=  %></td>
+        <td></td>
         <td></td>
         <td><%= link_to '確認', '#', class: "btn btn-primary" %></td>
       </tr>
