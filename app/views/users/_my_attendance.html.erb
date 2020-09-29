@@ -54,8 +54,10 @@
         <td>指示者確認</td>
         <td>変更</td>
         <td>勤怠を確認する</td>
+        <td>変更を送信する</td>
       </tr>
     </thead>
+    
     <% @overtime_appliyings.each do |attendance| %>
     <tbody>
       <tr>
@@ -69,6 +71,7 @@
         <td></td>
         <td></td>
         <td><%= link_to '確認', user_path(attendance.user), class: "btn btn-primary" %></td>
+        <td><%= link_to '送信', '#', class: "btn btn-success" %></td>
       </tr>
     </tbody>
   	<% end %>
