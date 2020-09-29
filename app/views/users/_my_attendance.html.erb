@@ -68,7 +68,7 @@
         <td><%= attendance.overtime_content %></td>
         <td></td>
         <td></td>
-        <td><%= link_to '確認', '#', class: "btn btn-primary" %></td>
+        <td><%= link_to '確認', user_path(attendance.user), class: "btn btn-primary" %></td>
       </tr>
     </tbody>
   	<% end %>
