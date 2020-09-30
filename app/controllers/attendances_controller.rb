@@ -79,11 +79,17 @@ class AttendancesController < ApplicationController
   end
   # 残業申請承認、社員へ返信
   def overtime_approval_reply
+    # ユーザー（user.id）とユーザーの勤怠（user_id）を探す
+    # ユーザーのattendances.idを探す
+    # 承認を選択（overtime_statusがapproval）
+    # overtime_statusのapprovalを特定させる
+    # 送信ボタン(url: attendances_overtime_approval_reply_user_path(@user, attendance))
+    # 社員（@user.attendance）の勤怠ページに承認（applying）と表示
     @user = User.find(params[:user_id]) # set_user
     # before_actionのset_one_month　定義
     @attendance = Attendance.find(params[:id])
     overtime_work_end_plan_params.each do |id, item|
-      
+    binding.pry
       attendance = Attendance.find(id)
       attendance.update_attributes(item)
     end
