@@ -2,7 +2,7 @@ class AttendancesController < ApplicationController
   before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overtime_work_end_plan, :update_overtime_work_end_plan]
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
-  before_action :set_one_month, only: [:edit_one_month, :edit_overtime_work_end_plan, :update_overtime_work_end_plan]
+  before_action :set_one_month, only: [:edit_one_month, :edit_overtime_work_end_plan, :update_overtime_work_end_plan, :overtime_approval_reply]
   
   #定数は下記のように大文字表記
   #更新エラー用のテキストを2ヶ所で使用しているため、このように定義
@@ -76,6 +76,17 @@ class AttendancesController < ApplicationController
      # flash[:danger] = "出社時間が入力されていません。"
       #redirect_to user_url(date: params[:date])
     #end
+  end
+  # 残業申請承認、社員へ返信
+  def overtime_approval_reply
+    @user = User.find(params[:user_id]) # set_user
+    # before_actionのset_one_month　定義
+    @attendance = Attendance.find(params[:id])
+    overtime_work_end_plan_params.each do |id, item|
+      
+      attendance = Attendance.find(id)
+      attendance.update_attributes(item)
+    end
   end
   
   private
