@@ -15,7 +15,7 @@
 			<td colspan="3"><br/>基本時間 : <%= format_basic_info(@user.basic_time) %></td>
 			<td><br/>初日 : <%= l(@first_day, format: :short) %></td>
 		</tr>
-		
+
 		<tr>
 			<td>所属：<%= @user.affiliation.present? ? @user.affiliation : "未所属" %></td>
 	<!--@userのユーザーオブジェクトにaffiliationが存在するか？存在する場合はその値を、存在しない場合は"未所属"という文字列を出力-->
@@ -91,14 +91,11 @@
 				<td>時間外時間</td>
 				<td>業務処理内容</td>
 				<td>指示者確認</td>
-				<td>変更</td>
 				<td>勤怠を確認する</td>
-				<td>変更を送信する</td>
 			</tr>
 		</thead>
 	<tbody>
-		<%= form_with model: @user do |f| %>
-			<% @overtime_appliyings.each do |attendance| %>	
+		<% @overtime_appliyings.each do |attendance| %>
 			<tr>
 				<td><%= attendance.user.name %></td>
 				<td><%= l(attendance.worked_on, format: :short) %></td>
@@ -107,12 +104,14 @@
 				<td><%= @user.designated_work_end_time.strftime("%R") %></td>
 				<td><%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %></td>
 				<td><%= attendance.overtime_content %></td>
-				<td><%= attendance.select :overtime_status_text, class: "form-control" %></td>
-				<td></td>
+        <td>
+          <%= form_with model: attendance, url: user_attendance_path(@user, attendance) do |f| %>
+            <%= f.select :overtime_status, Attendance.overtime_status.options, {}, class: "form-control" %>
+            <%= f.submit '送信', class: "btn btn-success" %>
+          <% end %>
+        </td>
 				<td><%= link_to '確認', user_path(attendance.user), class: "btn btn-primary" %></td>
-				<td><%= f.submit '送信', class: "btn btn-success" %></td>
 			</tr>
-			<% end %>
 		<% end %>
 	</tbody>
 </table>
@@ -158,12 +157,12 @@
 				<th>分</th>
 			</tr>
 		</thead>
-		
+
 		<tbody>
 			<% @attendances.each do |day| %> <!--# 範囲オブジェクトとして扱う-->
 			<!--@attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(worked_on)-->
 			<tr>
-				<td><%= link_to "残業申請", attendances_edit_overtime_work_end_plan_user_path(date: day.worked_on), 
+				<td><%= link_to "残業申請", attendances_edit_overtime_work_end_plan_user_path(date: day.worked_on),
 																				remote: true, class: "btn btn-primary" %></td>
 				<td><%= l(day.worked_on, format: :short) %></td> <!--config/localesディレクトリにあるja.ymlロケールファイルを参照-->
 				<td>
@@ -172,7 +171,7 @@
 					<% elsif day.worked_on.wday == 6 %> <!--土曜日の色　青-->
 						<font color="#0033cc">
 					<% end %>
-					<%= $days_of_the_week[day.worked_on.wday] %></td> 
+					<%= $days_of_the_week[day.worked_on.wday] %></td>
 				<td>
 					<%= l(day.started_at, format: :hour) if day.started_at.present? %>
 					<!--後置きのifによって、started_atの値が存在する場合のみ表示できるよう制御しています-->
@@ -212,12 +211,12 @@
 			</tr>
 			<% end %>
 		</tbody>
-		
+
 		<tfoot>
 			<tr>
 				<td rowspan="2"></td>　　　　　　　　　　　　
 				<td colspan="2">累計日数</td>
-				<td colspan="6"></td> 
+				<td colspan="6"></td>
 				<td>在社時間合計</td>
 				<td colspan="5"></td>
 				<td rowspan="2">所属長承認
@@ -229,7 +228,7 @@
 				<td colspan="2"><%= @attendances.count %></td>
 				<!--@attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(worked_on)-->
 				<td colspan="6"></td>
-				<td><%= format("%.2f", @total_working_times.to_f)%></td> 
+				<td><%= format("%.2f", @total_working_times.to_f)%></td>
 				<td colspan="5"></td>
 			</tr>
 		</tfoot>
