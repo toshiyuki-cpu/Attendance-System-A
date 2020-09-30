@@ -9,7 +9,7 @@
 			<td colspan="3"><br/>基本時間 : <%= format_basic_info(@user.basic_time) %></td>
 			<td><br/>初日 : <%= l(@first_day, format: :short) %></td>
 		</tr>
-		
+	
 		<tr>
 			<td>所属：<%= @user.affiliation.present? ? @user.affiliation : "未所属" %></td>
 			<td>氏名 :<%= @user.name %></td>
