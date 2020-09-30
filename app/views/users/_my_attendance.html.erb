@@ -68,15 +68,56 @@
         <td><%= @user.designated_work_end_time.strftime("%R") %></td>
         <td><%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %></td>
         <td><%= attendance.overtime_content %></td>
-        <td></td>
-        <td></td>
+        <td><%=  %></td>
+        <td><%= check_box_tag '#' %></td>
         <td><%= link_to '確認', user_path(attendance.user), class: "btn btn-primary" %></td>
-        <td><%= link_to '送信', '#', class: "btn btn-success" %></td>
+        <td><%= submit_tag '送信', class: "btn btn-success" %></td>
       </tr>
     </tbody>
   	<% end %>
   </table>
 </div>
+
+
+	<div>
+  	<table class="table table-bordered table-condensed table-hover received-application-details-table">
+    	<thead>
+      	<tr>
+      		<td>社員名</td>
+		    	<td>日付</td>
+		    	<td>曜日</td>
+			    <td>終了予定時間</td>
+			    <td>指定勤務終了時間</td>
+			    <td>時間外時間</td>
+			    <td>業務処理内容</td>
+			    <td>指示者確認</td>
+			    <td>変更</td>
+			    <td>勤怠を確認する</td>
+			    <td>変更を送信する</td>
+      	 </tr>
+   	  </thead>
+   	  <tbody>
+   	  	<%= form_with model: @user do |f| %>
+   	  	  <% @overtime_appliyings.each do |attendance| %>	
+      	<tr>
+	      	<td><%= attendance.user.name %></td>
+	        <td><%= l(attendance.worked_on, format: :short) %></td>
+	        <td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
+	        <td><%= attendance.overtime_work_end_plan.strftime("%R") %></td>
+	        <td><%= @user.designated_work_end_time.strftime("%R") %></td>
+	        <td><%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %></td>
+	        <td><%= attendance.overtime_content %></td>
+	        <td><%= attendance.select :overtime_status_text, class: "form-control" %></td>
+	        <td></td>
+	        <td><%= link_to '確認', user_path(attendance.user), class: "btn btn-primary" %></td>
+	        <td><%= f.submit '送信', class: "btn btn-success" %></td>
+      	</tr>
+      	<% end %>
+      	<% end %>
+    	</tbody>
+  	</table>
+  </div>
+
 
 <div class="btn btn-users-show" >
 	<%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
