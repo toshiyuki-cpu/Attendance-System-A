@@ -105,7 +105,7 @@
 				<td><%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %></td>
 				<td><%= attendance.overtime_content %></td>
         <td>
-          <%= form_with model: attendance, url: attendances_overtime_approval_reply_user_path(@user, attendance) do |f| %>
+          <%= form_with model: attendance, url: attendances_overtime_approval_reply_user_path(@user, attendance), local: true do |f| %>
             <%= f.select :overtime_status, Attendance.overtime_status.options, {}, class: "form-control" %>
             <%= f.submit '送信', class: "btn btn-success" %>
           <% end %>

@@ -2,7 +2,7 @@ class AttendancesController < ApplicationController
   before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overtime_work_end_plan, :update_overtime_work_end_plan]
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
-  before_action :set_one_month, only: [:edit_one_month, :edit_overtime_work_end_plan, :update_overtime_work_end_plan, :overtime_approval_reply]
+  before_action :set_one_month, only: [:edit_one_month, :edit_overtime_work_end_plan, :update_overtime_work_end_plan]
   
   #定数は下記のように大文字表記
   #更新エラー用のテキストを2ヶ所で使用しているため、このように定義
@@ -81,31 +81,33 @@ class AttendancesController < ApplicationController
   def overtime_approval_reply
     # STEP1
     # 対象のattendanceオブジェクトを探す(paramsのなかに対象のattendanceのidがはいっているはず)
-
+     @attendance = Attendance.find(params[:id])
+     
     # STEP2
     # @attendanceのovertime_statusを変更する
     # paramsの中にviewから渡ってきたovertime_statusがあります。その値を@attendanceのovertime_statusに代入してあげます。
-
+    @attendance.overtime_status = :approval
+    
     # STEP3
     # @attendanceを保存します。
-
+    @attendance.save
     # STEP4
     # 任意のページにリダイレクトします。
-
+    redirect_to user_url
     # ユーザー（user.id）とユーザーの勤怠（user_id）を探す
     # ユーザーのattendances.idを探す
     # 承認を選択（overtime_statusがapproval）
     # overtime_statusのapprovalを特定させる
     # 送信ボタン(url: attendances_overtime_approval_reply_user_path(@user, attendance))
     # 社員（@user.attendance）の勤怠ページに承認（applying）と表示
-    @user = User.find(params[:user_id]) # set_user
+    # @user = User.find(params[:user_id]) # set_user
     # before_actionのset_one_month　定義
-    @attendance = Attendance.find(params[:id])
-    overtime_work_end_plan_params.each do |id, item|
-    binding.pry
-      attendance = Attendance.find(id)
-      attendance.update_attributes(item)
-    end
+    # @attendance = Attendance.find(params[:id])
+    # overtime_work_end_plan_params.each do |id, item|
+    # binding.pry
+    # attendance = Attendance.find(id)
+    # attendance.update_attributes(item)
+    #end
   end
   
   private
