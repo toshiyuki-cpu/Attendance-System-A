@@ -79,6 +79,19 @@ class AttendancesController < ApplicationController
   end
   # 残業申請承認、社員へ返信
   def overtime_approval_reply
+    # STEP1
+    # 対象のattendanceオブジェクトを探す(paramsのなかに対象のattendanceのidがはいっているはず)
+
+    # STEP2
+    # @attendanceのovertime_statusを変更する
+    # paramsの中にviewから渡ってきたovertime_statusがあります。その値を@attendanceのovertime_statusに代入してあげます。
+
+    # STEP3
+    # @attendanceを保存します。
+
+    # STEP4
+    # 任意のページにリダイレクトします。
+
     # ユーザー（user.id）とユーザーの勤怠（user_id）を探す
     # ユーザーのattendances.idを探す
     # 承認を選択（overtime_statusがapproval）
