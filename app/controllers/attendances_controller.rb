@@ -81,8 +81,9 @@ class AttendancesController < ApplicationController
   def overtime_approval_reply
     # STEP1
     # 対象のattendanceオブジェクトを探す(paramsのなかに対象のattendanceのidがはいっているはず)
-     @attendance = Attendance.find(params[:id])
-     
+    @attendance = Attendance.find(params[:attendance_id])
+    
+    
     # STEP2
     # @attendanceのovertime_statusを変更する
     # paramsの中にviewから渡ってきたovertime_statusがあります。その値を@attendanceのovertime_statusに代入してあげます。
@@ -94,7 +95,7 @@ class AttendancesController < ApplicationController
     
     # STEP4
     # 任意のページにリダイレクトします。
-    redirect_to user_url
+    redirect_to users_url
     # ユーザー（user.id）とユーザーの勤怠（user_id）を探す
     # ユーザーのattendances.idを探す
     # 承認を選択（overtime_statusがapproval）
