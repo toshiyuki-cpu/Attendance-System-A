@@ -26,11 +26,14 @@ Rails.application.routes.draw do
       patch 'attendances/overtime_approval_reply'
     end
     
-    resources :attendances, only: :update # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます
+    resources :attendances, only: :update do
+      patch 'overtime_approval_reply'
+    end
+  end
+    # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます
   # Usersリソースのブロック内に記述しているため、設定されるルーティングは
   # HTTP　PATCH
   # URL /users/:user_id/attendances/:id　　params[:user_id]でユーザーIDが取得できる
   # PATH user_attendance_path	
   # コントローラー#アクション　attendances#update　となる
-    end
-  end
+end

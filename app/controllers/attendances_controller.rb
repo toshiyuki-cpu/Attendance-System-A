@@ -91,6 +91,7 @@ class AttendancesController < ApplicationController
     # STEP3
     # @attendanceを保存します。
     @attendance.save
+    
     # STEP4
     # 任意のページにリダイレクトします。
     redirect_to user_url

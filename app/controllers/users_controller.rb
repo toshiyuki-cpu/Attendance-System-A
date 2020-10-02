@@ -38,7 +38,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params) #(params[:user]) userコントローラーにシンボルparams[:user]として渡している
     if @user.save
-      log_in @user # 保存成功後、ログインします。このメソッドによりリダイレクトされたページではログイ���状態のレイアウトが表示される
+      log_in @user # 保存成功後、ログインします。このメソッドによりリダイレクトされたページではログイ�����状態のレイアウトが表示される
       flash[:success] = '新規作成に成功しました。' #:successというキーには保存に成功した時のメッセージを代入
       redirect_to @user #左記のように記述できる　redirect_to user_url(@user)
     else
