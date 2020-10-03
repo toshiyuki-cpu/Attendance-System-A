@@ -86,7 +86,7 @@ class AttendancesController < ApplicationController
     # STEP2
     # @attendanceのovertime_statusを変更する
     # paramsの中にviewから渡ってきたovertime_statusがあります。その値を@attendanceのovertime_statusに代入してあげます。
-    @attendance.overtime_status = :approval
+    @attendance.overtime_status = params[:attendance][:overtime_status]
     
     # STEP3
     # @attendanceを保存します。
