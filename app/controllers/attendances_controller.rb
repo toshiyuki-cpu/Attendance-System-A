@@ -93,7 +93,7 @@ class AttendancesController < ApplicationController
     @attendance.save
     
     # STEP4
-    # 任意のページにリダイレクトします。
+    # 上長（現在ログインしている上長）の勤怠ページにリダイレクト（今回はリロード）します。
     redirect_to user_url(current_user)
     
     # @user = User.find(params[:user_id]) # set_user
