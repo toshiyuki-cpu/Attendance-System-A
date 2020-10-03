@@ -77,6 +77,34 @@ class AttendancesController < ApplicationController
       #redirect_to user_url(date: params[:date])
     #end
   end
+  # 残業申請承認、社員へ返信
+  def overtime_approval_reply
+    # STEP1
+    # 対象のattendanceオブジェクトを探す(paramsのなかに対象のattendanceのidがはいっているはず)
+    @attendance = Attendance.find(params[:attendance_id])
+   
+    # STEP2
+    # @attendanceのovertime_statusを変更する
+    # paramsの中にviewから渡ってきたovertime_statusがあります。その値を@attendanceのovertime_statusに代入してあげます。
+    @attendance.overtime_status = params[:attendance][:overtime_status]
+    
+    # STEP3
+    # @attendanceを保存します。
+    @attendance.save
+    
+    # STEP4
+    # 上長（現在ログインしている上長）の勤怠ページにリダイレクト（今回はリロード）します。
+    redirect_to user_url(current_user)
+    
+    # @user = User.find(params[:user_id]) # set_user
+    # before_actionのset_one_month　定義
+    # @attendance = Attendance.find(params[:id])
+    # overtime_work_end_plan_params.each do |id, item|
+    # binding.pry
+    # attendance = Attendance.find(id)
+    # attendance.update_attributes(item)
+    #end
+  end
   
   private
   
