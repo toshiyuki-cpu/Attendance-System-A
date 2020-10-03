@@ -45,7 +45,7 @@
                                                                                         <!-- user.idを渡して各ユーザーに紐付け -->
             <div id="demo<%= user.id %>" class="collapse"><!-- user.idを渡して各ユーザーに紐付け -->
             <%= render 'form', { user: user } %> <!-- render partial: 'form', locals: { user: user } でも可。 -->
-                                                 <!--データを渡すには、 render メソッドの locals オプションを利用
+                                               <!--データを渡すには、 render メソッドの locals オプションを利用
                                                      locals オプションにはオブジェクトを渡します。
                                                       オブジェクトのキー名がパーシャル内で参照できる値になります-->
           </div>

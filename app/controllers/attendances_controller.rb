@@ -82,8 +82,7 @@ class AttendancesController < ApplicationController
     # STEP1
     # 対象のattendanceオブジェクトを探す(paramsのなかに対象のattendanceのidがはいっているはず)
     @attendance = Attendance.find(params[:attendance_id])
-    
-    
+   
     # STEP2
     # @attendanceのovertime_statusを変更する
     # paramsの中にviewから渡ってきたovertime_statusがあります。その値を@attendanceのovertime_statusに代入してあげます。
@@ -95,13 +94,8 @@ class AttendancesController < ApplicationController
     
     # STEP4
     # 任意のページにリダイレクトします。
-    redirect_to users_url
-    # ユーザー（user.id）とユーザーの勤怠（user_id）を探す
-    # ユーザーのattendances.idを探す
-    # 承認を選択（overtime_statusがapproval）
-    # overtime_statusのapprovalを特定させる
-    # 送信ボタン(url: attendances_overtime_approval_reply_user_path(@user, attendance))
-    # 社員（@user.attendance）の勤怠ページに承認（applying）と表示
+    redirect_to user_url(current_user)
+    
     # @user = User.find(params[:user_id]) # set_user
     # before_actionのset_one_month　定義
     # @attendance = Attendance.find(params[:id])
