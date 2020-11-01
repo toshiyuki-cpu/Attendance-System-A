@@ -207,7 +207,10 @@
 					<% end %>
 				</td>
 				<td><%= day.overtime_content %></td>
-				<td><%= day.overtime_status_text %></td>　<!-- _text加えることにより日本語に変換-->
+				<td>
+				  <%= day.superior %>
+					<%= day.overtime_status_text %> <!-- _text加えることにより日本語に変換-->
+				</td>　
 			</tr>
 			<% end %>
 		</tbody>

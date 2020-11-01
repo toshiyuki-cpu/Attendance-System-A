@@ -27,6 +27,9 @@ class Attendance < ApplicationRecord #AttendanceモデルからみたUserモデ�
 #Attendanceモデルが生成され、コードでは、Userモデルと1対1の関係を示すbelongs_to :userというコードが記述されています。
 #これは先ほど実行したコマンドにuser:referenceという引数を含めたためです。
 #この引数を使うと、自動的にuser_id属性が追加されActiveRecordがUserモデルとAttendanceモデルを紐付ける準備をしてくれます
+
+  has_one :superior, class_name: 'User', foreign_key: :select_superior_id
+  
   extend Enumerize
   enumerize :overtime_status, in: %i(applying approval negation cancel), scope: true
   
