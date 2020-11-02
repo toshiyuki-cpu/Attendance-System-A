@@ -24,9 +24,11 @@ class AttendancesController < ApplicationController
           flash[:info] = "お疲れ様でした。"
       else
           flash[:danger] = UPDATE_ERROR_MSG
+          
       end
     end
     redirect_to @user
+    
   end
   
   def edit_one_month #ルーティングattendances/edit_one_monthを設定してからアクションを定義
