@@ -207,9 +207,8 @@
 					<% end %>
 				</td>
 				<td><%= day.overtime_content %></td>
-				<td>
-				  <%= day.superior.name if day.superior %> <!-- attendance.rbにてselect_superior_idを外部キーとして設定-->
-					<%= day.overtime_status_text %> <!-- _text加えることにより日本語に変換-->
+				<td>　　<!-- superiorはattendance.rbにてselect_superior_idを外部キーとして設定-->
+					<%= overtime_reply_text(day) %>
 				</td>　
 			</tr>
 			<% end %>

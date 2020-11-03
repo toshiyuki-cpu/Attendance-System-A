@@ -32,6 +32,33 @@ module AttendancesHelper
       format("%.2f", (end_plan.hour - end_time.hour) + (end_plan.min - end_time.min) / 60.00)
     end
   end
+  
+  # 指示者確認欄の表示設定
+  def overtime_reply_text(day)
+    case day.overtime_status
+    when "applying"
+        "#{day.superior.name}に申請中"
+    when "approval"
+        "#{day.superior.name}から承認済"
+    when "negation"
+        "#{day.superior.name}から否認されました"
+    when "cancel"
+        "#{day.superior.name}からキャンセルされました"
+    end
+  end
+  
+  #def overtime_reply_text(status)
+    #case status
+    #when "applying"
+        #"に申請中"
+    #when "approval"
+        #"から承認済"
+   # when "negation"
+        #"から否認されました"
+    #when "cancel"
+        #"からキャンセルされました"
+    #end
+  #end
 end  
 # Attendances Helperにより下記のshow.html.erbの記述はいらなくなる
 #	<% if (Date.current == day.worked_on) && day.started_at.nil? %>
