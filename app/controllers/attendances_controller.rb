@@ -73,7 +73,17 @@ class AttendancesController < ApplicationController
     end
     #if attendance.update_attributes(overtime_work_end_plan_params)
       flash[:success] = "残業を申請しました。"
-      redirect_to user_url(date: params[:date])
+      
+      #redirect_back(fallback_location: user_url)
+      #params id を取得する
+      attendance = Attendance.find(params[:user][:attendances].keys.first)
+      #idでattendanceオブジェクトを取得
+      
+      #worked_onの日付から月の初日をとる
+      first_day = attendance.worked_on.beginning_of_month
+     
+      #ストリングパラメータの値に月初を入れてリダイレクトする
+      redirect_to user_url(date: first_day)
     #else @attendance.started_at.nil?
      # flash[:danger] = "出社時間が入力されていません。"
       #redirect_to user_url(date: params[:date])
