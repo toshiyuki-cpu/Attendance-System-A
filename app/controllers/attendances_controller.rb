@@ -24,11 +24,9 @@ class AttendancesController < ApplicationController
           flash[:info] = "お疲れ様でした。"
       else
           flash[:danger] = UPDATE_ERROR_MSG
-          
       end
     end
     redirect_to @user
-    
   end
   
   def edit_one_month #ルーティングattendances/edit_one_monthを設定してからアクションを定義
@@ -71,24 +69,20 @@ class AttendancesController < ApplicationController
       attendance.overtime_status = :applying # 指示者確認欄にapplyingと表示
       attendance.update_attributes(item)
     end
-    #if attendance.update_attributes(overtime_work_end_plan_params)
       flash[:success] = "残業を申請しました。"
       
-      #redirect_back(fallback_location: user_url)
-      #params id を取得する
+      #params idでattendanceオブジェクトを取得
       attendance = Attendance.find(params[:user][:attendances].keys.first)
-      #idでattendanceオブジェクトを取得
       
       #worked_onの日付から月の初日をとる
       first_day = attendance.worked_on.beginning_of_month
      
       #ストリングパラメータの値に月初を入れてリダイレクトする
       redirect_to user_url(date: first_day)
-    #else @attendance.started_at.nil?
-     # flash[:danger] = "出社時間が入力されていません。"
-      #redirect_to user_url(date: params[:date])
-    #end
+      
+      #redirect_back(fallback_location: user_url) この１行でも実装可能（74から81行省略して）
   end
+  
   # 残業申請承認、社員へ返信
   def overtime_approval_reply
     # STEP1
@@ -104,9 +98,9 @@ class AttendancesController < ApplicationController
     # @attendanceを保存します。
     @attendance.save
     
-    flash[:success] = '変更を申請者へ送信しました。'
     # STEP4
     # 上長（現在ログインしている上長）の勤怠ページにリダイレクト（今回はリロード）します。
+    flash[:success] = '変更を申請者へ送信しました。'
     redirect_to user_url(current_user)
     
     # @user = User.find(params[:user_id]) # set_user

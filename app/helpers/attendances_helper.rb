@@ -36,13 +36,13 @@ module AttendancesHelper
   # 指示者確認欄の表示設定
   def overtime_reply_text(attendance)
     case attendance.overtime_status
-    when "applying"
+    when 'applying'
         "#{attendance.superior.name}に申請中"
-    when "approval"
+    when 'approval'
         "#{attendance.superior.name}から承認済"
-    when "negation"
+    when 'negation'
         "#{attendance.superior.name}から否認されました"
-    when "cancel"
+    when 'cancel'
         "#{attendance.superior.name}からキャンセルされました"
     end
   end
