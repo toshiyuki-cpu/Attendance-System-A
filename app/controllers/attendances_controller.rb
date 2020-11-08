@@ -104,6 +104,7 @@ class AttendancesController < ApplicationController
     # @attendanceを保存します。
     @attendance.save
     
+    flash[:success] = '変更を申請者へ送信しました。'
     # STEP4
     # 上長（現在ログインしている上長）の勤怠ページにリダイレクト（今回はリロード）します。
     redirect_to user_url(current_user)
