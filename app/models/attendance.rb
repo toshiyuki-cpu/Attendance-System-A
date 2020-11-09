@@ -27,6 +27,11 @@ class Attendance < ApplicationRecord #AttendanceモデルからみたUserモデ�
 #Attendanceモデルが生成され、コードでは、Userモデルと1対1の関係を示すbelongs_to :userというコードが記述されています。
 #これは先ほど実行したコマンドにuser:referenceという引数を含めたためです。
 #この引数を使うと、自動的にuser_id属性が追加されActiveRecordがUserモデルとAttendanceモデルを紐付ける準備をしてくれます
+
+  # select_superior_idを外部キーのカラムと認識させるためuserのidとattendanceのselect_superior_idを外部キーとして関連付ける
+  # optional: trueとは、アソシエーションによって紐づけられた外部キーの値が存在していなくても、データベースに保存することができるオプション
+  belongs_to :superior, class_name: 'User', foreign_key: :select_superior_id, optional: true 
+  
   extend Enumerize
   enumerize :overtime_status, in: %i(applying approval negation cancel), scope: true
   
