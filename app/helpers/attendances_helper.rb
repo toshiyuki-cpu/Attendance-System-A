@@ -2,20 +2,20 @@ module AttendancesHelper
  # このメソッドを使って勤怠登録ボタンのテキストには何が必要か？または必要ないか？をこのメソッドで判定すること 
   def attendance_state(attendance)
     # 受け取ったAttendanceオブジェクトが当日と一致するか評価します。
-    #このメソッドでは戻り値が3パターンある
-    #このメソッドの戻り値と、if文のルールを使ってビューを制御。
-    #if文は条件式の結果がtrueなら処理を実行しfalseなら何もしない
+    # このメソッドでは戻り値が3パターンある
+    # このメソッドの戻り値と、if文のルールを使ってビューを制御。
+    # if文は条件式の結果がtrueなら処理を実行しfalseなら何もしない
    
     if Date.current == attendance.worked_on
       return '出社' if attendance.started_at.nil?
       return '退社' if attendance.started_at.present? && attendance.finished_at.nil?
-       #上記の3つの戻り値のうち、'出勤'と'退勤'はtrueとして判断されます
+       # 上記の3つの戻り値のうち、'出勤'と'退勤'はtrueとして判断されます
     end
     # どれにも当てはまらなかった場合はfalseを返します。
     false
   end
   
-  #def overtime_apply
+  # def overtime_apply
   
   # 出勤時間と退勤時間を受け取り、在社時間を計算して返します。
   def working_times(start, finish)
@@ -46,19 +46,6 @@ module AttendancesHelper
         "#{attendance.superior.name}からキャンセルされました"
     end
   end
-  
-  #def overtime_reply_text(status)
-    #case status
-    #when "applying"
-        #"に申請中"
-    #when "approval"
-        #"から承認済"
-   # when "negation"
-        #"から否認されました"
-    #when "cancel"
-        #"からキャンセルされました"
-    #end
-  #end
 end  
 # Attendances Helperにより下記のshow.html.erbの記述はいらなくなる
 #	<% if (Date.current == day.worked_on) && day.started_at.nil? %>
