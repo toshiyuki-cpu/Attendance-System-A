@@ -67,6 +67,7 @@ class AttendancesController < ApplicationController
     # id,itemはattendances_params（Attendanceモデルオブジェクト）の中
       attendance = Attendance.find(id)
       attendance.overtime_status = :applying # 指示者確認欄にapplyingと表示
+      attendance.change_permit = 0
       attendance.update_attributes(item)
     end
       flash[:success] = "残業を申請しました。"
@@ -119,7 +120,7 @@ class AttendancesController < ApplicationController
   
     # 残業申請のパラメーター
   def overtime_work_end_plan_params
-    params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id, :overtime_status])[:attendances]
+    params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id, :overtime_status, :change_permit])[:attendances]
   end
     # paramsハッシュの中の、
     #:userがキーのハッシュの中の、
