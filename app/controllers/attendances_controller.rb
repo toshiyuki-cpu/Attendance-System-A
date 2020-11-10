@@ -4,8 +4,8 @@ class AttendancesController < ApplicationController
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
   before_action :set_one_month, only: [:edit_one_month, :edit_overtime_work_end_plan, :update_overtime_work_end_plan]
   
-   # 定数は下記のように大文字表記
-   # 更新エラー用のテキストを2ヶ所で使用しているため、このように定義
+    # 定数は下記のように大文字表記
+    # 更新エラー用のテキストを2ヶ所で使用しているため、このように定義
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
   
   def update
@@ -14,7 +14,7 @@ class AttendancesController < ApplicationController
     # 出勤時間が未登録であることを判定します。
     if @attendance.started_at.nil?
       if @attendance.update_attributes(started_at: Time.current.change(sec: 0)) #　changeメソッド　秒数を０に変換する
-    # update_attributes バリデーションを通す
+        # update_attributes バリデーションを通す
         flash[:info] = "おはようございます！"
       else
         flash[:danger] = UPDATE_ERROR_MSG
@@ -67,7 +67,7 @@ class AttendancesController < ApplicationController
     # id,itemはattendances_params（Attendanceモデルオブジェクト）の中
       attendance = Attendance.find(id)
       attendance.overtime_status = :applying # 指示者確認欄にapplyingと表示
-      attendance.change_permit = 0
+      attendance.change_permit = 0 # 再申請すると上長ページでチェックが入ってしまうのでfalseで返す。
       attendance.update_attributes(item)
     end
       flash[:success] = "残業を申請しました。"
@@ -99,10 +99,10 @@ class AttendancesController < ApplicationController
     # チェックボックスがtrueの時、@attendanceにtrue代入。そして@attendanceを保存します。
     # チェックボックス がfalseなら更新できない。viewに required: true追加してメッセージ出す
     # (check_boxヘルパーのチェックボックス に入力された値をコントローラーやモデルで使用する時は
-    # params[モデル名][カラム名（オブジェクト名）]で取得する（値が格納される))
+    # params[モデル名][カラム名]で取得する（値が格納される)) 注意）htmlで記述されたname属性の中身に依る
     if @attendance.change_permit = params[:attendance][:change_permit]
-      @attendance.save
-    else
+       @attendance.save
+    　else
     end
       
     # STEP4
@@ -113,7 +113,7 @@ class AttendancesController < ApplicationController
   
   private
   
-    # 1ヶ月分の勤怠情報を扱います。
+  # 1ヶ月分の勤怠情報を扱います。
   def attendances_params
     params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
   end
@@ -123,8 +123,8 @@ class AttendancesController < ApplicationController
     params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id, :overtime_status, :change_permit])[:attendances]
   end
     # paramsハッシュの中の、
-    #:userがキーのハッシュの中の、
-    #:attendancesがキーのハッシュの中の
+    # :userがキーのハッシュの中の、
+    # :attendancesがキーのハッシュの中の
     # idがキーで、各カラム名がキーとなり、値がバリューとなった
     # この説明ですが、これらを上記のコードと合わせていくと・・・
     # paramsハッシュの中の・・・params

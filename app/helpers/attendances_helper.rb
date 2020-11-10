@@ -15,8 +15,6 @@ module AttendancesHelper
     false
   end
   
-  # def overtime_apply
-  
   # 出勤時間と退勤時間を受け取り、在社時間を計算して返します。
   def working_times(start, finish)
     format("%.2f", (((finish - start) / 60) / 60.0))
@@ -47,11 +45,11 @@ module AttendancesHelper
     end
   end
 end  
-# Attendances Helperにより下記のshow.html.erbの記述はいらなくなる
-#	<% if (Date.current == day.worked_on) && day.started_at.nil? %>
-#	<!--繰り返し処理中の日付と、実際の日付における当日が一致することを条件とし、さらに該当する日付データにはstarted_atがnilであるか？
-#	を評価しています。どちらもtrueとなる時のみ、ボタンの出力部分が実行されます-->
-#	<%= link_to "出社", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
-#	<% elsif (Date.current == day.worked_on) && day.started_at.present? day.finished_at.nil? %>
-#	<%= link_to "退社", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
-#	<% end %>
+  # Attendances Helperにより下記のshow.html.erbの記述はいらなくなる
+  #	<% if (Date.current == day.worked_on) && day.started_at.nil? %>
+  #	<!--繰り返し処理中の日付と、実際の日付における当日が一致することを条件とし、さらに該当する日付データにはstarted_atがnilであるか？
+  #	を評価しています。どちらもtrueとなる時のみ、ボタンの出力部分が実行されます-->
+  #	<%= link_to "出社", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
+  #	<% elsif (Date.current == day.worked_on) && day.started_at.present? day.finished_at.nil? %>
+  #	<%= link_to "退社", user_attendance_path(@user, day), method: :patch, class: "btn btn-primary btn-attendance" %>
+  #	<% end %>

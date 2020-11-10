@@ -25,7 +25,7 @@
 #  index_users_on_email  (email) UNIQUE
 #
 class User < ApplicationRecord #Userモデル
-  #Userモデルからみた場合、Attendanceとの関係は1（User）対多（Attendance）
+  # Userモデルからみた場合、Attendanceとの関係は1（User）対多（Attendance）
   # has_many ~と記述　多数所持するため、複数形（attendances）となっている
   # ユーザーが削除された場合、関連する勤怠データも同時に自動で削除されるよう設定 dependent: :destroy
   
@@ -34,48 +34,48 @@ class User < ApplicationRecord #Userモデル
   
   enumerize :role, in: %i(admin superior employee), default: :employee, scope: true
   
-# 「remember_token」という仮想の属性を作成します。
+  # 「remember_token」という仮想の属性を作成します。
   attr_accessor :remember_token
   
-# before_saveとはActive Recordのコールバックメソッド
+  # before_saveとはActive Recordのコールバックメソッド
   before_save { self.email = email.downcase } #現在のメールアドレス（self.email）の値をdowncaseメソッドを使って小文字に変換
   
   validates :name, presence: true, length: { maximum: 50 } #presence 存在性
   
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i #正規表現を代入している（値が変化する事がない為定数として定義）
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i # 正規表現を代入している（値が変化する事がない為定数として定義）
   
   validates :email, presence: true, length: { maximum: 100 },
-                    format: { with: VALID_EMAIL_REGEX }, #formatオプション（有効なメアドだけにマッチする）
-                    uniqueness: true #一意性（他に同じデータがない）
+                    format: { with: VALID_EMAIL_REGEX }, # formatオプション（有効なメアドだけにマッチする）
+                    uniqueness: true # 一意性（他に同じデータがない）
                     
   validates :affiliation, length: { in: 2..30 }, allow_blank: true
   # inオプション「2文字以上かつ30文字以下」という検証を追加
-  #allow_blank: true 値が空文字""の場合バリデーションをスルー
+  # allow_blank: true 値が空文字""の場合バリデーションをスルー
   
   validates :basic_time, presence: true
   
   validates :work_time, presence: true
   
-  has_secure_password #パスワードをそのままの文字列ではなく、ハッシュ化した状態の文字列でデータベースに保存
+  has_secure_password # パスワードをそのままの文字列ではなく、ハッシュ化した状態の文字列でデータベースに保存
                       # ハッシュ化とは、入力されたデータ（パスワード）を元に戻せないデータにする処理
                       
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
-#has_secure_passwordを追加することで(bcryptと言うgemをインストール)
-#1.ハッシュ化したパスワードを、データベースのpassword_digestというカラムに保存できるようになる。
-#2.ペアとなる仮想的なカラムであるpasswordとpassword_confirmationが使えるようになる。さらに存在性と値が一致するかどうかの検証も追加される。
-#3.authenticateメソッドが使用可能となる。
-#このメソッドは引数の文字列がパスワードと一致した場合オブジェクトを返し、パスワードが一致しない場合はfalseを返す。
-# allow_nil: trueはユーザー情報更新でパスワード入力しなくても更新できるメソッド
+  # has_secure_passwordを追加することで(bcryptと言うgemをインストール)
+  # 1.ハッシュ化したパスワードを、データベースのpassword_digestというカラムに保存できるようになる。
+  # 2.ペアとなる仮想的なカラムであるpasswordとpassword_confirmationが使えるようになる。さらに存在性と値が一致するかどうかの検証も追加される。
+  # 3.authenticateメソッドが使用可能となる。
+  # このメソッドは引数の文字列がパスワードと一致した場合オブジェクトを返し、パスワードが一致しない場合はfalseを返す。
+  # allow_nil: trueはユーザー情報更新でパスワード入力しなくても更新できるメソッド
 
-  def self.search(search) #ここでのself.はUser.を意味する 
+  def self.search(search) # ここでのself.はUser.を意味する 
     if search
       where(['name LIKE ?', "%#{search}%"]) #検索とnameの部分一致を表示。User.は省略
     else
-      all #全て表示。User.は省略
+      all # 全て表示。User.は省略
     end
   end
 
-# 渡された文字列のハッシュ値を返す
+  # 渡された文字列のハッシュ値を返す
   def User.digest(string)
     cost = 
       if ActiveModel::SecurePassword.min_cost
