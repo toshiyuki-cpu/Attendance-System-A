@@ -28,7 +28,7 @@ class UsersController < ApplicationController
     # @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
     
     # 残業申請お知らせ通知
-      @overtime_appliyings = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying')
+    @overtime_appliyings = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying')
   end
   
   def new
@@ -110,26 +110,26 @@ class UsersController < ApplicationController
   
   # paramsハッシュからユーザーを取得します。
   # def set_user # show,edit,updateアクションの@user = User.find(params[:id])をset_userとして定義
-  # @user = User.find(params[:id])
+  #   @user = User.find(params[:id])
   # end
   
   # ログイン済みのユーザーか確認
   # def logged_in_user
-  # unless logged_in? # unlessは条件式がfalseの場合のみ記述した処理が実行される構文
-  # store_location
-  # flash[:danger] = "ログインしてください。"
-  # redirect_to login_url
-  # end
+  #   unless logged_in? # unlessは条件式がfalseの場合のみ記述した処理が実行される構文
+  #     store_location
+  #     flash[:danger] = "ログインしてください。"
+  #     redirect_to login_url
+  #   end
   # end
   
   # アクセスしたユーザーが現在ログインしているユーザーか確認
   # def correct_user
-  # @user = User.find(params[:id]) # アクセスしたユーザーを判定するため
-  # redirect_to(root_url) unless current_user?(@user) #current_user?(user) sessionsヘルパーで定義してある
+  #   @user = User.find(params[:id]) # アクセスしたユーザーを判定するため
+  #   redirect_to(root_url) unless current_user?(@user) #current_user?(user) sessionsヘルパーで定義してある
   # end
   
   # システム管理権限所有かどうか判定
   # def admin_user
-  # redirect_to root_url unless current_user.admin?
+  #   redirect_to root_url unless current_user.admin?
   # end
 end
