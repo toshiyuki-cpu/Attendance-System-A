@@ -107,6 +107,7 @@
         <td>
           <%= form_with model: attendance, url: user_attendance_overtime_approval_reply_path(@user, attendance), local: true do |f| %>
             <%= f.select :overtime_status, Attendance.overtime_status.options, {}, class: "form-control" %>
+            <%= f.check_box :change_permit, required: true %>
             <%= f.submit '送信', class: "btn btn-success" %>
           <% end %>
         </td>

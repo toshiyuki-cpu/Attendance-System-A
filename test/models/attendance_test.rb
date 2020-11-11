@@ -3,6 +3,7 @@
 # Table name: attendances
 #
 #  id                     :integer          not null, primary key
+#  change_permit          :boolean
 #  finished_at            :datetime
 #  hours_of_overtime      :string
 #  next_day               :boolean
