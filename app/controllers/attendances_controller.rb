@@ -4,8 +4,8 @@ class AttendancesController < ApplicationController
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
   before_action :set_one_month, only: [:edit_one_month, :edit_overtime_work_end_plan, :update_overtime_work_end_plan]
   
-    # 定数は下記のように大文字表記
-    # 更新エラー用のテキストを2ヶ所で使用しているため、このように定義
+  # 定数は下記のように大文字表記
+  # 更新エラー用のテキストを2ヶ所で使用しているため、このように定義
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
   
   def update
@@ -102,7 +102,7 @@ class AttendancesController < ApplicationController
     # params[モデル名][カラム名]で取得する（値が格納される)) 注意）htmlで記述されたname属性の中身に依る
     if @attendance.change_permit = params[:attendance][:change_permit]
        @attendance.save
-    　else
+      else
     end
       
     # STEP4
