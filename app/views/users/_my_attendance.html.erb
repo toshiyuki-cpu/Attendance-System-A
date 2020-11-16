@@ -18,7 +18,7 @@
 
 		<tr>
 			<td>所属：<%= @user.affiliation.present? ? @user.affiliation : "未所属" %></td>
-	<!--@userのユーザーオブジェクトにaffiliationが存在するか？存在する場合はその値を、存在しない場合は"未所属"という文字列を出力-->
+			<!--@userのユーザーオブジェクトにaffiliationが存在するか？存在する場合はその値を、存在しない場合は"未所属"という文字列を出力-->
 			<td>氏名 :<%= @user.name %></td>
 			<td>コード</td>
 			<td><%= @user.employee_number %></td>
@@ -29,15 +29,15 @@
 </div>
 
 <% if @user.role.superior? %>
-	<div class="notice">
-		<p>【 所属長承認申請のお知らせ 】</p>
-		<p>【 勤怠変更申請のお知らせ 】</p>
-		<p>【 残業申請のお知らせ 】
-			<% if @overtime_appliyings.present? %>
-				<%= link_to " #{@overtime_appliyings.count}件の通知があります", '#', class: "notice-superior" %>
-			<% end %>
-		</p>
-	</div>
+<div class="notice">
+	<p>【 所属長承認申請のお知らせ 】</p>
+	<p>【 勤怠変更申請のお知らせ 】</p>
+	<p>【 残業申請のお知らせ 】
+	<% if @overtime_appliyings.present? %>
+		<%= link_to " #{@overtime_appliyings.count}件の通知があります", '#', class: "notice-superior" %>
+<% end %>
+	</p>
+</div>
 <% end %>
 
 <div>
@@ -68,27 +68,29 @@
 				<td><%= @user.designated_work_end_time.strftime("%R") %></td>
 				<td><%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %></td>
 				<td><%= attendance.overtime_content %></td>
-          <%= form_with model: attendance, url: user_attendance_overtime_approval_reply_path(@user, attendance), local: true do |f| %>
-            <td><%= f.select :overtime_status, Attendance.overtime_status.options, {}, class: "form-control" %></td>
-            <td><%= f.check_box :change_permit, required: true %></td>
-            <td><%= f.submit '送信', class: "btn btn-success" %></td>
-          <% end %>
+				<%= form_with model: attendance, url: user_attendance_overtime_approval_reply_path(@user, attendance), local: true do |f| %>
+					<td><%= f.select :overtime_status, Attendance.overtime_status.options, {}, class: "form-control" %></td>
+					<td><%= f.check_box :change_permit, required: true %></td>
+					<td><%= f.submit '送信', class: "btn btn-success" %></td>
+				<% end %>
 				<td><%= link_to '確認', user_path(attendance.user), class: "btn btn-primary" %></td>
 			</tr>
 		<% end %>
 		</tbody>
 	</table>
+
 	<div class="center">
-    <%= link_to '変更を送信する', '#', class: "btn btn-lg btn-success" %>
-  </div>
+		<%= link_to '変更を送信する', '#', class: "btn btn-lg btn-success" %>
+	</div>
 </div>
 
 <!-- NOTE: @applying_group = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by{|item| item.user} -->
 <!-- NOTE: @applying_group配列の中の二次元配列["user",[attendance]]をブロック変数keys,valuesに代入 -->
 <% @applying_group.each do |keys, values| %> 
-	<div class="center">
-		<h3>【<%= keys.name %>からの残業申請】</h3>
-	</div>
+<div class="center">
+	<h3>【<%= keys.name %>からの残業申請】</h3>
+</div>
+
 <div>
 	<table class="table table-bordered table-condensed table-hover received-application-details-table">
 		<thead>
@@ -105,36 +107,36 @@
 				<td>勤怠を確認する</td>
 			</tr>
 		</thead>
-		<tbody>
-			<!-- |keys, values|配列の中の[values]を取り出しattendanceに代入 -->
+			<tbody>
+				<!-- |keys, values|配列の中の[values]を取り出しattendanceに代入 -->
 			<% values.each do |attendance| %>	
-			<tr>
+				<tr>
 				<td><%= l(attendance.worked_on, format: :short) %></td>
 				<td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
 				<td><%= attendance.overtime_work_end_plan.strftime("%R") %></td>
 				<td><%= @user.designated_work_end_time.strftime("%R") %></td>
 				<td><%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %></td>
 				<td><%= attendance.overtime_content %></td>
-					<%= form_with model: attendance, url: user_attendance_overtime_approval_reply_path(@user, attendance), local: true do |f| %>
-				<td><%= f.select :overtime_status, Attendance.overtime_status.options, {}, class: "form-control" %></td>
-				<td><%= f.check_box :change_permit, required: true %></td>
-				<td><%= f.submit '送信', class: "btn btn-success" %></td>
+				<%= form_with model: attendance, url: user_attendance_overtime_approval_reply_path(@user, attendance), local: true do |f| %>
+					<td><%= f.select :overtime_status, Attendance.overtime_status.options, {}, class: "form-control" %></td>
+					<td><%= f.check_box :change_permit, required: true %></td>
+					<td><%= f.submit '送信', class: "btn btn-success" %></td>
 				<% end %>
 				<td><%= link_to '確認', user_path(attendance.user), class: "btn btn-primary" %></td>
 			</tr>
-			<% end %>
+		<% end %>
 		</tbody>
 	</table>
 </div>
 <% end %>
 <div class="center">
-  <%= link_to '変更を送信する', '#', class: "btn btn-lg btn-success" %>
+	<%= link_to '変更を送信する', '#', class: "btn btn-lg btn-success" %>
 </div>
 
 <div class="btn btn-users-show" >
 	<%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
 	<!--paramsハッシュにdateキーとして、@first_dayを指定しています。
-	       これで受け取ったparams[:date]をもとに、どの月の情報を表示するか判断できるようになります-->
+	これで受け取ったparams[:date]をもとに、どの月の情報を表示するか判断できるようになります-->
 	<%=link_to "CSV出力", '#', class: "btn btn-primary" %>
 	<%= link_to "勤怠修正ログ (承認済)", attendances_edit_log_user_path, class: "btn btn-primary attendance-edit-log" %>
 </div>
@@ -148,8 +150,8 @@
 				<th rowspan="3">曜日</th>
 				<th colspan="8">実績</th>
 				<th colspan="5">所定外勤務</th>
-			</tr>
-			<tr>
+				</tr>
+				<tr>
 				<th colspan="3">出社</th>
 				<th colspan="3">退社</th>
 				<th rowspan="2">在社時間</th>
@@ -158,8 +160,8 @@
 				<th rowspan="2">時間外時間</th>
 				<th rowspan="2">業務処理内容</th>
 				<th rowspan="2">指示者確認<%= "\u329e" %></th>
-			</tr>
-			<tr>
+				</tr>
+				<tr>
 				<th>時</th>
 				<th>分</th>
 				<th></th>
@@ -170,63 +172,63 @@
 				<th>分</th>
 			</tr>
 		</thead>
-
+			
 		<tbody>
-			<% @attendances.each do |attendance| %> <!--# 範囲オブジェクトとして扱う-->
-			<!--@attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(worked_on)-->
+		<% @attendances.each do |attendance| %> <!--# 範囲オブジェクトとして扱う-->
+		<!--@attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(worked_on)-->
 			<tr>
 				<td><%= link_to "残業申請", attendances_edit_overtime_work_end_plan_user_path(date: attendance.worked_on),
-																				remote: true, class: "btn btn-primary" %></td>
+															remote: true, class: "btn btn-primary" %></td>
 				<td><%= l(attendance.worked_on, format: :short) %></td> <!--config/localesディレクトリにあるja.ymlロケールファイルを参照-->
 				<td>
-					<% if attendance.worked_on.wday == 0 %> <!--日曜日の色　赤-->
-						<font color="#ff000">
-					<% elsif attendance.worked_on.wday == 6 %> <!--土曜日の色　青-->
-						<font color="#0033cc">
-					<% end %>
-					<%= $days_of_the_week[attendance.worked_on.wday] %></td>
+				<% if attendance.worked_on.wday == 0 %> <!--日曜日の色　赤-->
+					<font color="#ff000">
+				<% elsif attendance.worked_on.wday == 6 %> <!--土曜日の色　青-->
+					<font color="#0033cc">
+				<% end %>
+				<%= $days_of_the_week[attendance.worked_on.wday] %></td>
 				<td>
 					<%= l(attendance.started_at, format: :hour) if attendance.started_at.present? %>
 					<!--後置きのifによって、started_atの値が存在する場合のみ表示できるよう制御しています-->
 				</td>
 				<td><%= l(attendance.started_at, format: :minute) if attendance.started_at.present? %></td>
 				<td>
-					<!--Attendances Helperにattendance_state(attendance)を定義した為下記の記述になる-->
-					<% if btn_text = attendance_state(attendance) %>
-						<%= link_to "#{btn_text}", user_attendance_path(@user, attendance), method: :patch, class: "btn btn-primary btn-attendance" %>
-					<% end %>
+				<!--Attendances Helperにattendance_state(attendance)を定義した為下記の記述になる-->
+				<% if btn_text = attendance_state(attendance) %>
+					<%= link_to "#{btn_text}", user_attendance_path(@user, attendance), method: :patch, class: "btn btn-primary btn-attendance" %>
+				<% end %>
 				</td>
 				<td><%= l(attendance.finished_at, format: :hour) if attendance.finished_at.present? %></td>
 				<td><%= l(attendance.finished_at, format: :minute) if attendance.finished_at.present? %></td>
 				<td></td>
 				<td>
-					<% if attendance.started_at.present? && attendance.finished_at.present? %>
-					<!--繰り返し処理中の勤怠データに、started_atとfinished_atの値が存在するかを判定するもの-->
-						<%= str_times = working_times(attendance.started_at, attendance.finished_at) %>
-						<!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
-						<!--繰り返し処理の中で累計在社時間の計算は完了します。あとは@total_working_times変数をフッター部分に表示すればOKという仕組み-->
-						<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
-						<!--attendance helperに定義済み-->
-						<!--working_times(start, finish)-->
-						<!--format("%.2f", (((finish - start) / 60) / 60.0))-->
-					<% end %>
+				<% if attendance.started_at.present? && attendance.finished_at.present? %>
+				<!--繰り返し処理中の勤怠データに、started_atとfinished_atの値が存在するかを判定するもの-->
+				<%= str_times = working_times(attendance.started_at, attendance.finished_at) %>
+				<!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
+				<!--繰り返し処理の中で累計在社時間の計算は完了します。あとは@total_working_times変数をフッター部分に表示すればOKという仕組み-->
+				<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+				<!--attendance helperに定義済み-->
+				<!--working_times(start, finish)-->
+				<!--format("%.2f", (((finish - start) / 60) / 60.0))-->
+				<% end %>
 				</td>
 				<td><%= attendance.note %></td>
 				<td><%= l(attendance.overtime_work_end_plan, format: :hour) if attendance.overtime_work_end_plan.present? %></td>
 				<td><%= l(attendance.overtime_work_end_plan, format: :minute) if attendance.overtime_work_end_plan.present? %></td>
 				<td>
-					<% if attendance.started_at.present? && attendance.overtime_work_end_plan.present? %>
-						<%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %>
-					<% end %>
+				<% if attendance.started_at.present? && attendance.overtime_work_end_plan.present? %>
+				<%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %>
+				<% end %>
 				</td>
 				<td><%= attendance.overtime_content %></td>
 				<td>　　<!-- superiorはattendance.rbにてselect_superior_idを外部キーとして設定-->
-					<%= overtime_reply_text(attendance) %>
+				<%= overtime_reply_text(attendance) %>
 				</td>　
 			</tr>
-			<% end %>
+		<% end %>
 		</tbody>
-
+		
 		<tfoot>
 			<tr>
 				<td rowspan="2"></td>　　　　　　　　　　　　
@@ -238,8 +240,8 @@
 				</br>未申請
 				</br><%= link_to "承認申請", '#', class: "btn btn-primary" %>
 				</td>
-			</tr>
-			<tr>
+				</tr>
+				<tr>
 				<td colspan="2"><%= @attendances.count %></td>
 				<!--@attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(worked_on)-->
 				<td colspan="6"></td>

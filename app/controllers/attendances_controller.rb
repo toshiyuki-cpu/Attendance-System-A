@@ -3,7 +3,7 @@ class AttendancesController < ApplicationController
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
   before_action :set_one_month, only: [:edit_one_month, :edit_overtime_work_end_plan, :update_overtime_work_end_plan]
-  
+    
   # 定数は下記のように大文字表記
   # 更新エラー用のテキストを2ヶ所で使用しているため、このように定義
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
@@ -144,7 +144,7 @@ class AttendancesController < ApplicationController
     @user = User.find(params[:user_id]) if @user.blank?
     unless current_user?(@user) || current_user.admin?
       flash[:danger] = "編集権限がありません。"
-        redirect_to(root_url)
+      redirect_to(root_url)
     end  
   end
 end
