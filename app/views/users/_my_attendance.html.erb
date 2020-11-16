@@ -107,10 +107,10 @@
 					<td>勤怠を確認する</td>
 				</tr>
 			</thead>
-				<tbody>
-				<!-- |keys, values|配列の中の[values]を取り出しattendanceに代入 -->
-				<% values.each do |attendance| %>	
-					<tr>
+			<tbody>
+			<!-- |keys, values|配列の中の[values]を取り出しattendanceに代入 -->
+			<% values.each do |attendance| %>	
+				<tr>
 					<td><%= l(attendance.worked_on, format: :short) %></td>
 					<td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
 					<td><%= attendance.overtime_work_end_plan.strftime("%R") %></td>
