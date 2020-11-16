@@ -102,7 +102,6 @@ class AttendancesController < ApplicationController
     # params[モデル名][カラム名]で取得する（値が格納される)) 注意）htmlで記述されたname属性の中身に依る
     if @attendance.change_permit = params[:attendance][:change_permit]
        @attendance.save
-      else
     end
       
     # STEP4

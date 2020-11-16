@@ -31,7 +31,7 @@ class UsersController < ApplicationController
     @overtime_appliyings = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying')
     
     # 残業申請をユーザーオブジェクトでグルーピング
-    @applying_group = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by{|item| item.user}
+    @applying_group = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by{ |item| item.user }
     
   end
   
