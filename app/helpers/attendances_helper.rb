@@ -22,8 +22,17 @@ module AttendancesHelper
       # そして、受け取った引数��使って時間の計算処理をして値を返す仕組み
   end
   
-  # 時間外時間
+  # 時間外時間（残業申請）
   def hours_of_overtime(next_day, end_time, end_plan)
+    if next_day # ifの条件はbooleanが必要。next_dayにはbooleanがはいってる
+      format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
+    else
+      format("%.2f", (end_plan.hour - end_time.hour) + (end_plan.min - end_time.min) / 60.00)
+    end
+  end
+  
+  # 時間外時間（勤怠変更申請）
+  def edit_hours_of_overtime(edit_next_day, end_time, end_plan)
     if next_day # ifの条件はbooleanが必要。next_dayにはbooleanがはいってる
       format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
     else
@@ -35,13 +44,13 @@ module AttendancesHelper
   def overtime_reply_text(attendance)
     case attendance.overtime_status
     when 'applying'
-        "#{attendance.superior.name}に申請中"
+        "#{attendance.superior.name}に残業申請中"
     when 'approval'
-        "#{attendance.superior.name}から承認済"
+        "#{attendance.superior.name}から残業承認済"
     when 'negation'
-        "#{attendance.superior.name}から否認されました"
+        "#{attendance.superior.name}から残業否認されました"
     when 'cancel'
-        "#{attendance.superior.name}からキャンセルされました"
+        "#{attendance.superior.name}から残業キャンセルされました"
     end
   end
 end  

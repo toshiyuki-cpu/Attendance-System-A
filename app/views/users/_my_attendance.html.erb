@@ -78,12 +78,8 @@
 		<% end %>
 		</tbody>
 	</table>
-
-	<div class="center">
-		<%= link_to '変更を送信する', '#', class: "btn btn-lg btn-success" %>
-	</div>
 </div>
-
+<!-- 一般社員からの残業申請 -->
 <!-- NOTE: @applying_group = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by{|item| item.user} -->
 <!-- NOTE: @applying_group配列の中の二次元配列["user",[attendance]]をブロック変数keys,valuesに代入 -->
 <% @applying_group.each do |key, values| %> <!-- |user, attendances| でもいい -->
@@ -129,8 +125,59 @@
 		</table>
 	</div>
 <% end %>
-<div class="center">
-	<%= link_to '変更を送信する', '#', class: "btn btn-lg btn-success" %>
+
+<!-- 一般社員からの勤怠変更申請 -->
+<div>
+	<table class="table table-bordered table-condensed table-hover" id="table-attendances">
+		<thead>
+			<tr>
+				<th rowspan="3">日付</th>
+				<th rowspan="3">曜日</th>
+				<th colspan="4">変更前</th>
+				<th colspan="4">変更後</th>
+				<th rowspan="3">備考</th>
+				<th rowspan="3">指示者確認<%= "\u329e" %></th>
+				<th rowspan="3">変更</th>
+				<th rowspan="3">勤怠を確認する</th>
+				<th rowspan="3">変更を送信する</th>
+			</tr>
+			<tr>
+				<th colspan="2">出社</th>
+				<th colspan="2">退社</th>
+				<th colspan="2">出社</th>
+				<th colspan="2">退社</th>
+			</tr>
+			<tr>
+				<th>時</th>
+				<th>分</th>
+				<th>時</th>
+				<th>分</th>
+				<th>時</th>
+				<th>分</th>
+				<th>時</th>
+				<th>分</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+		</tbody>
+	</table>
 </div>
 
 <div class="btn btn-users-show" >

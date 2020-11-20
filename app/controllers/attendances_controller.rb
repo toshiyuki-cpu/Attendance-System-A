@@ -57,7 +57,6 @@ class AttendancesController < ApplicationController
   def edit_overtime_work_end_plan
     # set_user定義
     # set_one_month定義
-    
   end
   
   def update_overtime_work_end_plan
@@ -114,7 +113,7 @@ class AttendancesController < ApplicationController
   
   # 1ヶ月分の勤怠情報を扱います。
   def attendances_params
-    params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+    params.require(:user).permit(attendances: [:started_at, :finished_at, :edit_next_day, :note, :change_superior_id, :change_attendance_status])[:attendances]
   end
   
     # 残業申請のパラメーター

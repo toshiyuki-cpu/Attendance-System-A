@@ -2,21 +2,24 @@
 #
 # Table name: attendances
 #
-#  id                     :integer          not null, primary key
-#  change_permit          :boolean
-#  finished_at            :datetime
-#  hours_of_overtime      :string
-#  next_day               :boolean
-#  note                   :string
-#  overtime_content       :string
-#  overtime_status        :string
-#  overtime_work_end_plan :datetime
-#  started_at             :datetime
-#  worked_on              :date
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  select_superior_id     :integer
-#  user_id                :integer
+#  id                       :integer          not null, primary key
+#  change_attendance_status :string
+#  change_permit            :boolean
+#  edit_next_day            :boolean
+#  finished_at              :datetime
+#  hours_of_overtime        :string
+#  next_day                 :boolean
+#  note                     :string
+#  overtime_content         :string
+#  overtime_status          :string
+#  overtime_work_end_plan   :datetime
+#  started_at               :datetime
+#  worked_on                :date
+#  created_at               :datetime         not null
+#  updated_at               :datetime         not null
+#  change_superior_id       :integer
+#  select_superior_id       :integer
+#  user_id                  :integer
 #
 # Indexes
 #
@@ -35,6 +38,8 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   
   extend Enumerize
   enumerize :overtime_status, in: %i(applying approval negation cancel), scope: true
+  
+  enumerize :change_attendance_status, in: %i(applying approval negation cancel), scope: true
   
   validates :worked_on, presence: true
   # worked_onはどの日付の勤怠情報かを判断する上で必須,存在性の検証が必要なのはworked_on
