@@ -62,6 +62,7 @@ Rails.application.routes.draw do
       get 'attendances/edit_overtime_work_end_plan'
       patch 'attendances/update_overtime_work_end_plan'
       patch 'attendances/overtime_approval_reply'
+      patch 'attendances/change_attendance_reply'
     end
     
     resources :attendances, only: :update do

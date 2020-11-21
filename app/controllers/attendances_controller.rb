@@ -51,6 +51,25 @@ class AttendancesController < ApplicationController
     redirect_to attendances_edit_one_month_user_url(date: params[:date])
   end
   
+  def change_attendance_reply # 勤怠変更申請
+  
+    # STEP1 userのattendanceオブジェクトを取得
+    @user = User.find(params[:id])
+    @attendance = Attendance.find(params[:id])
+    
+    # STEP2 ストロングパラメーターで更新したいカラムを取得
+    attendances_params.each do |id, item|
+      attendance = Attendance.find(id)
+      
+      # STEP3 申請中をステータスに代入
+      attendance.change_attendance_status = :applying
+      attendance.update_attributes(item)
+    end
+    flash[:success] = "変更を送信しました。"
+    redirect_to user_url(date: params[:date])
+      
+  end
+  
   def edit_log
   end
   
@@ -113,7 +132,7 @@ class AttendancesController < ApplicationController
   
   # 1ヶ月分の勤怠情報を扱います。
   def attendances_params
-    params.require(:user).permit(attendances: [:started_at, :finished_at, :edit_next_day, :note, :change_superior_id, :change_attendance_status])[:attendances]
+    params.require(:user).permit(attendances: [:started_at, :finished_at, :next_day, :note, :change_superior_id, :change_attendance_status])[:attendances]
   end
   
     # 残業申請のパラメーター

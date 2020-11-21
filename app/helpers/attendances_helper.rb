@@ -22,17 +22,8 @@ module AttendancesHelper
       # そして、受け取った引数��使って時間の計算処理をして値を返す仕組み
   end
   
-  # 時間外時間（残業申請）
+  # 時間外時間（残業申請、勤怠変更申請）
   def hours_of_overtime(next_day, end_time, end_plan)
-    if next_day # ifの条件はbooleanが必要。next_dayにはbooleanがはいってる
-      format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
-    else
-      format("%.2f", (end_plan.hour - end_time.hour) + (end_plan.min - end_time.min) / 60.00)
-    end
-  end
-  
-  # 時間外時間（勤怠変更申請）
-  def edit_hours_of_overtime(edit_next_day, end_time, end_plan)
     if next_day # ifの条件はbooleanが必要。next_dayにはbooleanがはいってる
       format("%.2f", (24 + end_plan.hour) - end_time.hour + (end_plan.min - end_time.min) / 60.00) 
     else
