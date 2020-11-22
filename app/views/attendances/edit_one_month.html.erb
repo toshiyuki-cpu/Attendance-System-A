@@ -38,7 +38,7 @@
               <%= working_times(attendance.started_at, attendance.finished_at) %>
             <% end %>
           </td>
-          <td><%= f.text_field :note, required: true, class: "form-control" %></td>
+          <td><%= f.text_field :note, class: "form-control" %></td>
           <td><%= f.select :change_superior_id, User.with_role(:superior).map { |u| [u.name, u.id] }, 
                   { include_blank: '選択してください' }, {class: "form-control", required: true} %></td>
           <td><%= f.submit '送信', class: "btn btn-success" %></td>
