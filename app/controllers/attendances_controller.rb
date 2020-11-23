@@ -44,7 +44,7 @@ class AttendancesController < ApplicationController
     # あるデータは更新できたが、あるデータは更新できていなかった。となるとデータの整合性がなくなってしまいます
       end
     end
-    flash[:success] = "１ヶ月分の勤怠情報を更新しました。"
+    flash[:success] = "１ヶ月分の勤怠��報を更新しました。"
     redirect_to user_url(date: params[:date])
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
@@ -58,7 +58,7 @@ class AttendancesController < ApplicationController
     @attendance = Attendance.find(params[:id])
 
     # change_attendance_statusにapplyingを代入
-    @attendance.change_attendance_status = :applying
+    #@attendance.change_attendance_status = :applying
     
     @attendance.update_attributes(change_attendance_params)
     
@@ -131,7 +131,8 @@ class AttendancesController < ApplicationController
   
   # 勤怠変更申請パラメーター
   def change_attendance_params
-    params.require(:attendance).permit(:started_at, :finished_at, :next_day, :note, :change_superior_id, :change_attendance_status)[:attendances]
+    params.require(:attendance).permit(:started_at, :finished_at, :next_day, :note, :change_superior_id, :change_attendance_status)
+    
   end
   
   # 1ヶ月分の勤怠情報を扱います。
