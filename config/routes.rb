@@ -62,11 +62,12 @@ Rails.application.routes.draw do
       get 'attendances/edit_overtime_work_end_plan'
       patch 'attendances/update_overtime_work_end_plan'
       patch 'attendances/overtime_approval_reply'
-      patch 'attendances/change_attendance_reply'
+      #patch 'attendances/change_attendance_reply'
     end
     
     resources :attendances, only: :update do
       patch 'overtime_approval_reply'
+      patch 'change_attendance_reply'
     end
   end
     # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます

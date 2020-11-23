@@ -29,7 +29,7 @@
           <% end %>
 					<%= $days_of_the_week[attendance.worked_on.wday] %>
         </td>
-        <%= form_with(model: attendance, url: attendances_change_attendance_reply_user_path(@user, attendance), local: true, method: :patch) do |f| %>  
+        <%= form_with(model: attendance, url: user_attendance_change_attendance_reply_path(@user, attendance), local: true, method: :patch) do |f| %>  
           <td><%= f.time_field :started_at, class: "form-control" %></td>
           <td><%= f.time_field :finished_at, class: "form-control" %></td>
           <td><%= f.check_box :next_day %></td>
@@ -48,7 +48,7 @@
     </tbody>
   </table>
 </div>
-
+<!--
 <%= form_with(model: @user, url: attendances_update_one_month_user_path(date: @first_day), local: true, method: :patch) do |f| %>
 <div>
   <h1>勤怠編集</h1>
@@ -113,3 +113,4 @@
   <%= f.submit "編集を保存する", class: "btn btn-lg btn-primary" %>
 </div>
 <% end %>
+-->

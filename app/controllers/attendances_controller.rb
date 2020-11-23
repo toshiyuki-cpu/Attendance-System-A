@@ -54,8 +54,8 @@ class AttendancesController < ApplicationController
   def change_attendance_reply # 勤怠変更申請
   
     # STEP1 userのattendanceオブジェクトを取得
-    @user = User.find(params[:id])
-    @attendance = Attendance.find(params[:id])
+    @user = User.find(params[:user_id])
+    @attendance = Attendance.find(params[:attendance_id])
 
     # change_attendance_statusにapplyingを代入
     #@attendance.change_attendance_status = :applying
@@ -64,7 +64,7 @@ class AttendancesController < ApplicationController
     
     flash[:success] = "変更を送信しました。"
     
-    redirect_to user_url(date: params[:date])
+    redirect_to user_url(@user, date: params[:date])
     
       
   end
