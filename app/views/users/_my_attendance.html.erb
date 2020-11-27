@@ -79,11 +79,6 @@
 		</tbody>
 	</table>
 
-	<div class="center">
-		<%= link_to '変更を送信する', '#', class: "btn btn-lg btn-success" %>
-	</div>
-</div>
-
 <!-- NOTE: @applying_group = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by{|item| item.user} -->
 <!-- NOTE: @applying_group配列の中の二次元配列["user",[attendance]]をブロック変数keys,valuesに代入 -->
 <% @applying_group.each do |key, values| %> <!-- |user, attendances| でもいい -->
@@ -129,9 +124,6 @@
 		</table>
 	</div>
 <% end %>
-<div class="center">
-	<%= link_to '変更を送信する', '#', class: "btn btn-lg btn-success" %>
-</div>
 
 <div class="btn btn-users-show" >
 	<%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>

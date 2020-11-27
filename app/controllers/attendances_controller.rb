@@ -32,6 +32,14 @@ class AttendancesController < ApplicationController
   def edit_one_month # ルーティングattendances/edit_one_monthを設定してからアクションを定義
   end
   
+  def change_attendance_applying
+    @user = User.find(params[:user_id])
+    @attendance = Attendance.find(params[:attendance_id])
+    @attendance.update_attributes(change_attendance_params)
+    flash[:success] = "勤怠の変更をへ送信しました。"
+    redirect_to user_url(@user, date: params[:date])
+  end
+  
   def update_one_month # ルーティングattendances/update_one_monthを設定してからアクションを定義
     ActiveRecord::Base.transaction do # トランザクションを開始します。
     attendances_params.each do |id, item|
@@ -111,6 +119,11 @@ class AttendancesController < ApplicationController
   end
   
   private
+  
+  # 勤怠変更申請のパラメーター
+  def change_attendance_params
+    params.require(:attendance).permit(:started_at, :finished_at, :next_day, :note, :change_attendance_superior_id )
+  end
   
   # 1ヶ月分の勤怠情報を扱います。
   def attendances_params
