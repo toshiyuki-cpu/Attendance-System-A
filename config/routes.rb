@@ -59,7 +59,6 @@ Rails.application.routes.draw do
       get 'attendances/edit_one_month' #ルーティング設定してアクションを定義
       patch 'attendances/update_one_month' #ルーティング設定してアクションを定義
       get 'attendances/edit_log' #勤怠ログ
-      get 'attendances/edit_overtime_work_end_plan'
       patch 'attendances/overtime_approval_reply'
     end
     
@@ -67,6 +66,7 @@ Rails.application.routes.draw do
     resources :attendances, only: :update do # ネストさせる（1人のユーザーはたくさんのアテンダンスを持っている）
       patch 'overtime_approval_reply' # /users/:user_id/attendances/:attendance_id/overtime_approval_reply
       patch 'change_attendance_applying'
+      get 'edit_overtime_work_end_plan'
       patch 'update_overtime_work_end_plan'# /users/:user_id/attendances/:attendance_id/update_overtime_work_end_plan
     end
   end

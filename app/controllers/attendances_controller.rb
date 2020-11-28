@@ -1,5 +1,5 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overtime_work_end_plan]
+  before_action :set_user, only: [:edit_one_month, :update_one_month]
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
   before_action :set_one_month, only: [:edit_one_month]
@@ -63,8 +63,8 @@ class AttendancesController < ApplicationController
   end
   
   def edit_overtime_work_end_plan
-    # set_user定義
-    @attendance = Attendance.find(params[:id])
+    @user = User.find(params[:user_id])
+    @attendance = Attendance.find(params[:attendance_id])
   end
   
   def update_overtime_work_end_plan
