@@ -1,8 +1,8 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overtime_work_end_plan, :update_overtime_work_end_plan]
+  before_action :set_user, only: [:edit_one_month, :update_one_month, :edit_overtime_work_end_plan]
   before_action :logged_in_user, only: [:update, :edit_one_month]
   before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
-  before_action :set_one_month, only: [:edit_one_month, :edit_overtime_work_end_plan, :update_overtime_work_end_plan]
+  before_action :set_one_month, only: [:edit_one_month]
     
   # 定数は下記のように大文字表記
   # 更新エラー用のテキストを2ヶ所で使用しているため、このように定義
@@ -64,13 +64,12 @@ class AttendancesController < ApplicationController
   
   def edit_overtime_work_end_plan
     # set_user定義
-    # set_one_month定義
-    
+    @attendance = Attendance.find(params[:id])
   end
   
   def update_overtime_work_end_plan
-    # @user = User.find(params[:user_id])
-    # @attendance = Attendance.find(params[:id])
+    @user = User.find(params[:user_id])
+    @attendance = Attendance.find(params[:attendance_id])
     overtime_work_end_plan_params.each do |id, item|
     # id,itemはattendances_params（Attendanceモデルオブジェクト）の中
       attendance = Attendance.find(id)
@@ -132,7 +131,8 @@ class AttendancesController < ApplicationController
   
     # 残業申請のパラメーター
   def overtime_work_end_plan_params
-    params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id, :overtime_status, :change_permit])[:attendances]
+    params.require(:attendance).permit(:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id, :overtime_status, :change_permit)
+    #params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id, :overtime_status, :change_permit])[:attendances]
   end
     # paramsハッシュの中の、
     # :userがキーのハッシュの中の、
