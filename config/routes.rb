@@ -66,8 +66,8 @@ Rails.application.routes.draw do
     resources :attendances, only: :update do # ネストさせる（1人のユーザーはたくさんのアテンダンスを持っている）
       patch 'overtime_approval_reply' # /users/:user_id/attendances/:attendance_id/overtime_approval_reply
       patch 'change_attendance_applying'
-      get 'edit_overtime_work_end_plan'
-      patch 'update_overtime_work_end_plan'# /users/:user_id/attendances/:attendance_id/update_overtime_work_end_plan
+      get 'edit_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/edit_overtime_work_end_plan
+      patch 'update_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/update_overtime_work_end_plan
     end
   end
     # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます

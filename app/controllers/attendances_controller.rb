@@ -70,23 +70,15 @@ class AttendancesController < ApplicationController
   def update_overtime_work_end_plan
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:attendance_id])
-    # overtime_work_end_plan_params.each do |id, item|
-    # id,itemはattendances_params（Attendanceモデルオブジェクト）の中
-    #attendance = Attendance.find(params[:attendance_id])
     @attendance.overtime_status = :applying # 指示者確認欄にapplyingと表示
     @attendance.change_permit = 0 # 再申請すると上長ページでチェックが入ってしまうのでfalseで返す。
     @attendance.update_attributes(overtime_work_end_plan_params)
     #end
     flash[:success] = "残業を申請しました。"
-    # 残業申請しようとしてる月にリロードする為、params idでattendanceオブジェクトを取得
-    attendance = Attendance.find(params[:attendance_id]) 
-      
     # worked_onの日付から月の初日をとる
     first_day = attendance.worked_on.beginning_of_month
-     
     # ストリングパラメータの値に月初を入れてリダイレクトする
     redirect_to user_url(@user, date: first_day)
-      
     # redirect_back(fallback_location: user_url) この１行でも実装可能（74から81行省略して）
   end
   
