@@ -2,24 +2,23 @@
 #
 # Table name: attendances
 #
-#  id                       :integer          not null, primary key
-#  change_attendance_status :string
-#  change_permit            :boolean
-#  edit_next_day            :boolean
-#  finished_at              :datetime
-#  hours_of_overtime        :string
-#  next_day                 :boolean
-#  note                     :string
-#  overtime_content         :string
-#  overtime_status          :string
-#  overtime_work_end_plan   :datetime
-#  started_at               :datetime
-#  worked_on                :date
-#  created_at               :datetime         not null
-#  updated_at               :datetime         not null
-#  change_superior_id       :integer
-#  select_superior_id       :integer
-#  user_id                  :integer
+#  id                            :integer          not null, primary key
+#  change_attendance_status      :string
+#  change_permit                 :boolean
+#  finished_at                   :datetime
+#  hours_of_overtime             :string
+#  next_day                      :boolean
+#  note                          :string
+#  overtime_content              :string
+#  overtime_status               :string
+#  overtime_work_end_plan        :datetime
+#  started_at                    :datetime
+#  worked_on                     :date
+#  created_at                    :datetime         not null
+#  updated_at                    :datetime         not null
+#  change_attendance_superior_id :integer
+#  select_superior_id            :integer
+#  user_id                       :integer
 #
 # Indexes
 #

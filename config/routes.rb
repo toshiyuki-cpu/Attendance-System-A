@@ -52,22 +52,23 @@ Rails.application.routes.draw do
   end
 
   resources :users do #4つの基本操作（POST GET PATCH DELETE）が定義されている
-    member do #生成されたurlにuserを識別するための:idが自動で追加されます
+    member do #生成されたurlにuserを識別するための:idが自動で追加されます（collection(集合)はidなし、member(個別)はidあり）
       get 'attend_employees' #出勤中社員一覧
       get 'edit_basic-info' #ルーティング設定してアクションを定義
       patch 'update_basic_info' #ルーティング設定してアクションを定義
       get 'attendances/edit_one_month' #ルーティング設定してアクションを定義
       patch 'attendances/update_one_month' #ルーティング設定してアクションを定義
       get 'attendances/edit_log' #勤怠ログ
-      get 'attendances/edit_overtime_work_end_plan'
-      patch 'attendances/update_overtime_work_end_plan'
       patch 'attendances/overtime_approval_reply'
       #patch 'attendances/change_attendance_reply'
     end
     
-    resources :attendances, only: :update do
-      patch 'overtime_approval_reply'
-      patch 'change_attendance_reply'
+    # resourcesでonly:またはexcept:オプションを使用することで、主要な7つのアクション(index, show, new, create, edit, update, destroy)を限定することができます
+    resources :attendances, only: :update do # ネストさせる（1人のユーザーはたくさんのアテンダンスを持っている）
+      patch 'overtime_approval_reply' # /users/:user_id/attendances/:attendance_id/overtime_approval_reply
+      patch 'change_attendance_applying'
+      get 'edit_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/edit_overtime_work_end_plan
+      patch 'update_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/update_overtime_work_end_plan
     end
   end
     # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます
