@@ -3,8 +3,12 @@
 # Table name: attendances
 #
 #  id                            :integer          not null, primary key
+#  change_attendance_permit      :boolean
 #  change_attendance_status      :string
+#  change_finished_at            :datetime
+#  change_note                   :string
 #  change_permit                 :boolean
+#  change_started_at             :datetime
 #  finished_at                   :datetime
 #  hours_of_overtime             :string
 #  next_day                      :boolean
@@ -46,6 +50,8 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   # worked_onはどの日付の勤怠情報かを判断する上で必須,存在性の検証が必要なのはworked_on
   # user_idは今回の追加方法ですとデフォルトで存在性の検証を行ってくれる
   validates :note, length: { maximum: 50 }
+  
+  validates :change_note, length: { maximum: 50 }
   
   validates :overtime_content, length: { maximum: 50 } #業務処理内容（残業申請）
   
