@@ -67,7 +67,7 @@ Rails.application.routes.draw do
     # resourcesでonly:またはexcept:オプションを使用することで、主要な7つのアクション(index, show, new, create, edit, update, destroy)を限定することができます
     resources :attendances, only: :update do # ネストさせる（1人のユーザーはたくさんのアテンダンスを持っている）
       patch 'overtime_approval_reply' # /users/:user_id/attendances/:attendance_id/overtime_approval_reply
-      patch 'change_attendance_applying'
+      patch 'change_attendance_applying' # /users/:user_id/attendances/:attendance_id/change_attendance_applying
     end
   end
     # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます

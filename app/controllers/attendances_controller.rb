@@ -35,9 +35,19 @@ class AttendancesController < ApplicationController
   def change_attendance_applying
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:attendance_id])
-    @attendance.update_attributes(change_attendance_params)
+    # 変更前の時間、内容を変更後に置換する
+    @attendance.change_started_at = @attendance.started_at
+    @attendance.change_finished_at = @attendance.finished_at
+    @attendance.change_note = @attendance.note
+    # 指示者確認欄に申請中と表示
+    @attendance.change_attendance_status = :applying
+    
+    @attendance.update_attributes(attendance_params)
     flash[:success] = "勤怠の変更をへ送信しました。"
-    redirect_to user_url(@user, date: params[:date])
+    # worked_onの日付から月の初日をとる
+     @first_day = @attendance.worked_on.beginning_of_month 
+    # ストリングパラメータの値に月初を入れてリダイレクトする
+     redirect_to user_url(@user, date: @first_day)
   end
   
   def update_one_month # ルーティングattendances/update_one_monthを設定してからアクションを定義
@@ -120,9 +130,14 @@ class AttendancesController < ApplicationController
   
   private
   
-  # 勤怠変更申請のパラメーター
+  # 勤怠変更前のパラメーター
+  def attendance_params
+    params.require(:attendance).permit(:started_at, :finished_at, :next_day, :note, :change_attendance_superior_id, :change_attendance_permit )
+  end
+  
+  # 勤怠変更後のパラメーター
   def change_attendance_params
-    params.require(:attendance).permit(:started_at, :finished_at, :next_day, :note, :change_attendance_superior_id )
+    params.require(:attendance).permit(:change_started_at, :change_finished_at, :next_day, :change_note, :change_attendance_superior_id, :change_attendance_permit )
   end
   
   # 1ヶ月分の勤怠情報を扱います。
