@@ -136,7 +136,7 @@ class AttendancesController < ApplicationController
     params.require(:attendance).permit(:started_at, :finished_at, :next_day, :note, :change_attendance_superior_id, :change_attendance_permit )
   end
   
-  # 勤怠変更後のパラメーター
+  # 勤怠変更申請時のパラメーター
   def change_attendance_params
     params.require(:attendance).permit(:change_started_at, :change_finished_at, :next_day, :change_note, :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit )
   end
