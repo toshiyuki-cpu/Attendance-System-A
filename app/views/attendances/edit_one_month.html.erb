@@ -33,15 +33,15 @@
           </td>
           <!-- user_attendance_overtime_approval_reply PATCH  /users/:user_id/attendances/:attendance_id/overtime_approval_reply -->
           <%= form_with(model: attendance, url: user_attendance_change_attendance_applying_path(@user, attendance), local: true, method: :patch) do |f| %>
-            <td><%= f.time_field :started_at, class: "form-control"%></td>
-            <td><%= f.time_field :finished_at, class: "form-control"%></td>
+            <td><%= f.time_field :change_started_at, class: "form-control"%></td>
+            <td><%= f.time_field :change_finished_at, class: "form-control"%></td>
             <td><%= f.check_box :next_day %></td>
             <td>
               <% if attendance.started_at.present? && attendance.finished_at.present? %>
                 <%= working_times(attendance.started_at, attendance.finished_at) %>
               <% end %>
             </td>
-            <td><%= f.text_field :note, class: "form-control" %></td>
+            <td><%= f.text_field :change_note, class: "form-control" %></td>
             <td><%= f.select :change_attendance_superior_id, User.with_role(:superior).map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control", required: true} %></td>
                   <!-- with_role は Enumerize で追加された scope -->
             <td><%= f.submit '編集を保存する', class: "btn btn-lg btn-success"%></td>

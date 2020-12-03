@@ -35,13 +35,13 @@ class AttendancesController < ApplicationController
   def change_attendance_applying
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:attendance_id])
-    # 変更前の時間と内容を維持、画面からpostされた値を取得して各change_〜に入れてあげる
-    @attendance.change_started_at = params[:attendance][:started_at]
-    @attendance.change_finished_at = params[:attendance][:finished_at]
-    @attendance.change_note = params[:attendance][:note]
+    # 変更前の時間と内容を維持、画面からpostされた値を各change_〜に入れてあげる
+    # change_attendance_paramsを@attendanceに代入する（まだDBには保存されてない）
+    @attendance.attributes = change_attendance_params # viewのname属性も変更する
+    
     # 指示者確認欄に申請中と表示
     @attendance.change_attendance_status = :applying
-    
+    # 保存
     @attendance.save
     
     flash[:success] = "勤怠の変更をへ送信しました。"
