@@ -87,7 +87,7 @@ class AttendancesController < ApplicationController
     #end
     flash[:success] = "残業を申請しました。"
     # worked_onの日付から月の初日をとる
-    first_day = attendance.worked_on.beginning_of_month
+    first_day = @attendance.worked_on.beginning_of_month
     # ストリングパラメータの値に月初を入れてリダイレクトする
     redirect_to user_url(@user, date: first_day)
     # redirect_back(fallback_location: user_url) この１行でも実装可能（74から81行省略して）
