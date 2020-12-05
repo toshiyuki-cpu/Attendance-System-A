@@ -68,7 +68,7 @@ Rails.application.routes.draw do
       patch 'change_attendance_applying'
       get 'edit_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/edit_overtime_work_end_plan
       patch 'update_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/update_overtime_work_end_plan
-
+      patch 'change_attendance_approval_reply' #  /users/:user_id/attendances/:attendance_id/change_attendance_approval_reply
     end
   end
     # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます
