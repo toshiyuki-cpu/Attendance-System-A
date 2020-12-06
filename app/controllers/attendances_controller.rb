@@ -51,6 +51,9 @@ class AttendancesController < ApplicationController
     redirect_to user_url(@user, date: @first_day)
   end
   
+  def change_attendance_approval_reply
+  end
+  
   def update_one_month # ルーティングattendances/update_one_monthを設定してからアクションを定義
     ActiveRecord::Base.transaction do # トランザクションを開始します。
     attendances_params.each do |id, item|
