@@ -27,7 +27,7 @@ class UsersController < ApplicationController
     #「1ヶ月分の勤怠データの中で、出勤時間が何も無い状態では無いものの数を代入」
     # @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
     
-    # 勤怠変更申請ユーザー取得
+    # 勤怠変更申請：attendanceオブジェクトからステータスがapplyingと上長idを取得
     @change_attendance_applyings = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying')
     
     

@@ -52,8 +52,6 @@ class AttendancesController < ApplicationController
   end
   
   def change_attendance_approval_reply
-    @user = User.find(params[:user_id])
-    @attendance = Attendance.find(params[:attendance_id])
   end
   
   def update_one_month # ルーティングattendances/update_one_monthを設定してからアクションを定義

@@ -90,10 +90,10 @@
 						<font color="#0033cc">
 					<% end %>
 					<%= $days_of_the_week[attendance.worked_on.wday] %></td>
-				<td><%= l(attendance.started_at, format: :hour) %></td>
-				<td><%= l(attendance.started_at, format: :minute) %></td>
-				<td><%= l(attendance.finished_at, format: :hour) %></td>
-				<td><%= l(attendance.finished_at, format: :minute) %></td>
+				<td><%= l(attendance.started_at, format: :hour) if attendance.started_at %></td>
+				<td><%= l(attendance.started_at, format: :minute) if attendance.started_at %></td>
+				<td><%= l(attendance.finished_at, format: :hour) if attendance.finished_at %></td>
+				<td><%= l(attendance.finished_at, format: :minute) if attendance.finished_at %></td>
 				<td><%= l(attendance.change_started_at, format: :hour) %></td>
 				<td><%= l(attendance.change_started_at, format: :minute) %></td>
 				<td><%= l(attendance.change_finished_at, format: :hour) %></td>
