@@ -52,6 +52,22 @@ class AttendancesController < ApplicationController
   end
   
   def change_attendance_approval_reply
+    # STEP1 対象のattendance_idを取得
+    @attendance = Attendance.find(params[:attendance_id])
+    # STEP2 @attendanceのchange_attendance_statusを変更する
+    # paramsの中にviewから渡ってきたchange_attendance_statusがあります。その値を@attendanceのchange_attendance_statusに代入してあげます
+    @attendance.change_attendance_status = params[:attendance][:change_attendance_status]
+    
+    # STEP3 承認（approval）の時、started_atの値をchange_started_atの値にする
+  
+    # 否認（ negation）、なし（ cancel）の時はattendance_paramsのまま
+    # STEP4 チェックボックス(change_attendance_permit)がtrueの時、@attendanceにtrue代入。そして@attendanceを保存します
+    if @attendance.change_attendance_permit = params[:attendance][:change_attendance_permit]
+       @attendance.save
+    end
+    # STEP5 上長（現在ログインしている上長）の勤怠ページにリダイレクト（今回はリロード）します。
+    flash[:success] = '勤怠変更を申請者へ送信しました。'
+    redirect_to user_url(current_user)
   end
   
   def update_one_month # ルーティングattendances/update_one_monthを設定してからアクションを定義
