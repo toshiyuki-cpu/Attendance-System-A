@@ -58,8 +58,15 @@ class AttendancesController < ApplicationController
     # paramsの中にviewから渡ってきたchange_attendance_statusがあります。その値を@attendanceのchange_attendance_statusに代入してあげます
     @attendance.change_attendance_status = params[:attendance][:change_attendance_status]
     
-    # STEP3 承認（approval）の時、started_atの値をchange_started_atの値にする
-  
+    # STEP3 承認（approval）の時、started_atの値をchange_started_atの値にして、承認後change_started_atをnilにする
+    if @attendance.change_attendance_status.approval?
+       @attendance.started_at = @attendance.change_started_at
+       @attendance.change_started_at = nil
+       @attendance.finished_at = @attendance.change_finished_at
+       @attendance.change_finished_at = nil
+       @attendance.note = @attendance.change_note
+       @attendance.change_note = nil
+    end
     # 否認（ negation）、なし（ cancel）の時はattendance_paramsのまま
     # STEP4 チェックボックス(change_attendance_permit)がtrueの時、@attendanceにtrue代入。そして@attendanceを保存します
     if @attendance.change_attendance_permit = params[:attendance][:change_attendance_permit]
