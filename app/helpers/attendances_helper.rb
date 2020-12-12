@@ -31,17 +31,33 @@ module AttendancesHelper
     end
   end
   
-  # 指示者確認欄の表示設定
+  # 残業申請の指示者確認欄表示設定
+   # select_superior_idを外部キーのカラムと認識させるためuserのidとattendanceのselect_superior_idをattendance.rbで外部キーとして関連付ける
   def overtime_reply_text(attendance)
     case attendance.overtime_status
     when 'applying'
-        "#{attendance.superior.name}に申請中"
+        "#{attendance.overtime_reply_superior.name}に残業申請中"
     when 'approval'
-        "#{attendance.superior.name}から承認済"
+        "#{attendance.overtime_reply_superior.name}から残業申請承認済"
     when 'negation'
-        "#{attendance.superior.name}から否認されました"
+        "#{attendance.overtime_reply_superior.name}から残業申請否認"
     when 'cancel'
-        "#{attendance.superior.name}からキャンセルされました"
+        "#{attendance.overtime_reply_superior.name}から残業申請キャンセル"
+    end
+  end
+  
+  # 勤怠変更申請の指示者確認欄表示設定
+   # change_attendance__superior_idを外部キーのカラムと認識させるためuserのidとattendanceのchange_attendance_superior_idをattendance.rbで外部キーとして関連付ける
+  def change_attendance_reply_text(attendance)
+    case attendance.change_attendance_status
+    when 'applying'
+        "#{attendance.change_attendance_reply_superior.name}に勤怠変更申請中"
+    when 'approval'
+        "#{attendance.change_attendance_reply_superior.name}から勤怠変更承認済"
+    when 'negation'
+        "#{attendance.change_attendance_reply_superior.name}から勤怠変更否認"
+    when 'cancel'
+        "#{attendance.change_attendance_reply_superior.name}から勤怠変更キャンセル"
     end
   end
 end  
