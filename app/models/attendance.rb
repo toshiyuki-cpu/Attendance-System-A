@@ -78,4 +78,11 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
       errors.add(:started_at, "より早い退勤時間は無効です") if started_at > finished_at
     end
   end
+  
+  # change_attendance_approval_replyアクションで使用。変更後カラムを変更前カラムに代入後カラムの値をnilにする
+  def reset_change_attendance_columns
+    self.change_started_at = nil
+    self.change_finished_at = nil
+    self.change_note = nil
+  end
 end
