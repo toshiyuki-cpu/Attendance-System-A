@@ -35,15 +35,11 @@
 			<% if @change_attendance_applyings.present? %>
 				<%= link_to " #{@change_attendance_applyings.count}件の通知があります", '#', class: "notice-superior" %>
 			<% end %>
-		
-			<% if @change_attendance_applyings.present? %>
-				<%= link_to " #{@change_attendance_applyings.count}件の通知があります", '#', class: "notice-superior" %>
-			<% end %>
 		</p>
 		<p>【 残業申請のお知らせ 】
-				<% if @overtime_appliyings.present? %>
-					<%= link_to " #{@overtime_appliyings.count}件の通知があります", '#', class: "notice-superior" %>
-				<% end %>
+			<% if @overtime_appliyings.present? %>
+				<%= link_to " #{@overtime_appliyings.count}件の通知があります", '#', class: "notice-superior" %>
+			<% end %>
 		</p>
 	</div>
 <% end %>

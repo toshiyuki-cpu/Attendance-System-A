@@ -39,7 +39,7 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   # optional: trueとは、アソシエーションによって紐づけられた外部キーの値が存在していなくても、データベースに保存することができるオプション
   belongs_to :superior, class_name: 'User', foreign_key: :select_superior_id, optional: true
   
-  belongs_to :superior, class_name: 'User', foreign_key: :change_attendance_superior_id, optional: true 
+  belongs_to :superior2, class_name: 'User', foreign_key: :change_attendance_superior_id, optional: true 
   
   extend Enumerize
   # 残業申請状態　ymlファイルも定義する　

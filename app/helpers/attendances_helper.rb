@@ -51,13 +51,13 @@ module AttendancesHelper
   def change_attendance_reply_text(attendance)
     case attendance.change_attendance_status
     when 'applying'
-        "#{attendance.superior.name}に勤怠変更申請中"
+        "#{attendance.superior2.name}に勤怠変更申請中"
     when 'approval'
-        "#{attendance.superior.name}から勤怠変更承認済"
+        "#{attendance.superior2.name}から勤怠変更承認済"
     when 'negation'
-        "#{attendance.superior.name}から勤怠変更否認"
+        "#{attendance.superior2.name}から勤怠変更否認"
     when 'cancel'
-        "#{attendance.superior.name}から勤怠変更キャンセル"
+        "#{attendance.superior2.name}から勤怠変更キャンセル"
     end
   end
 end  
