@@ -37,9 +37,9 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
 
   # select_superior_idを外部キーのカラムと認識させるためuserのidとattendanceのselect_superior_idを外部キーとして関連付ける
   # optional: trueとは、アソシエーションによって紐づけられた外部キーの値が存在していなくても、データベースに保存することができるオプション
-  belongs_to :superior, class_name: 'User', foreign_key: :select_superior_id, optional: true
+  belongs_to :overtime_reply_superior, class_name: 'User', foreign_key: :select_superior_id, optional: true
   
-  belongs_to :superior2, class_name: 'User', foreign_key: :change_attendance_superior_id, optional: true 
+  belongs_to :change_attendance_reply_superior, class_name: 'User', foreign_key: :change_attendance_superior_id, optional: true 
   
   extend Enumerize
   # 残業申請状態　ymlファイルも定義する　

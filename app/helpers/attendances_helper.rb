@@ -36,13 +36,13 @@ module AttendancesHelper
   def overtime_reply_text(attendance)
     case attendance.overtime_status
     when 'applying'
-        "#{attendance.superior.name}に残業申請中"
+        "#{attendance.overtime_reply_superior.name}に残業申請中"
     when 'approval'
-        "#{attendance.superior.name}から残業申請承認済"
+        "#{attendance.overtime_reply_superior.name}から残業申請承認済"
     when 'negation'
-        "#{attendance.superior.name}から残業申請否認"
+        "#{attendance.overtime_reply_superior.name}から残業申請否認"
     when 'cancel'
-        "#{attendance.superior.name}から残業申請キャンセル"
+        "#{attendance.overtime_reply_superior.name}から残業申請キャンセル"
     end
   end
   
@@ -51,13 +51,13 @@ module AttendancesHelper
   def change_attendance_reply_text(attendance)
     case attendance.change_attendance_status
     when 'applying'
-        "#{attendance.superior2.name}に勤怠変更申請中"
+        "#{attendance.change_attendance_reply_superior.name}に勤怠変更申請中"
     when 'approval'
-        "#{attendance.superior2.name}から勤怠変更承認済"
+        "#{attendance.change_attendance_reply_superior.name}から勤怠変更承認済"
     when 'negation'
-        "#{attendance.superior2.name}から勤怠変更否認"
+        "#{attendance.change_attendance_reply_superior.name}から勤怠変更否認"
     when 'cancel'
-        "#{attendance.superior2.name}から勤怠変更キャンセル"
+        "#{attendance.change_attendance_reply_superior.name}から勤怠変更キャンセル"
     end
   end
 end  
