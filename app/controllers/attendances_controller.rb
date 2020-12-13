@@ -41,6 +41,8 @@ class AttendancesController < ApplicationController
     
     # 指示者確認欄に申請中と表示
     @attendance.change_attendance_status = :applying
+    # 再申請すると上長ページでチェックが入ってしまうのでfalseで返す。
+    @attendance.change_permit = 0 
     # 保存
     @attendance.save
     

@@ -125,7 +125,6 @@
 		<table class="table table-bordered table-condensed table-hover received-application-details-table">
 			<thead>
 				<tr>
-					<th rowspan="4">社員名</th>
 					<th rowspan="4">日付</th>
 					<th rowspan="4">曜日</th>
 					<th colspan="4">変更前</th>
@@ -158,7 +157,6 @@
 			<!-- |keys, values|配列の中の[values]を取り出しattendanceに代入 -->
 			<% values.each do |attendance| %>
 				<tr>
-					<td><%= attendance.user.name %></td>
 					<td><%= l(attendance.worked_on, format: :short) %></td>
 					<td>
 						<% if attendance.worked_on.wday == 0 %> <!--日曜日の色　赤-->
