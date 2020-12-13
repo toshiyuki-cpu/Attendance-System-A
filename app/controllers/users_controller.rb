@@ -29,15 +29,15 @@ class UsersController < ApplicationController
     
     # 勤怠変更申請：attendanceオブジェクトからステータスがapplyingと上長idを取得
     @change_attendance_applyings = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying')
-    # binding.pry
+    
     # 勤怠変更申請をユーザーオブジェクトでグルーピング
-    @change_attendance_applying_group = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by{ |item| item.user } 
+    @change_attendance_applying_group = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by { |item| item.user } 
     
     # 残業申請お知らせ通知
     @overtime_appliyings = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying')
     
     # 残業申請をユーザーオブジェクトでグルーピング
-    @applying_group = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by{ |item| item.user }
+    @applying_group = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by { |item| item.user }
     
   end
   

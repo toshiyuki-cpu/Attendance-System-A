@@ -42,7 +42,7 @@ class AttendancesController < ApplicationController
     # 指示者確認欄に申請中と表示
     @attendance.change_attendance_status = :applying
     # 再申請すると上長ページでチェックが入ってしまうのでfalseで返す。
-    @attendance.change_permit = 0 
+    @attendance.change_permit = false 
     # 保存
     @attendance.save
     
@@ -108,7 +108,7 @@ class AttendancesController < ApplicationController
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:attendance_id])
     @attendance.overtime_status = :applying # 指示者確認欄にapplyingと表示
-    @attendance.change_permit = 0 # 再申請すると上長ページでチェックが入ってしまうのでfalseで返す。
+    @attendance.change_permit = false # 再申請すると上長ページでチェックが入ってしまうのでfalseで返す。
     @attendance.update_attributes(overtime_work_end_plan_params)
     #end
     flash[:success] = "残業を申請しました。"
