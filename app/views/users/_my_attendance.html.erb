@@ -115,6 +115,78 @@
 	</table>
 </div>
 
+<!-- NOTE: @change_attendance_applying_group = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by{ |item| item.user }  -->
+<% @change_attendance_applying_group.each do |key, values| %> <!-- |user, attendances| でもいい -->
+	<div class="center">
+		<h3>【<%= key.name %>からの勤怠変更申請】</h3>
+	</div>
+	
+	<div>
+		<table class="table table-bordered table-condensed table-hover received-application-details-table">
+			<thead>
+				<tr>
+					<th rowspan="4">日付</th>
+					<th rowspan="4">曜日</th>
+					<th colspan="4">変更前</th>
+					<th colspan="4">変更後</th>
+					<th rowspan="4">備考</th>
+					<th rowspan="4">指示者確認<%= "\u329e" %></th>
+					<th rowspan="4">変更</th>
+					<th rowspan="4">変更を送信する</th>
+					<th rowspan="4">勤怠を確認する</th>
+				</tr>
+				<tr>
+					<th colspan="2">出社</th>
+					<th colspan="2">退社</th>
+					<th colspan="2">出社</th>
+					<th colspan="2">退社</th>
+				</tr>
+				<tr>
+				<tr>
+					<th>時</th>
+					<th>分</th>
+					<th>時</th>
+					<th>分</th>
+					<th>時</th>
+					<th>分</th>
+					<th>時</th>
+					<th>分</th>
+				</tr>
+			</thead>
+			<tbody>
+			<!-- |keys, values|配列の中の[values]を取り出しattendanceに代入 -->
+			<% values.each do |attendance| %>
+				<tr>
+					<td><%= l(attendance.worked_on, format: :short) %></td>
+					<td>
+						<% if attendance.worked_on.wday == 0 %> <!--日曜日の色　赤-->
+							<font color="#ff000">
+						<% elsif attendance.worked_on.wday == 6 %> <!--土曜日の色　青-->
+							<font color="#0033cc">
+						<% end %>
+						<%= $days_of_the_week[attendance.worked_on.wday] %></td>
+					<td><%= l(attendance.started_at, format: :hour) if attendance.started_at %></td>
+					<td><%= l(attendance.started_at, format: :minute) if attendance.started_at %></td>
+					<td><%= l(attendance.finished_at, format: :hour) if attendance.finished_at %></td>
+					<td><%= l(attendance.finished_at, format: :minute) if attendance.finished_at %></td>
+					<td><%= l(attendance.change_started_at, format: :hour) %></td>
+					<td><%= l(attendance.change_started_at, format: :minute) %></td>
+					<td><%= l(attendance.change_finished_at, format: :hour) %></td>
+					<td><%= l(attendance.change_finished_at, format: :minute) %></td>
+					<td><%= attendance.change_note %></td>
+					<%= form_with model: attendance, url: user_attendance_change_attendance_approval_reply_path(@user, attendance), local: true do |f| %>
+						<td><%= f.select :change_attendance_status, Attendance.change_attendance_status.options, {}, class: "form-control" %></td>
+						<td><%= f.check_box :change_attendance_permit, required: true %></td>
+						<td><%= f.submit '送信', class: "btn btn-success" %></td>
+					<% end %>				
+					<td><%= link_to '確認', user_path(attendance.user), class: "btn btn-primary" %></td>
+				</tr>
+			<% end %>
+			</tbody>
+		</table>
+	</div>
+<% end %>
+
 <div>
 	<table class="table table-bordered table-condensed table-hover received-application-details-table">
 		<thead>
