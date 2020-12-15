@@ -38,7 +38,7 @@
 		</p>
 		<p>【 残業申請のお知らせ 】
 			<% if @overtime_appliyings.present? %>
-				<%= link_to " #{@overtime_appliyings.count}件の通知があります", '#', class: "notice-superior" %>
+				<%= link_to " #{@overtime_appliyings.count}件の通知があります", user_attendance_overtime_approval_reply_user_path(@user, attendance), remote: true, class: "notice-superior" %>
 			<% end %>
 		</p>
 	</div>
@@ -391,5 +391,8 @@
 	</table>
 </div>
 
-<!--モーダルウインドウ表示-->
+<!--残業申請モーダルウインドウ表示-->
 <div id="edit-overtime-work-end-plan" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+
+<!--上長画面：通知から残業申請モーダルウインドウ表示-->
+<div id="edit_overtime_approval_reply" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
