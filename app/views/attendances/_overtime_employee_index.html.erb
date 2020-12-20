@@ -7,17 +7,16 @@
       <div class="center">
         <h3 class="modal-title">⭐️ 残業申請のお知らせ ⭐️</h3>        
       </div>
-      
     </div>
     <div class="modal-body">
-    <!-- NOTE: @attendances = Attendance.where(select_superior_id: current_user.id, overtime_status: 'applying').group_by{|item| item.user} -->
-    <!-- NOTE: @attendances配列の中の二次元配列["user",[attendance]]をブロック変数keys,valuesに代入 -->
-    <% @attendances.each do |key, values| %> <!-- |user, attendances| でもいい -->
-    	<div class="center">
-    		<h3>【<%= key.name %>からの残業申請】</h3>
-    	</div>
-    	
-    	<div>
+      <!-- NOTE: @attendances = Attendance.where(select_superior_id: current_user.id, overtime_status: 'applying').group_by{|item| item.user} -->
+      <!-- NOTE: @attendances配列の中の二次元配列["user",[attendance]]をブロック変数keys,valuesに代入 -->
+      <% @attendances.each do |key, values| %> <!-- |user, attendances| でもいい -->
+      	<div class="center">
+      		<h3>【<%= key.name %>からの残業申請】</h3>
+      	</div>
+      	
+      	<div>
     		<table class="table table-bordered table-condensed table-hover received-application-details-table">
     			<thead>
     				<tr>
@@ -43,11 +42,17 @@
     					<td><%= @user.designated_work_end_time.strftime("%R") %></td>
     					<td><%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %></td>
     					<td><%= attendance.overtime_content %></td>
-    					<%= form_with model: attendance, url: user_attendance_overtime_approval_reply_path(@user, attendance), local: true do |f| %>
-    						<td><%= f.select :overtime_status, Attendance.overtime_status.options, {}, class: "form-control" %></td>
-    						<td><%= f.check_box :change_permit, required: true %></td>
-    						<td><%= f.submit '送信', class: "btn btn-success" %></td>
-    					<% end %>
+    						<td>
+    					    <%= form_with model: attendance, url: user_attendance_overtime_approval_reply_path(@user, attendance), local: true do |f| %>
+    						    <%= f.select :overtime_status, Attendance.overtime_status.options, {}, class: "form-control" %>
+      						  <%= f.check_box :change_permit, required: true %>
+      						  <%= f.submit '送信', class: "btn btn-success" %>
+    					    <% end %>
+    						</td>
+    						<td>
+    						</td>
+    						<td>
+    						</td>
     					<td><%= link_to '確認', user_path(attendance.user), class: "btn btn-primary" %></td>
     				</tr>
     			<% end %>

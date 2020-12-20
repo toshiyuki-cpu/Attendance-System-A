@@ -27,9 +27,9 @@
                 <tbody>
                   <td><%= l(@attendance.worked_on, format: :short) %></td>
                   <td>
-                    <% if @attendance.worked_on == 0 %> <!--日曜日の色　赤-->
+                    <% if @attendance.worked_on == 0 %> <!--日曜日の色 赤-->
                       <font color="#ff000">
-                    <% elsif @attendance.worked_on == 6 %> <!--土曜日の色　青-->
+                    <% elsif @attendance.worked_on == 6 %> <!--土曜日の色 青-->
                       <font color="#0033cc">
                     <% end %>
                     <%= $days_of_the_week[@attendance.worked_on.wday] %>

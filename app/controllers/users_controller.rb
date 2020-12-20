@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     # ページネーションを判定できるオブジェクトに置き換える
     # paginateではキーが:pageで値がページ番号のハッシュを引数にとります。
     # User.paginateは:pageパラメータに基づき、データベースからひとかたまりのデータを取得
-    # @users = User.paginate(page: params[:page])　検索フォーム無しの場合
+    # @users = User.paginate(page: params[:page]) 検索フォーム無しの場合
     # @users = User.paginate(page: params[:page]).search(params[:search]) 検索フォーム有りの場合
     @users = User.paginate(page: params[:page]).search(params[:search]).where.not(admin: true) #where.not(admin: true)管理者を表示させない
   end
@@ -50,7 +50,7 @@ class UsersController < ApplicationController
     if @user.save
       log_in @user # 保存成功後、ログインします。このメソッドによりリダイレクトされたページではログイ�����状態のレイアウトが表示される
       flash[:success] = '新規作成に成功しました。' #:successというキーには保存に成功した時のメッセージを代入
-      redirect_to @user #左記のように記述できる　redirect_to user_url(@user)
+      redirect_to @user #左記のように記述できる redirect_to user_url(@user)
     else
       render :new
     end
@@ -115,7 +115,7 @@ class UsersController < ApplicationController
   end
   
   
-  # applocation_controllerへ移動　１２２行目まで
+  # applocation_controllerへ移動 １２２行目まで
   # beforeフィルター
   
   # paramsハッシュからユーザーを取得します。

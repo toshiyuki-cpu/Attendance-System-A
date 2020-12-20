@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
   # $ グローバル変数は極端に言うとプログラムのどこからでも呼び出すことのできる変数
   $days_of_the_week = %w{日 月 火 水 木 金 土} # Rubyのリテラル表記
   
-  # beforeフィルター users_controllerから引越し　１１行目から３６行目まで
+  # beforeフィルター users_controllerから引越し １１行目から３６行目まで
   
   # paramsハッシュからユーザーを取得します。
   def set_user # show,edit,updateアクションの@user = User.find(params[:id])をset_userとして定義

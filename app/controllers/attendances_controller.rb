@@ -13,7 +13,7 @@ class AttendancesController < ApplicationController
     @attendance = Attendance.find(params[:id])
     # 出勤時間が未登録であることを判定します。
     if @attendance.started_at.nil?
-      if @attendance.update_attributes(started_at: Time.current.change(sec: 0)) #　changeメソッド　秒数を０に変換する
+      if @attendance.update_attributes(started_at: Time.current.change(sec: 0)) # changeメソッド 秒数を０に変換する
         # update_attributes バリデーションを通す
         flash[:info] = "おはようございます！"
       else
@@ -51,6 +51,11 @@ class AttendancesController < ApplicationController
     @first_day = @attendance.worked_on.beginning_of_month 
     # ストリングパラメータの値に月初を入れてリダイレクトする
     redirect_to user_url(@user, date: @first_day)
+  end
+  
+  def change_attendance_employee_index
+    @user = User.find(params[:user_id])
+    @attendances = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by { |item| item.user }
   end
   
   def change_attendance_approval_reply
@@ -121,7 +126,7 @@ class AttendancesController < ApplicationController
   
   def overtime_employee_index
     @user = User.find(params[:user_id])
-    @attendances = Attendance.where(select_superior_id: current_user.id, overtime_status: 'applying').group_by { |item| item.user } 
+    @attendances = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by { |item| item.user } 
   end
   
   # 残業申請承認、社員へ返信

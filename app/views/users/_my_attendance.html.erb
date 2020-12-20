@@ -33,7 +33,7 @@
 		<p>【 所属長承認申請のお知らせ 】</p>
 		<p>【 勤怠変更申請のお知らせ 】
 			<% if @change_attendance_applyings.present? %>
-				<%= link_to " #{@change_attendance_applyings.count}件の通知があります", '#', class: "notice-superior" %>
+				<%= link_to " #{@change_attendance_applyings.count}件の通知があります", user_attendance_change_attendance_employee_index_path(@user, @attendances), remote: true, class: "notice-superior" %>
 			<% end %>
 		</p>
 		<p>【 残業申請のお知らせ 】
@@ -88,9 +88,9 @@
 				<td><%= attendance.user.name %></td>
 				<td><%= l(attendance.worked_on, format: :short) %></td>
 				<td>
-					<% if attendance.worked_on.wday == 0 %> <!--日曜日の色　赤-->
+					<% if attendance.worked_on.wday == 0 %> <!--日曜日の色 赤-->
 						<font color="#ff000">
-					<% elsif attendance.worked_on.wday == 6 %> <!--土曜日の色　青-->
+					<% elsif attendance.worked_on.wday == 6 %> <!--土曜日の色 青-->
 						<font color="#0033cc">
 					<% end %>
 					<%= $days_of_the_week[attendance.worked_on.wday] %></td>
@@ -115,7 +115,7 @@
 	</table>
 </div>
 
-<!-- NOTE: @change_attendance_applying_group = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by{ |item| item.user }  -->
+<!-- NOTE: @change_attendance_applying_group = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by{ |item| item.user } -->
 <% @change_attendance_applying_group.each do |key, values| %> <!-- |user, attendances| でもいい -->
 	<div class="center">
 		<h3>【<%= key.name %>からの勤怠変更申請】</h3>
@@ -159,9 +159,9 @@
 				<tr>
 					<td><%= l(attendance.worked_on, format: :short) %></td>
 					<td>
-						<% if attendance.worked_on.wday == 0 %> <!--日曜日の色　赤-->
+						<% if attendance.worked_on.wday == 0 %> <!--日曜日の色 赤-->
 							<font color="#ff000">
-						<% elsif attendance.worked_on.wday == 6 %> <!--土曜日の色　青-->
+						<% elsif attendance.worked_on.wday == 6 %> <!--土曜日の色 青-->
 							<font color="#0033cc">
 						<% end %>
 						<%= $days_of_the_week[attendance.worked_on.wday] %></td>
@@ -289,8 +289,8 @@
 				<th rowspan="3">曜日</th>
 				<th colspan="8">実績</th>
 				<th colspan="5">所定外勤務</th>
-				</tr>
-				<tr>
+			</tr>
+			<tr>
 				<th colspan="3">出社</th>
 				<th colspan="3">退社</th>
 				<th rowspan="2">在社時間</th>
@@ -319,9 +319,9 @@
 				<td><%= link_to "残業申請", user_attendance_edit_overtime_work_end_plan_path(@user, attendance), remote: true, class: "btn btn-primary" %></td>
 				<td><%= l(attendance.worked_on, format: :short) %></td> <!--config/localesディレクトリにあるja.ymlロケールファイルを参照-->
 				<td>
-				<% if attendance.worked_on.wday == 0 %> <!--日曜日の色　赤-->
+				<% if attendance.worked_on.wday == 0 %> <!--日曜日の色 赤-->
 					<font color="#ff000">
-				<% elsif attendance.worked_on.wday == 6 %> <!--土曜日の色　青-->
+				<% elsif attendance.worked_on.wday == 6 %> <!--土曜日の色 青-->
 					<font color="#0033cc">
 				<% end %>
 				<%= $days_of_the_week[attendance.worked_on.wday] %></td>
@@ -355,22 +355,23 @@
 				<td><%= l(attendance.overtime_work_end_plan, format: :hour) if attendance.overtime_work_end_plan.present? %></td>
 				<td><%= l(attendance.overtime_work_end_plan, format: :minute) if attendance.overtime_work_end_plan.present? %></td>
 				<td>
-				<% if attendance.started_at.present? && attendance.overtime_work_end_plan.present? %>
-				<%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %>
-				<% end %>
+					<% if attendance.started_at.present? && attendance.overtime_work_end_plan.present? %>
+						<%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %>
+					<% end %>
 				</td>
 				<td><%= attendance.overtime_content %></td>
 				<!-- superiorはattendance.rbにてselect_superior_idを外部キーとして設定-->
-				<td><%= overtime_reply_text(attendance) %><br>
-						<%= change_attendance_reply_text(attendance) %>
-				</td>　
+				<td>
+					<%= overtime_reply_text(attendance) %><br>
+					<%= change_attendance_reply_text(attendance) %>
+				</td>
 			</tr>
 		<% end %>
 		</tbody>
 		
 		<tfoot>
 			<tr>
-				<td rowspan="2"></td>　　　　　　　　　　　　
+				<td rowspan="2"></td>
 				<td colspan="2">累計日数</td>
 				<td colspan="6"></td>
 				<td>在社時間合計</td>
@@ -393,6 +394,7 @@
 
 <!--残業申請モーダルウインドウ表示-->
 <div id="edit-overtime-work-end-plan" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-
+<!-- 通知から勤怠変更申請モーダル表示 -->
+<div id="change_attendance_employee_index" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <!--上長画面：通知から残業申請モーダルウインドウ表示-->
 <div id="overtime_employee_index" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

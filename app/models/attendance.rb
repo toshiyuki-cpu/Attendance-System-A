@@ -42,10 +42,10 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   belongs_to :change_attendance_reply_superior, class_name: 'User', foreign_key: :change_attendance_superior_id, optional: true 
   
   extend Enumerize
-  # 残業申請状態　ymlファイルも定義する　
+  # 残業申請状態 ymlファイルも定義する 
   enumerize :overtime_status, in: %i(applying approval negation cancel), scope: true
   
-  # 勤怠変更申請状態　ymlファイルも定義する
+  # 勤怠変更申請状態 ymlファイルも定義する
   enumerize :change_attendance_status, in: %i(applying approval negation cancel), scope: true
   
   validates :worked_on, presence: true

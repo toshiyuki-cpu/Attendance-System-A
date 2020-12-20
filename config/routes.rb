@@ -73,14 +73,15 @@ Rails.application.routes.draw do
       patch 'update_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/update_overtime_work_end_plan
       patch 'change_attendance_approval_reply' #  /users/:user_id/attendances/:attendance_id/change_attendance_approval_reply
       get 'overtime_employee_index' # 通知から残業申請モーダル表示のルーティング
+      get 'change_attendance_employee_index' # 通知から勤怠変更申請モーダル表示のルーティング
     end
   end
     # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます
   # Usersリソースのブロック内に記述しているため、設定されるルーティングは
-  # HTTP　PATCH
-  # URL /users/:user_id/attendances/:id　　params[:user_id]でユーザーIDが取得できる
+  # HTTP PATCH
+  # URL /users/:user_id/attendances/:id  params[:user_id]でユーザーIDが取得できる
   # PATH user_attendance_path	
-  # コントローラー#アクション　attendances#update　となる
+  # コントローラー#アクション attendances#update となる
  
   # get '/overtime_approval_index', to: 'attendances#overtime_approval_index' 
   
