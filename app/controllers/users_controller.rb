@@ -11,7 +11,7 @@ class UsersController < ApplicationController
     # ページネーションを判定できるオブジェクトに置き換える
     # paginateではキーが:pageで値がページ番号のハッシュを引数にとります。
     # User.paginateは:pageパラメータに基づき、データベースからひとかたまりのデータを取得
-    # @users = User.paginate(page: params[:page])　検索フォーム無しの場合
+    # @users = User.paginate(page: params[:page]) 検索フォーム無しの場合
     # @users = User.paginate(page: params[:page]).search(params[:search]) 検索フォーム有りの場合
     @users = User.paginate(page: params[:page]).search(params[:search]).where.not(admin: true) #where.not(admin: true)管理者を表示させない
   end
@@ -31,13 +31,13 @@ class UsersController < ApplicationController
     @change_attendance_applyings = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying')
     
     # 勤怠変更申請をユーザーオブジェクトでグルーピング
-    @change_attendance_applying_group = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by { |item| item.user } 
+    # @change_attendance_applying_group = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by { |item| item.user } 
     
     # 残業申請お知らせ通知
     @overtime_appliyings = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying')
     
     # 残業申請をユーザーオブジェクトでグルーピング
-    @applying_group = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by { |item| item.user }
+    # @applying_group = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by { |item| item.user }
     
   end
   
@@ -50,7 +50,7 @@ class UsersController < ApplicationController
     if @user.save
       log_in @user # 保存成功後、ログインします。このメソッドによりリダイレクトされたページではログイ�����状態のレイアウトが表示される
       flash[:success] = '新規作成に成功しました。' #:successというキーには保存に成功した時のメッセージを代入
-      redirect_to @user #左記のように記述できる　redirect_to user_url(@user)
+      redirect_to @user #左記のように記述できる redirect_to user_url(@user)
     else
       render :new
     end
@@ -115,7 +115,7 @@ class UsersController < ApplicationController
   end
   
   
-  # applocation_controllerへ移動　１２２行目まで
+  # applocation_controllerへ移動１２２行目まで
   # beforeフィルター
   
   # paramsハッシュからユーザーを取得します。

@@ -63,18 +63,26 @@ Rails.application.routes.draw do
     end
     
     # resourcesでonly:またはexcept:オプションを使用することで、主要な7つのアクション(index, show, new, create, edit, update, destroy)を限定することができます
+    # index =>  /users/1/attendances
     resources :attendances, only: :update do # ネストさせる（1人のユーザーはたくさんのアテンダンスを持っている）
       patch 'overtime_approval_reply' # /users/:user_id/attendances/:attendance_id/overtime_approval_reply
       patch 'change_attendance_applying'
       get 'edit_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/edit_overtime_work_end_plan
+      # get 'edit_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/edit_overtime_work_end_plan
+      # get 'overtime_approval_reply_user'
       patch 'update_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/update_overtime_work_end_plan
       patch 'change_attendance_approval_reply' #  /users/:user_id/attendances/:attendance_id/change_attendance_approval_reply
+      get 'overtime_employee_index' # 通知から残業申請モーダル表示のルーティング
+      get 'change_attendance_employee_index' # 通知から勤怠変更申請モーダル表示のルーティング
     end
   end
     # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます
   # Usersリソースのブロック内に記述しているため、設定されるルーティングは
-  # HTTP　PATCH
-  # URL /users/:user_id/attendances/:id　　params[:user_id]でユーザーIDが取得できる
+  # HTTP PATCH
+  # URL /users/:user_id/attendances/:id  params[:user_id]でユーザーIDが取得できる
   # PATH user_attendance_path	
-  # コントローラー#アクション　attendances#update　となる
+  # コントローラー#アクション attendances#update となる
+ 
+  # get '/overtime_approval_index', to: 'attendances#overtime_approval_index' 
+  
 end
