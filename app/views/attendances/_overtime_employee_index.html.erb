@@ -12,53 +12,50 @@
       <!-- NOTE: @attendances = Attendance.where(select_superior_id: current_user.id, overtime_status: 'applying').group_by{|item| item.user} -->
       <!-- NOTE: @attendances配列の中の二次元配列["user",[attendance]]をブロック変数keys,valuesに代入 -->
       <% @attendances.each do |key, values| %> <!-- |user, attendances| でもいい -->
-      	<div class="center">
-      		<h3>【<%= key.name %>からの残業申請】</h3>
-      	</div>
-      	
-      	<div>
-    		<table class="table table-bordered table-condensed table-hover received-application-details-table">
-    			<thead>
-    				<tr>
-    					<td>日付</td>
-    					<td>曜日</td>
-    					<td>終了予定時間</td>
-    					<td>指定勤務終了時間</td>
-    					<td>時間外時間</td>
-    					<td>業務処理内容</td>
-    					<td>指示者確認<%= "\u329e" %></td>
-    					<td>変更</td>
-    					<td>変更を送信</td>
-    					<td>勤怠を確認する</td>
-    				</tr>
-    			</thead>
-    			<tbody>
-    			<!-- |keys, values|配列の中の[values]を取り出しattendanceに代入 -->
-    			<% values.each do |attendance| %>	
-    				<tr>
-    					<td><%= l(attendance.worked_on, format: :short) %></td>
-    					<td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
-    					<td><%= attendance.overtime_work_end_plan.strftime("%R") %></td>
-    					<td><%= @user.designated_work_end_time.strftime("%R") %></td>
-    					<td><%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %></td>
-    					<td><%= attendance.overtime_content %></td>
-    						<td>
-    					    <%= form_with model: attendance, url: user_attendance_overtime_approval_reply_path(@user, attendance), local: true do |f| %>
-    						    <%= f.select :overtime_status, Attendance.overtime_status.options, {}, class: "form-control" %>
-      						  <%= f.check_box :change_permit, required: true %>
-      						  <%= f.submit '送信', class: "btn btn-success" %>
-    					    <% end %>
-    						</td>
-    						<td>
-    						</td>
-    						<td>
-    						</td>
-    					<td><%= link_to '確認', user_path(attendance.user), class: "btn btn-primary" %></td>
-    				</tr>
-    			<% end %>
-    			</tbody>
-    		</table>
-    	</div>
+        <div class="center">
+          <h3>【<%= key.name %>からの残業申請】</h3>
+        </div>
+        <div>
+          <table class="table table-bordered table-condensed table-hover received-application-details-table">
+            <thead>
+              <tr>
+                <td>日付</td>
+                <td>曜日</td>
+                <td>終了予定時間</td>
+                <td>指定勤務終了時間</td>
+                <td>時間外時間</td>
+                <td>業務処理内容</td>
+                <td>指示者確認<%= "\u329e" %></td>
+                <td>変更</td>
+                <td>変更を送信</td>
+                <td>勤怠を確認する</td>
+              </tr>
+            </thead>
+            <tbody>
+            <!-- |keys, values|配列の中の[values]を取り出しattendanceに代入 -->
+            <% values.each do |attendance| %>	
+              <tr>
+                <td><%= l(attendance.worked_on, format: :short) %></td>
+                <td><%= $days_of_the_week[attendance.worked_on.wday] %></td>
+                <td><%= attendance.overtime_work_end_plan.strftime("%R") %></td>
+                <td><%= @user.designated_work_end_time.strftime("%R") %></td>
+                <td><%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %></td>
+                <td><%= attendance.overtime_content %></td>
+                <td>
+                <%= form_with model: attendance, url: user_attendance_overtime_approval_reply_path(@user, attendance), local: true do |f| %>
+                  <%= f.select :overtime_status, Attendance.overtime_status.options, {}, class: "form-control" %>
+                  <%= f.check_box :change_permit, required: true %>
+                  <%= f.submit '送信', class: "btn btn-success" %>
+                <% end %>
+                </td>
+                <td></td>
+                <td></td>
+                <td><%= link_to '確認', user_path(attendance.user), class: "btn btn-primary" %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
       <% end %> 
     </div>
   </div>

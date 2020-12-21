@@ -32,6 +32,7 @@ class AttendancesController < ApplicationController
   def edit_one_month # ルーティングattendances/edit_one_monthを設定してからアクションを定義
   end
   
+  # 勤怠変更申請、上長へ送信
   def change_attendance_applying
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:attendance_id])
@@ -53,11 +54,13 @@ class AttendancesController < ApplicationController
     redirect_to user_url(@user, date: @first_day)
   end
   
+  # 勤怠変更申請モーダル表示
   def change_attendance_employee_index
     @user = User.find(params[:user_id])
     @attendances = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by { |item| item.user }
   end
   
+  # 勤怠変更申請、社員へ送信
   def change_attendance_approval_reply
     # STEP1 対象のattendance_idを取得
     @attendance = Attendance.find(params[:attendance_id])
@@ -104,11 +107,13 @@ class AttendancesController < ApplicationController
   def edit_log
   end
   
+  # 残業申請モーダル表示
   def edit_overtime_work_end_plan
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:attendance_id])
   end
   
+  # 残業申請、上長へ送信
   def update_overtime_work_end_plan
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:attendance_id])
@@ -124,6 +129,7 @@ class AttendancesController < ApplicationController
     # redirect_back(fallback_location: user_url) この１行でも実装可能（74から81行省略して）
   end
   
+  # 上長ページ：残業申請モーダル表示
   def overtime_employee_index
     @user = User.find(params[:user_id])
     @attendances = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by { |item| item.user } 
