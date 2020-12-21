@@ -31,13 +31,13 @@ class UsersController < ApplicationController
     @change_attendance_applyings = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying')
     
     # 勤怠変更申請をユーザーオブジェクトでグルーピング
-    @change_attendance_applying_group = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by { |item| item.user } 
+    # @change_attendance_applying_group = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by { |item| item.user } 
     
     # 残業申請お知らせ通知
     @overtime_appliyings = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying')
     
     # 残業申請をユーザーオブジェクトでグルーピング
-    @applying_group = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by { |item| item.user }
+    # @applying_group = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by { |item| item.user }
     
   end
   
@@ -115,7 +115,7 @@ class UsersController < ApplicationController
   end
   
   
-  # applocation_controllerへ移動 １２２行目まで
+  # applocation_controllerへ移動１２２行目まで
   # beforeフィルター
   
   # paramsハッシュからユーザーを取得します。
