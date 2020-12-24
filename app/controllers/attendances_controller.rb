@@ -30,6 +30,8 @@ class AttendancesController < ApplicationController
   end
   
   def edit_one_month # ルーティングattendances/edit_one_monthを設定してからアクションを定義
+  # 選択フォームに自分を載せない
+  @superior = User.where.not(id: current_user.id)
   end
   
   # 勤怠変更申請、上長へ送信
@@ -111,6 +113,8 @@ class AttendancesController < ApplicationController
   def edit_overtime_work_end_plan
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:attendance_id])
+    # 選択フォームに自分を載せない
+    @superior = User.where.not(id: current_user.id) 
   end
   
   # 残業申請、上長へ送信
