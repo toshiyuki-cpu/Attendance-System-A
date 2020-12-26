@@ -34,7 +34,7 @@ class User < ApplicationRecord #Userモデル
   
   enumerize :role, in: %i(admin superior employee), default: :employee, scope: true
   
-  # current_userが上長の時、上長選択フォームで自分を載せない
+  # 引数で受け取るユーザーを除いた上司を取得
   scope :superior_except_me, ->(user) { where.not(id: user).with_role(:superior) } 
   
   # 「remember_token」という仮想の属性を作成します。
