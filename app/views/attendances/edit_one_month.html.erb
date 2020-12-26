@@ -44,7 +44,7 @@
               <% end %>
             </td>
             <td><%= f.text_field :change_note, class: "form-control", required: true %></td>
-            <td><%= f.select :change_attendance_superior_id, User.with_role(:superior).map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control", required: true} %></td>
+            <td><%= f.select :change_attendance_superior_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control", required: true} %></td>
                   <!-- with_role は Enumerize で追加された scope -->
             <td><%= f.submit '編集を保存する', class: "btn btn-lg btn-success" %></td>
             <td><%= link_to "キャンセル", user_path(@user, date: @first_day), class: "btn btn-lg btn-default" %></td>
