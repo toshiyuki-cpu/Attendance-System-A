@@ -31,6 +31,7 @@ class User < ApplicationRecord #Userモデル
   
   extend Enumerize
   has_many :attendances, dependent: :destroy
+  has_many :month_reports, dependent: :destroy
   
   enumerize :role, in: %i(admin superior employee), default: :employee, scope: true
   

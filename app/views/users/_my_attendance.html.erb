@@ -148,10 +148,12 @@
 				<td colspan="6"></td>
 				<td>在社時間合計</td>
 				<td colspan="5"></td>
-				<td rowspan="2">所属長承認
-				</br>未申請
-				</br><%= link_to "承認申請", '#', class: "btn btn-primary" %>
+			<%= form_with(model: @month_report, url: user_month_report_update_report_apply_path(@user, month_report), local: true, method: :patch) do |f| %>
+				<td rowspan="2">所属長承認 未申請
+					<%= f.select :report_approver, @superiors.map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control", required: true} %></br>
+					<%= f.submit '承認申請', class: "btn btn-primary" %>
 				</td>
+			<% end %>
 				</tr>
 				<tr>
 				<td colspan="2"><%= @attendances.count %></td>

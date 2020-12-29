@@ -75,6 +75,11 @@ Rails.application.routes.draw do
       get 'overtime_employee_index' # 通知から残業申請モーダル表示のルーティング
       get 'change_attendance_employee_index' # 通知から勤怠変更申請モーダル表示のルーティング
     end
+    
+    resources :month_reports, only: :update do
+      get 'edit_report_apply'
+      patch 'update_report_apply'
+    end
   end
     # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます
   # Usersリソースのブロック内に記述しているため、設定されるルーティングは
