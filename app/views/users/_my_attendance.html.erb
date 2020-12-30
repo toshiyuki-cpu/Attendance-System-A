@@ -163,12 +163,23 @@
 </div>
 
 <div class="center">
-	<%= form_with(model: @month_report, url: new_user_month_report_path(@user), local: true) do |f| %>
-		所属長承認
-		<%= :status %>
-		<%= f.hidden_field :month, { date: @first_day } %>
-		<%= f.select :approver_id, User.with_role(:superior).map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control", required: true} %>
-		<%= f.submit '承認申請', class: "btn btn-primary" %>
+	<%= @month_report.inspect %>
+	<% if @month_report.new_record? %>
+	新規作成
+		<%= form_with(model: @month_report, url: user_month_reports_path(@user), local: true) do |f| %>
+			所属長承認 未
+			<%= f.hidden_field :month, { date: @first_day } %>
+			<%= f.select :approver_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control", required: true} %>
+			<%= f.submit '申請', class: "btn btn-primary" %>
+		<% end %>
+	<% else %>
+		更新
+		<%= form_with(model: @month_report, url: user_month_report_path(@user, @month_report), local: true) do |f| %>
+			所属長承認
+			<%= f.hidden_field :month, { date: @first_day } %>
+			<%= f.select :approver_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control", required: true} %>
+			<%= f.submit '申請', class: "btn btn-primary" %>
+		<% end %>
 	<% end %>
 </div>
 

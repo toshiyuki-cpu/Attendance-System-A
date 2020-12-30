@@ -38,7 +38,14 @@ class UsersController < ApplicationController
     
     # 残業申請をユーザーオブジェクトでグルーピング
     # @applying_group = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by { |item| item.user }
-    @month_reports = MonthReport.find_by(user_id: current_user, month: @first_day)
+    
+    # find_or_initialize_byメソッドとは、条件に合致したインスタンスがデータベースに保存されているかどうかをチェック
+    # データベースに保存されている場合はfindメソッド
+    # データベースに保存されていない場合は'new'メソッドとして、インスタンスの状況によって適用されるメソッドが異なる
+    @month_report = MonthReport.find_or_initialize_by(user_id: current_user, month: @first_day)
+    
+    # 1ヶ月分の勤怠申請上長選択フォームで自分を表示させない
+    @superiors = User.superior_except_me(current_user)
   end
   
   def new

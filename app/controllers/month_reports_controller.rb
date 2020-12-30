@@ -1,27 +1,34 @@
 class MonthReportsController < ApplicationController
-    
-  def new
-    # STEP 1:user_idを取得
-    @user = User.find(params[:user_id])
-    @month_report = MonthReport.new
-  end
   
   def create
     # STEP 1:user_idを取得 
     @user = User.find(params[:user_id])
-    # STEP 2:month_reportのidを取得
     
-    # STEP 3:month_report_idがDBに保存されてなければ新規で申請
-    #@month_report = MonthReport.find_or_initialize_by(id: params[:id])
-    #unless @month_report.new_record?
-    #end
-    # STEP 3:month_reportを新規作成し保存(申請)
-    #@month_report.save
+    # STEP 2:新規作成
+    month_report = MonthReport.new(month_report_params)
+    # STEP 3:statusに申請中を代入
+    month_report.status = 'applying'
+    # userのidを取得
+    month_report.user = current_user
+    # STEP 4:保存
+    month_report.save
+    flash[:success] = '上長に1ヶ月分の勤怠を申請しました。'
+    redirect_to user_url(current_user)
   end
+  
+  def update
+    month_report = MonthReport.find(params[:id])
+    month_report.attributes = month_report_params
+    month_report.status = 'applying'
+    month_report.save
+    flash[:success] = '上長に1ヶ月分の勤怠を申請しました。'
+    redirect_to user_url(current_user)
+  end
+  
+  private
     
-    private
-    
-    def month_report_params
-      params.require(:month_report).permit(:approver_id, :month, :status)
-    end
+  def month_report_params
+    params.require(:month_report).permit(:approver_id, :month)
+  end
+  
 end
