@@ -148,7 +148,27 @@
 				<td colspan="6"></td>
 				<td>在社時間合計</td>
 				<td colspan="5"></td>
-				<td rowspan="2">所属長承認 未申請
+				<td rowspan="2">
+				<div class="month-apply-form">
+					<!--month_reportコントローラーでfind_or_initialize_byメソッドを定義-->
+					<% if @month_report.new_record? %>
+						<!--まだ申請してない場合（新規作成）-->
+						<%= form_with(model: @month_report, url: user_month_reports_path(@user), local: true) do |f| %>
+							所属長承認 未
+							<%= f.hidden_field :month, { date: @first_day } %>
+							<%= f.select :approver_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control month-report-form", required: true} %>
+							<%= f.submit '申請', class: "btn btn-block btn-success" %>
+						<% end %>
+					<% else %>
+						<!--申請済みの場合（更新）-->
+						<%= form_with(model: @month_report, url: user_month_report_path(@user, @month_report), local: true) do |f| %>
+							所属長承認 <%= month_report_status_text(@month_report) %>
+							<%= f.hidden_field :month, { date: @first_day } %>
+							<%= f.select :approver_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control month-report-form", required: true} %>
+							<%= f.submit '申請', class: "btn btn-block btn-success" %>
+						<% end %>
+					<% end %>
+				</div>
 				</td>
 				</tr>
 				<tr>
@@ -162,26 +182,7 @@
 	</table>
 </div>
 
-<div class="center">
-	<%= @month_report.inspect %>
-	<% if @month_report.new_record? %>
-	新規作成
-		<%= form_with(model: @month_report, url: user_month_reports_path(@user), local: true) do |f| %>
-			所属長承認 未
-			<%= f.hidden_field :month, { date: @first_day } %>
-			<%= f.select :approver_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control", required: true} %>
-			<%= f.submit '申請', class: "btn btn-primary" %>
-		<% end %>
-	<% else %>
-		更新
-		<%= form_with(model: @month_report, url: user_month_report_path(@user, @month_report), local: true) do |f| %>
-			所属長承認
-			<%= f.hidden_field :month, { date: @first_day } %>
-			<%= f.select :approver_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control", required: true} %>
-			<%= f.submit '申請', class: "btn btn-primary" %>
-		<% end %>
-	<% end %>
-</div>
+
 
 <!--残業申請モーダルウインドウ表示-->
 <div id="edit-overtime-work-end-plan" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
