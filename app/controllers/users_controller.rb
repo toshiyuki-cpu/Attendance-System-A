@@ -38,7 +38,7 @@ class UsersController < ApplicationController
     
     # 残業申請をユーザーオブジェクトでグルーピング
     # @applying_group = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by { |item| item.user }
-    
+    @month_reports = MonthReport.find_by(user_id: current_user, month: @first_day)
   end
   
   def new

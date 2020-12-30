@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201228121203) do
+ActiveRecord::Schema.define(version: 20201228112729) do
 
   create_table "attendances", force: :cascade do |t|
     t.date "worked_on"
@@ -46,12 +46,12 @@ ActiveRecord::Schema.define(version: 20201228121203) do
   end
 
   create_table "month_reports", force: :cascade do |t|
-    t.date "report_month"
-    t.string "report_status"
-    t.integer "report_approver"
+    t.date "month"
+    t.string "status"
+    t.integer "approver_id"
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -63,13 +63,13 @@ ActiveRecord::Schema.define(version: 20201228121203) do
     t.string "remember_digest"
     t.boolean "admin", default: false
     t.string "affiliation"
-    t.datetime "basic_time", default: "2020-12-18 23:00:00"
-    t.datetime "work_time", default: "2020-12-18 22:30:00"
+    t.datetime "basic_time", default: "2020-12-28 23:00:00"
+    t.datetime "work_time", default: "2020-12-28 22:30:00"
     t.string "employee_number"
     t.string "uid"
     t.datetime "basic_work_time"
-    t.datetime "designated_work_start_time", default: "2020-12-19 00:00:00"
-    t.datetime "designated_work_end_time", default: "2020-12-19 09:00:00"
+    t.datetime "designated_work_start_time", default: "2020-12-29 00:00:00"
+    t.datetime "designated_work_end_time", default: "2020-12-29 09:00:00"
     t.string "role", default: "employee", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end

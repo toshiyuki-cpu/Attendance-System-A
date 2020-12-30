@@ -2,13 +2,13 @@
 #
 # Table name: month_reports
 #
-#  id              :integer          not null, primary key
-#  report_approver :integer
-#  report_month    :date
-#  report_status   :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  user_id         :integer
+#  id          :integer          not null, primary key
+#  month       :date
+#  status      :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  approver_id :integer
+#  user_id     :integer
 #
 require 'test_helper'
 
