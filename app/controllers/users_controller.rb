@@ -44,7 +44,7 @@ class UsersController < ApplicationController
     # データベースに保存されていない場合は'new'メソッドとして、インスタンスの状況によって適用されるメソッドが異なる
     # @month_report = MonthReport.find_or_initialize_by(user_id: current_user, month: @first_day)
     
-    @month_report = MonthReport.find_or_create_by(user_id: current_user, month: @first_day)
+    @month_report = @user.month_reports.find_or_create_by(user_id: current_user, month: @first_day)
     
     # 1ヶ月分の勤怠申請上長選択フォームで自分を表示させない
     @superiors = User.superior_except_me(current_user)

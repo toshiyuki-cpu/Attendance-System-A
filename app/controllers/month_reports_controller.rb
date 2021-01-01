@@ -23,8 +23,8 @@ class MonthReportsController < ApplicationController
     month_report.status = 'applying'
     month_report.save
     flash[:success] = "#{month_report.month_report_apply_superior.name}に1ヶ月分の勤怠を申請しました。"
-    # redirect_to user_url(@user, date: @first_day)
-    redirect_back(fallback_location: user_url)
+    redirect_to user_url(@user, date: @first_day)
+    #redirect_back(fallback_location: user_url)
   end
   
   private
