@@ -4,7 +4,7 @@ class MonthReportsController < ApplicationController
     # STEP 1:user_idを取得 
     @user = User.find(params[:user_id])
     # STEP 2:新規作成
-    month_report = MonthReport.new(month_report_params)
+    month_report = MonthReport.create(month_report_params)
     # STEP 3:statusに申請中を代入
     month_report.status = 'applying'
     # userのidを取得
@@ -12,7 +12,8 @@ class MonthReportsController < ApplicationController
     # STEP 4:保存
     month_report.save
     flash[:success] = "#{month_report.month_report_apply_superior.name}に1ヶ月分の勤怠を申請しました。"
-    redirect_to user_url(current_user)
+    redirect_to user_url(@user, date: @first_day)
+    #redirect_back(fallback_location: user_url)
   end
   
   def update
@@ -22,7 +23,8 @@ class MonthReportsController < ApplicationController
     month_report.status = 'applying'
     month_report.save
     flash[:success] = "#{month_report.month_report_apply_superior.name}に1ヶ月分の勤怠を申請しました。"
-    redirect_to user_url(current_user)
+    # redirect_to user_url(@user, date: @first_day)
+    redirect_back(fallback_location: user_url)
   end
   
   private

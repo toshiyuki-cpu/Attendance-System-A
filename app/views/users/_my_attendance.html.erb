@@ -150,24 +150,17 @@
 				<td colspan="5"></td>
 				<td rowspan="2">
 				<div class="month-apply-form">
-					<!--month_reportコントローラーでfind_or_initialize_byメソッドを定義-->
-					<% if @month_report.new_record? %>
-						<!--まだ申請してない場合（新規作成）-->
+					<!--userコントローラーshowアクションでfind_or_create_byメソッドを定義-->
 						<%= form_with(model: @month_report, url: user_month_reports_path(@user), local: true) do |f| %>
-							所属長承認 未
+							所属長承認 :<% if @month_report.status.present? %>
+														<%= month_report_status_text(@month_report) %>
+													<% else %>
+														<%= '未申請' %>
+													<% end %>
 							<%= f.hidden_field :month, { date: @first_day } %>
 							<%= f.select :approver_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control month-report-form", required: true} %>
 							<%= f.submit '申請', class: "btn btn-block btn-success" %>
 						<% end %>
-					<% else %>
-						<!--申請済みの場合（更新）-->
-						<%= form_with(model: @month_report, url: user_month_report_path(@user, @month_report), local: true) do |f| %>
-							所属長承認 <%= month_report_status_text(@month_report) %>
-							<%= f.hidden_field :month, { date: @first_day } %>
-							<%= f.select :approver_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control month-report-form", required: true} %>
-							<%= f.submit '申請', class: "btn btn-block btn-success" %>
-						<% end %>
-					<% end %>
 				</div>
 				</td>
 				</tr>
