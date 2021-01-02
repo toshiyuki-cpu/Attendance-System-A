@@ -77,7 +77,6 @@ Rails.application.routes.draw do
     end
     
     resources :month_reports do
-      get 'month_reports/report_apply'
     end
   end
     # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます

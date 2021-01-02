@@ -150,8 +150,8 @@
 				<td colspan="5"></td>
 				<td rowspan="2">
 				<div class="month-apply-form">
-					<!--userコントローラーでfind_or_initialize_byメソッドを定義-->
-					<!--今回このfind_or_initialize_byメソッドは、新規で申請の時@month_report（createアクション）、再申請はformで定義のupdateアクションに振り分けられる-->
+					<!--userコントローラーでfind_or_create_byメソッドを定義-->
+					<!--今回このfind_or_create_byメソッドは、新規で申請の時@month_report（createアクション）、再申請はformで定義のupdateアクションに振り分けられる-->
 						<%= form_with(model: @month_report, url: user_month_report_path(@user, @month_report), local: true) do |f| %>
 							所属長承認 :<% if @month_report.status.present? %>
 														<%= month_report_status_text(@month_report) %>

@@ -4,7 +4,7 @@ class MonthReportsController < ApplicationController
     # STEP 1:user_idを取得 
     @user = User.find(params[:user_id])
     # STEP 2:新規作成
-    month_report = MonthReport.create(month_report_params)
+    month_report = MonthReport.new(month_report_params)
     # STEP 3:statusに申請中を代入
     month_report.status = 'applying'
     # userのidを取得
