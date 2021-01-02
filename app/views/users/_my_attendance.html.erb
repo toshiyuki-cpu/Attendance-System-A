@@ -148,9 +148,21 @@
 				<td colspan="6"></td>
 				<td>在社時間合計</td>
 				<td colspan="5"></td>
-				<td rowspan="2">所属長承認
-				</br>未申請
-				</br><%= link_to "承認申請", '#', class: "btn btn-primary" %>
+				<td rowspan="2">
+				<div class="month-apply-form">
+					<!--userコントローラーでfind_or_create_byメソッドを定義-->
+					<!--今回このfind_or_create_byメソッドは、新規で申請の時@month_report（createアクション）、再申請はformで定義のupdateアクションに振り分けられる-->
+						<%= form_with(model: @month_report, url: user_month_report_path(@user, @month_report), local: true) do |f| %>
+							所属長承認 :<% if @month_report.status.present? %>
+														<%= month_report_status_text(@month_report) %>
+													<% else %>
+														<%= '未' %>
+													<% end %>
+							<%= f.hidden_field :month, { date: @first_day } %>
+							<%= f.select :approver_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control month-report-form", required: true} %>
+							<%= f.submit '申請', class: "btn btn-block btn-success" %>
+						<% end %>
+				</div>
 				</td>
 				</tr>
 				<tr>
@@ -163,6 +175,8 @@
 		</tfoot>
 	</table>
 </div>
+
+
 
 <!--残業申請モーダルウインドウ表示-->
 <div id="edit-overtime-work-end-plan" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

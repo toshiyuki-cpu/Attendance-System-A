@@ -1,0 +1,24 @@
+# == Schema Information
+#
+# Table name: month_reports
+#
+#  id          :integer          not null, primary key
+#  month       :date
+#  status      :string
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  approver_id :integer
+#  user_id     :integer
+#
+
+one:
+  report_month: 2020-12-27
+  report_status: MyString
+  report_approver: MyString
+  attendance: one
+
+two:
+  report_month: 2020-12-27
+  report_status: MyString
+  report_approver: MyString
+  attendance: two

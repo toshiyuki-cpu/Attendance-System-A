@@ -16,3 +16,9 @@ ja:
         approval: '承認'
         negation: '否認'
         cancel: 'なし'
+    monthreport:
+      status:
+        applying: '申請中'
+        approval: '承認'
+        negation: '否認'
+        cancel: 'なし'
