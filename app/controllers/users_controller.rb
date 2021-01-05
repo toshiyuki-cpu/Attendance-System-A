@@ -42,10 +42,12 @@ class UsersController < ApplicationController
     # find_or_create_byメソッドとは、条件に合致したインスタンスがデータベースに保存されているかどうかをチェック
     # データベースに保存されている場合はfindメソッド
     # データベースに保存されていない場合は'create'メソッドとして、インスタンスの状況によって適用されるメソッドが異なる
-    @month_report = @user.month_reports.find_or_create_by(user_id: current_user, month: @first_day)
+    @month_report = @user.month_reports.find_or_create_by(user_id: current_user, month: params[:date])
     
     # 1ヶ月分の勤怠申請上長選択フォームで自分を表示させない
     @superiors = User.superior_except_me(current_user)
+    
+    @report_receivings_group = MonthReport.where(approver_id: @user.id, status: 'applying').group_by { |item| item.user }
   end
   
   def new

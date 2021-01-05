@@ -44,13 +44,48 @@
 	</div>
 <% end %>
 
-<div class="btn btn-users-show" >
-	<%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
-	<!--paramsハッシュにdateキーとして、@first_dayを指定しています。
-	これで受け取ったparams[:date]をもとに、どの月の情報を表示するか判断できるようになります-->
-	<%=link_to "CSV出力", '#', class: "btn btn-primary" %>
-	<%= link_to "勤怠修正ログ (承認済)", attendances_edit_log_user_path, class: "btn btn-primary attendance-edit-log" %>
+<% @report_receivings_group.each do |key, values| %>
+<div class="center">
+	<h3>【<%= key.name %>からの1ヶ月分勤怠申請】</h3>
 </div>
+<div>
+	<table class=table table-bordered table-condensed table-hover received-application-details-table>
+		<thead>
+			<tr>
+				<th>月</th>
+				<th>指示者確認</th>
+				<th>変更</th>
+				<th>勤怠を確認する</th>
+			</tr>
+		</thead>
+		<% values.each do |report| %>
+		<tbody>
+			<tr>
+				<td><%= l(report.month, format: :month) %></td>
+				<td>
+					<%= form_with(model: @month_report, url: user_month_report_receiving_path(@user, @month_report), local: true) do |f| %>
+						<%= f.select :status, MonthReport.status.options, {}, class: "form-control" %>
+						<%= hidden_field_tag 'report[reply]', false %>
+						<%= check_box_tag 'report[reply]', true, false, {required: true} %>
+						<%= f.submit '送信する', class: "btn btn-success" %>
+					<% end %>
+				</td>
+				<td></td>
+				<td><%= link_to '確認', '#', class: "btn btn-primary" %></td>
+			</tr>
+		</tbody>
+		<% end %>
+	</table>
+</div>
+<% end %>
+	
+	<div class="btn btn-users-show" >
+		<%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
+		<!--paramsハッシュにdateキーとして、@first_dayを指定しています。
+		これで受け取ったparams[:date]をもとに、どの月の情報を表示するか判断できるようになります-->
+		<%=link_to "CSV出力", '#', class: "btn btn-primary" %>
+		<%= link_to "勤怠修正ログ (承認済)", attendances_edit_log_user_path, class: "btn btn-primary attendance-edit-log" %>
+	</div>
 
 <div>
 	<table class="table table-bordered table-condensed table-hover" id="table-attendances">
@@ -158,7 +193,7 @@
 													<% else %>
 														<%= '未' %>
 													<% end %>
-							<%= f.hidden_field :month, { date: @first_day } %>
+							<%= f.hidden_field :month %>
 							<%= f.select :approver_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '選択してください' }, {class: "form-control month-report-form", required: true} %>
 							<%= f.submit '申請', class: "btn btn-block btn-success" %>
 						<% end %>

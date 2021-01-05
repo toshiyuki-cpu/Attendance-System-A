@@ -40,6 +40,10 @@ class ApplicationController < ActionController::Base
     # @first_day = Date.current.beginning_of_month
     @first_day = params[:date].nil? ? Date.current.beginning_of_month : params[:date].to_date
     #三項演算子(結果を戻り値として返す)
+    # if params[:date].nil?
+    #   Date.current.biginning_of_month
+    # else params[:date].to_date
+    # end
     
     @last_day = @first_day.end_of_month
     one_month = [*@first_day..@last_day] # 対象の月の日数を代入します。showアクションでは使わない為ローカル変数に代入
