@@ -47,6 +47,10 @@ class UsersController < ApplicationController
     # 1ヶ月分の勤怠申請上長選択フォームで自分を表示させない
     @superiors = User.superior_except_me(current_user)
     
+    # 1ヶ月分の勤怠申請お知らせ通知件数
+    @month_report_applyings = MonthReport.where(approver_id: @user.id, status: 'applying')
+    
+    # 1ヶ月分の勤怠申請をユーザーオブジェクトでグルーピング
     @report_receivings_group = MonthReport.where(approver_id: @user.id, status: 'applying').group_by { |item| item.user }
   end
   
