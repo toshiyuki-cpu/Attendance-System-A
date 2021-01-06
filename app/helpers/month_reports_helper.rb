@@ -5,7 +5,7 @@ module MonthReportsHelper
     when 'applying'
         "#{month_report.month_report_apply_superior.name}に申請中"
     when 'approval'
-        "#{month_report.month_report_apply_superior.name}から承認済"
+        "#{month_report.month_report_apply_superior.name}から承認済🟠"
     when 'negation'
         "#{month_report.month_report_apply_superior.name}から否認"
     when 'cancel'

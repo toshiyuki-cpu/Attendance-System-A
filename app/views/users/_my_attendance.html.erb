@@ -62,16 +62,13 @@
 		<tbody>
 			<tr>
 				<td><%= l(report.month, format: :month) %></td>
-				<td>
-					<%= form_with(model: @month_report, url: user_month_report_receiving_path(@user, @month_report), local: true) do |f| %>
-						<%= f.select :status, MonthReport.status.options, {}, class: "form-control" %>
-						<%= hidden_field_tag 'report[reply]', false %>
-						<%= check_box_tag 'report[reply]', true, false, {required: true} %>
-						<%= f.submit '送信する', class: "btn btn-success" %>
-					<% end %>
-				</td>
-				<td></td>
-				<td><%= link_to '確認', '#', class: "btn btn-primary" %></td>
+				<%= form_with(model: @month_report, url: user_month_report_receiving_path(@user, report), local: true) do |f| %>
+					<td><%= f.select :status, MonthReport.status.options, {}, class: "form-control" %></td>
+					<td><%= hidden_field_tag 'report[reply]', false %>
+							<%= check_box_tag 'report[reply]', true, false, {required: true} %></td>
+					<td><%= link_to '確認', user_path(key), class: "btn btn-primary" %></td>
+					<td><%= f.submit '送信する', class: "btn btn-success" %></td>
+				<% end %>
 			</tr>
 		</tbody>
 		<% end %>
