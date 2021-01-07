@@ -29,24 +29,25 @@ class MonthReportsController < ApplicationController
     #redirect_back(fallback_location: user_url)
   end
   
+  # モーダル表示で必要なくなった
   # 上長画面：社員からの1ヶ月分の勤怠表示・送信
-  def receiving
-    @user = User.find(params[:user_id])
-    @month_report = MonthReport.find(params[:month_report_id])
+  #def receiving
+    #@user = User.find(params[:user_id])
+    #@month_report = MonthReport.find(params[:month_report_id])
     # STEP1: パラメーターのmonth_report.statusを取得
-    @month_report.status = params[:month_report][:status]
+    #@month_report.status = params[:month_report][:status]
     # STEP2: チェックボックスがtrueの時送信
-    if params[:report][:reply] 
-      @month_report.save
-    end
-    flash[:success] = '1ヶ月分の勤怠申請を申請者へ送信しました。'
+    #if params[:report][:reply] 
+      #@month_report.save
+    #end
+    #flash[:success] = '1ヶ月分の勤怠申請を申請者へ送信しました。'
     # 送信後、なぜかstring parameterにdateが渡ってないので、引数にdate: Time.current.beginning_of_month.to_date.to_sを入れた
-    redirect_to user_url(current_user, date: Time.current.beginning_of_month.to_date.to_s)
-  end
+    #redirect_to user_url(current_user, date: Time.current.beginning_of_month.to_date.to_s)
+  #end
   
   def receiving_index
     @user = User.find(params[:user_id])
-    # @month_report = MonthReport.find(params[:month_report_id])
+    @month_report = MonthReport.find(params[:month_report_id])
     @report_receivings = MonthReport.where(approver_id: @user.id, status: 'applying').group_by { |item| item.user }
   end
   

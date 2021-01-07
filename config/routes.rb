@@ -77,7 +77,7 @@ Rails.application.routes.draw do
     end
     
     resources :month_reports do 
-      patch 'receiving' # 上長ページにひとまず表示させる
+      # patch 'receiving' # 上長ページにひとまず表示させる(モーダルにするから必要ない)
       get 'receiving_index' # 通知からモーダル表示
       patch 'reply'
     end
