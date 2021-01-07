@@ -30,7 +30,11 @@
 
 <% if @user.role.superior? %>
 	<div class="notice">
-		<p>【 所属長承認申請のお知らせ 】</p>
+		<p>【 所属長承認申請のお知らせ 】
+			<% if @month_report_applyings.present? %>
+				<%= link_to " #{@month_report_applyings.count}件の通知があります", '#', class: "notice-superior" %>
+			<% end %>
+		</p>
 		<p>【 勤怠変更申請のお知らせ 】
 			<% if @change_attendance_applyings.present? %>
 				<%= link_to " #{@change_attendance_applyings.count}件の通知があります", user_attendance_change_attendance_employee_index_path(@user, @attendances), remote: true, class: "notice-superior" %>
@@ -66,7 +70,7 @@
 					<td><%= f.select :status, MonthReport.status.options, {}, class: "form-control" %></td>
 					<td><%= hidden_field_tag 'report[reply]', false %>
 							<%= check_box_tag 'report[reply]', true, false, {required: true} %></td>
-					<td><%= link_to '確認', user_path(key), class: "btn btn-primary" %></td>
+					<td><%= link_to '確認', user_path(key, date: report.month), class: "btn btn-primary" %></td>
 					<td><%= f.submit '送信する', class: "btn btn-success" %></td>
 				<% end %>
 			</tr>
