@@ -44,6 +44,26 @@ class MonthReportsController < ApplicationController
     redirect_to user_url(current_user, date: Time.current.beginning_of_month.to_date.to_s)
   end
   
+  def receiving_index
+    @user = User.find(params[:user_id])
+    # @month_report = MonthReport.find(params[:month_report_id])
+    @report_receivings = MonthReport.where(approver_id: @user.id, status: 'applying').group_by { |item| item.user }
+  end
+  
+  def reply
+    @user = User.find(params[:user_id])
+    @month_report = MonthReport.find(params[:month_report_id])
+    # STEP1: パラメーターのmonth_report.statusを取得
+    @month_report.status = params[:month_report][:status]
+    # STEP2: チェックボックスがtrueの時送信
+    if params[:report][:reply] 
+      @month_report.save
+    end
+    flash[:success] = '1ヶ月分の勤怠申請を申請者へ送信しました。'
+    # 送信後、なぜかstring parameterにdateが渡ってないので、引数にdate: Time.current.beginning_of_month.to_date.to_sを入れた
+    redirect_to user_url(current_user, date: Time.current.beginning_of_month.to_date.to_s)
+  end
+  
   private
     
   def month_report_params

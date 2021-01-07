@@ -1,0 +1,46 @@
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="center">
+        <h3 class="modal-title">⭐️ 1ヶ月分の勤怠申請のお知らせ ⭐️</h3>
+      </div>
+    </div>
+    <div class="modal-body">
+    <!-- NOTE: @report_receivings = MonthReport.where(approver_id: @user.id, status: 'applying').group_by { |item| item.user } -->
+    <% @report_receivings.each do |key, values| %>
+    <div class="center">
+    	<h3>【<%= key.name %>からの1ヶ月分勤怠申請】</h3>
+    </div>
+    <div>
+    	<table class=table table-bordered table-condensed table-hover received-application-details-table>
+    		<thead>
+    			<tr>
+    				<th>月</th>
+    				<th>指示者確認</th>
+    				<th>変更</th>
+    				<th>勤怠を確認する</th>
+    			</tr>
+    		</thead>
+    		<% values.each do |report| %>
+    		<tbody>
+    			<tr>
+    				<td><%= l(report.month, format: :month) %></td>
+    				<%= form_with(model: @month_report, url: user_month_report_reply_path(@user, report), local: true, method: :patch) do |f| %>
+    					<td><%= f.select :status, MonthReport.status.options, {}, class: "form-control" %></td>
+    					<td><%= hidden_field_tag 'report[reply]', false %>
+    							<%= check_box_tag 'report[reply]', true, false, {required: true} %></td>
+    					<td><%= link_to '確認', user_path(key, date: report.month), class: "btn btn-primary" %></td>
+    					<td><%= f.submit '送信する', class: "btn btn-success" %></td>
+    				<% end %>
+    			</tr>
+    		</tbody>
+    		<% end %>
+    	</table>
+    </div>
+    <% end %>
+    </div>
+  </div>
+</div>
