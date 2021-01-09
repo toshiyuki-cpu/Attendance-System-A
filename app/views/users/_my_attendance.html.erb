@@ -32,7 +32,7 @@
 	<div class="notice">
 		<p>【 所属長承認申請のお知らせ 】
 			<% if @month_report_applyings.present? %>
-				<%= link_to " #{@month_report_applyings.count}件の通知があります", '#', class: "notice-superior" %>
+				<%= link_to " #{@month_report_applyings.count}件の通知があります", user_month_report_receiving_index_path(@user, @month_report), remote: true, class: "notice-superior" %>
 			<% end %>
 		</p>
 		<p>【 勤怠変更申請のお知らせ 】
@@ -48,37 +48,6 @@
 	</div>
 <% end %>
 
-<% @report_receivings_group.each do |key, values| %>
-<div class="center">
-	<h3>【<%= key.name %>からの1ヶ月分勤怠申請】</h3>
-</div>
-<div>
-	<table class=table table-bordered table-condensed table-hover received-application-details-table>
-		<thead>
-			<tr>
-				<th>月</th>
-				<th>指示者確認</th>
-				<th>変更</th>
-				<th>勤怠を確認する</th>
-			</tr>
-		</thead>
-		<% values.each do |report| %>
-		<tbody>
-			<tr>
-				<td><%= l(report.month, format: :month) %></td>
-				<%= form_with(model: @month_report, url: user_month_report_receiving_path(@user, report), local: true) do |f| %>
-					<td><%= f.select :status, MonthReport.status.options, {}, class: "form-control" %></td>
-					<td><%= hidden_field_tag 'report[reply]', false %>
-							<%= check_box_tag 'report[reply]', true, false, {required: true} %></td>
-					<td><%= link_to '確認', user_path(key, date: report.month), class: "btn btn-primary" %></td>
-					<td><%= f.submit '送信する', class: "btn btn-success" %></td>
-				<% end %>
-			</tr>
-		</tbody>
-		<% end %>
-	</table>
-</div>
-<% end %>
 	
 	<div class="btn btn-users-show" >
 		<%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
@@ -220,3 +189,5 @@
 <div id="change_attendance_employee_index" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <!--上長画面：通知から残業申請モーダルウインドウ表示-->
 <div id="overtime_employee_index" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<!--上長画面：通知から1ヶ月分の勤怠申請モーダルウインドウ表示-->
+<div id="receiving_index" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
