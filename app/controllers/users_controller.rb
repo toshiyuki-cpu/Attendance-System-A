@@ -36,7 +36,7 @@ class UsersController < ApplicationController
     # 残業申請お知らせ通知
     @overtime_appliyings = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying')
     
-    # 残業申請をユーザーオブジェクトでグルーピング(モーダル表示のためattemdamcesコントローラーで定義に変更)
+    # 残業申請をユーザーオブジェクトでグルーピング
     # @applying_group = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by { |item| item.user }
     
     # find_or_create_byメソッドとは、条件に合致したインスタンスがデータベースに保存されているかどうかをチェック
@@ -50,8 +50,8 @@ class UsersController < ApplicationController
     # 1ヶ月分の勤怠申請お知らせ通知件数
     @month_report_applyings = MonthReport.where(approver_id: @user.id, status: 'applying')
     
-    # 1ヶ月分の勤怠申請をユーザーオブジェクトでグルーピング（モーダル表示のためmonth_reportsコントローラーで定義に変更）
-    # @report_receivings_group = MonthReport.where(approver_id: @user.id, status: 'applying').group_by { |item| item.user }
+    # 1ヶ月分の勤怠申請をユーザーオブジェクトでグルーピング
+    @report_receivings_group = MonthReport.where(approver_id: @user.id, status: 'applying').group_by { |item| item.user }
   end
   
   def new

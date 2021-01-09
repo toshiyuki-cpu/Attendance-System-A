@@ -76,10 +76,8 @@ Rails.application.routes.draw do
       get 'change_attendance_employee_index' # 通知から勤怠変更申請モーダル表示のルーティング
     end
     
-    resources :month_reports do 
-      # patch 'receiving' # 上長ページにひとまず表示させる(モーダルにするから必要ない)
-      get 'receiving_index' # 通知からモーダル表示
-      patch 'reply'
+    resources :month_reports do
+      patch 'receiving'
     end
   end
     # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます
