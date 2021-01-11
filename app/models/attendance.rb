@@ -39,7 +39,7 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   # optional: trueとは、アソシエーションによって紐づけられた外部キーの値が存在していなくても、データベースに保存することができるオプション
   belongs_to :overtime_reply_superior, class_name: 'User', foreign_key: :select_superior_id, optional: true
   
-  belongs_to :change_attendance_reply_superior, class_name: 'User', foreign_key: :change_attendance_superior_id, optional: true 
+  belongs_to :change_attendance_reply_superior, class_name: 'User', foreign_key: :change_attendance_superior_id, optional: true
   
   extend Enumerize
   # 残業申請状態 ymlファイルも定義する 
@@ -60,24 +60,51 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   # 出勤時間が存在しない場合、退勤時間は無効
   # Railsではモデルの状態を確認し、無効な場合errorsオブジェクトにメッセージを追加するメソッドを作成することができます。
   # このメソッドを作成後、バリデーションメソッド名を指すシンボルを渡しvalidateクラスメソッドを使って登録する必要があります
-  validate :finished_at_is_invalid_without_a_started_at
+  #validate :finished_at_is_invalid_without_a_started_at
+  validate :change_finished_at_is_invalid_without_a_change_started_at
   # 存在性の検証などではvalidatesのようにsが入りましたが、今回のパターンだと不要
   # この記述によりfinished_at_is_invalid_without_a_started_atを検証の際に呼び出します
+  validate :change_strted_at_is_invalid_without_a_change_finished_at
   
   # 出勤・退勤時間どちらも存在する時、出勤時間より早い退勤時間は無効
-  validate :started_at_than_finished_at_fast_if_invalid
+  #validate :started_at_than_finished_at_fast_if_invalid
+  validate :change_started_at_than_change_finished_at_fast_if_invalid
   
-  def finished_at_is_invalid_without_a_started_at
-    errors.add(:started_at, "が必要です") if started_at.blank? && finished_at.present?
+  validate :change_note_if_invalid
+  
+  #def finished_at_is_invalid_without_a_started_at
+    #errors.add(:started_at, "が必要です") if started_at.blank? && finished_at.present?
                                              #「出勤時間が無い、かつ退勤時間が存在する場合」、trueとなって処理が実行される
-  end
+  #end
   
-  def started_at_than_finished_at_fast_if_invalid
+  #def started_at_than_finished_at_fast_if_invalid
     # validateクラスメソッドを使って新しく定義したカスタムメソッドを呼び出します。
     # しかし、今回に限っては設定したエラーメッセージをアプリケーション上で表示することはありません。
     # 今回は例外処理を発生させるためにこのようなカスタムメソッドを作成
-    if started_at.present? && finished_at.present?
-      errors.add(:started_at, "より早い退勤時間は無効です") if started_at > finished_at
+    #if started_at.present? && finished_at.present?
+      #errors.add(:started_at, "より早い退勤時間は無効です") if started_at > finished_at
+    #end
+  #end
+  
+  # validate :change_finished_at_is_invalid_without_a_change_started_at
+  #「出勤時間が無い、かつ退勤時間が存在する場合」、trueとなって処理が実行される
+  def change_finished_at_is_invalid_without_a_change_started_at
+    errors.add(:change_started_at, "が必要です") if change_started_at.blank? && change_finished_at.present?
+  end
+  
+  def change_strted_at_is_invalid_without_a_change_finished_at
+    errors.add(:change_finished_at, "が必要です") if change_finished_at.blank? && change_started_at.present?
+  end
+  # validate :change_started_at_than_change_finished_at_fast_if_invalid
+  def change_started_at_than_change_finished_at_fast_if_invalid
+    if change_started_at.present? && change_finished_at.present? && next_day.blank?
+      errors.add(:change_started_at, "より早い退勤時間は無効です") if change_started_at > change_finished_at
+    end
+  end
+  
+  def change_note_if_invalid
+    if change_started_at.present? && change_finished_at.present? && change_note.blank?
+    errors.add(:change_note, "が必要です") if change_attendance_superior_id.present?
     end
   end
   

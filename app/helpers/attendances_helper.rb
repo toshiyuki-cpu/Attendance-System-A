@@ -22,6 +22,15 @@ module AttendancesHelper
       # そして、受け取った引数��使って時間の計算処理をして値を返す仕組み
   end
   
+  # 勤怠変更の在社時間計算
+  def edit_working_times(next_day, change_start, change_finish)
+    if next_day # ifの条件はbooleanが必要。next_dayにはbooleanがはいってる
+      format("%.2f", (24 + change_finish.hour) - change_start.hour + (change_finish.min - change_start.min) / 60.00) 
+    else
+      format("%.2f", (change_finish.hour) - change_start.hour + (change_finish.min - change_start.min) / 60.00)
+    end
+  end
+  
   # 時間外時間
   def hours_of_overtime(next_day, end_time, end_plan)
     if next_day # ifの条件はbooleanが必要。next_dayにはbooleanがはいってる
@@ -60,7 +69,7 @@ module AttendancesHelper
         "#{attendance.change_attendance_reply_superior.name}から勤怠変更キャンセル"
     end
   end
-end  
+end
   # Attendances Helperにより下記のshow.html.erbの記述はいらなくなる
   #	<% if (Date.current == day.worked_on) && day.started_at.nil? %>
   #	<!--繰り返し処理中の日付と、実際の日付における当日が一致することを条件とし、さらに該当する日付データにはstarted_atがnilであるか？

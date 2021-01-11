@@ -1,8 +1,8 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :update_one_month]
-  before_action :logged_in_user, only: [:update, :edit_one_month]
-  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
-  before_action :set_one_month, only: [:edit_one_month]
+  before_action :set_user, only: [:edit_one_month, :editing_one_month, :update_one_month]
+  before_action :logged_in_user, only: [:update, :edit_one_month, :editing_one_month]
+  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :editing_one_month, :update_one_month]
+  before_action :set_one_month, only: [:edit_one_month, :editing_one_month]
     
   # 定数は下記のように大文字表記
   # 更新エラー用のテキストを2ヶ所で使用しているため、このように定義
@@ -33,6 +33,31 @@ class AttendancesController < ApplicationController
   # 選択フォームに自分を載せない
   # user.rbでscopeメソッド :superior_except_me, ->(user) { where.not(id: user).with_role(:superior) }
   @superiors = User.superior_except_me(current_user)
+  end
+  
+  def editing_one_month
+    @superiors = User.superior_except_me(current_user)
+  end
+  
+  def updating_one_month
+    @user = User.find(params[:id])
+    ActiveRecord::Base.transaction do # トランザクションを開始します。
+      change_attendances_params.each do |id, item| # idがkey,itemがvalue
+      # attendance_idを取得
+      attendance = Attendance.find(id)
+      # もし上長idが
+      if attendance.change_attendance_superior_id?
+        attendance.change_attendance_status = :applying
+      end
+      attendance.update_attributes!(item)
+      end
+    end
+    
+    flash[:success] = "勤怠の変更を上長へ送信しました。。"
+    redirect_to user_url(date: params[:date])
+  rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+    flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
+    redirect_to attendances_editing_one_month_user_url(date: params[:date])
   end
   
   # 勤怠変更申請、上長へ送信
@@ -179,9 +204,14 @@ class AttendancesController < ApplicationController
     params.require(:attendance).permit(:change_started_at, :change_finished_at, :next_day, :change_note, :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit )
   end
   
+  # 勤怠変更申請まとめて送信のパラメーター(アクション updating_one_month)
+  def change_attendances_params
+    params.require(:user).permit(attendances: [:change_started_at, :change_finished_at, :next_day, :change_note, :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit])[:attendances]
+  end
+  
   # 1ヶ月分の勤怠情報を扱います。
   def attendances_params
-    params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+    params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :next_day, :change_note, :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit])[:attendances]
   end
   
     # 残業申請のパラメーター
