@@ -32,7 +32,7 @@ class AttendancesController < ApplicationController
   def edit_one_month # ルーティングattendances/edit_one_monthを設定してからアクションを定義
   # 選択フォームに自分を載せない
   # user.rbでscopeメソッド :superior_except_me, ->(user) { where.not(id: user).with_role(:superior) }
-  @superiors = User.superior_except_me(current_user)
+    @superiors = User.superior_except_me(current_user)
   end
   
   def editing_one_month
@@ -45,7 +45,11 @@ class AttendancesController < ApplicationController
       change_attendances_params.each do |id, item| # idがkey,itemがvalue
       # attendance_idを取得
       attendance = Attendance.find(id)
-      # もし上長idが
+      # change_attendance_statusが存在するときは、そのレコード更新させない
+      if attendance.change_attendance_status? 
+        next
+      end
+      # もし上長が選択されたらstatusに”申請中を代入”
       if attendance.change_attendance_superior_id?
         attendance.change_attendance_status = :applying
       end
@@ -101,7 +105,7 @@ class AttendancesController < ApplicationController
        @attendance.started_at = @attendance.change_started_at
        @attendance.finished_at = @attendance.change_finished_at
        @attendance.note = @attendance.change_note
-       @attendance.reset_change_attendance_columns # attendance.rbにインスタンスメソッド定義
+       #@attendance.reset_change_attendance_columns # attendance.rbにインスタンスメソッド定義
     end
     # 否認（ negation）、なし（ cancel）の時はattendance_paramsのまま
     # STEP4 チェックボックス(change_attendance_permit)がtrueの時、@attendanceにtrue代入。そして@attendanceを保存します

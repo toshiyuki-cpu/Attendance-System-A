@@ -70,7 +70,13 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   #validate :started_at_than_finished_at_fast_if_invalid
   validate :change_started_at_than_change_finished_at_fast_if_invalid
   
-  validate :change_note_if_invalid
+  validate :change_note_or_change_attendance_superior_id_if_invalid
+  
+  validate :next_day_only_invalid
+  
+  validate :next_day_and_change_note_only_invalid
+  
+  validate :change_note_and_change_attendance_superior_id_if_invalid
   
   #def finished_at_is_invalid_without_a_started_at
     #errors.add(:started_at, "が必要です") if started_at.blank? && finished_at.present?
@@ -102,16 +108,34 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
     end
   end
   
-  def change_note_if_invalid
-    if change_started_at.present? && change_finished_at.present? && change_note.blank?
-    errors.add(:change_note, "が必要です") if change_attendance_superior_id.present?
+  def change_note_or_change_attendance_superior_id_if_invalid
+    if change_started_at.blank? && change_finished_at.blank? && next_day.blank?
+      errors.add(:change_note, "が必要です") if change_note.present? || change_attendance_superior_id.present?
+    end  
+  end
+  
+  def next_day_only_invalid
+    if change_started_at.blank? && change_finished_at.blank? && change_note.blank?
+      errors.add(:change_started_at, "が必要です") if next_day.present? 
+    end
+  end
+  
+  def next_day_and_change_note_only_invalid
+    if change_started_at.blank? && change_finished_at.blank? && change_attendance_superior_id.present?
+      errors.add(:change_started_at, :change_finished_at, "が必要です") if next_day.present? && change_note.present? 
+    end
+  end
+  
+  def change_note_and_change_attendance_superior_id_if_invalid
+    if change_started_at.present? && change_finished_at.present?
+      errors.add(:change_note, "が必要です") if change_note.blank? && change_attendance_superior_id.blank?
     end
   end
   
   # change_attendance_approval_replyアクションで使用。変更後カラムを変更前カラムに代入後カラムの値をnilにする
-  def reset_change_attendance_columns
-    self.change_started_at = nil
-    self.change_finished_at = nil
-    self.change_note = nil
-  end
+  #def reset_change_attendance_columns
+    #self.change_started_at = nil
+    #self.change_finished_at = nil
+    #self.change_note = nil
+  #end
 end

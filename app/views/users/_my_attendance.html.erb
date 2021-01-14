@@ -118,10 +118,17 @@
 				<td><%= l(attendance.finished_at, format: :minute) if attendance.finished_at.present? %></td>
 				<td></td>
 				<td>
-				<% if attendance.started_at.present? && attendance.finished_at.present? %>
-					<%= str_times = working_times(attendance.started_at, attendance.finished_at) %> <!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
-					<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
-				<% end %>
+					<% if attendance.next_day.present? %> <!-- 日をまたいだら-->
+						<% if attendance.started_at.present? && attendance.finished_at.present? %>
+							<%= str_times = edit_working_times(attendance.next_day, attendance.change_started_at, attendance.change_finished_at) %> <!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
+							<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+						<% end %>
+					<% else %>
+						<% if attendance.started_at.present? && attendance.finished_at.present? %>
+							<%= str_times = working_times(attendance.started_at, attendance.finished_at) %> <!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
+							<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+						<% end %>
+					<% end %>
 				</td>
 				<td><%= attendance.note %></td>
 				<td><%= l(attendance.overtime_work_end_plan, format: :hour) if attendance.overtime_work_end_plan.present? %></td>
