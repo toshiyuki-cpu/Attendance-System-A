@@ -45,10 +45,6 @@ class AttendancesController < ApplicationController
       change_attendances_params.each do |id, item| # idがkey,itemがvalue
       # attendance_idを取得
       attendance = Attendance.find(id)
-      # change_attendance_statusが存在するときは、そのレコード更新させない
-      if attendance.change_attendance_status? 
-        next
-      end
       # もし上長が選択されたらstatusに”申請中を代入”
       if attendance.change_attendance_superior_id?
         attendance.change_attendance_status = :applying
@@ -57,7 +53,7 @@ class AttendancesController < ApplicationController
       end
     end
     
-    flash[:success] = "勤怠の変更を上長へ送信しました。。"
+    flash[:success] = "勤怠の変更を上長へ送信しました。"
     redirect_to user_url(date: params[:date])
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
     flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
@@ -107,7 +103,7 @@ class AttendancesController < ApplicationController
        @attendance.note = @attendance.change_note
        #@attendance.reset_change_attendance_columns # attendance.rbにインスタンスメソッド定義
     end
-    # 否認（ negation）、なし（ cancel）の時はattendance_paramsのまま
+    # 否���（ negation）、なし（ cancel）の時はattendance_paramsのまま
     # STEP4 チェックボックス(change_attendance_permit)がtrueの時、@attendanceにtrue代入。そして@attendanceを保存します
     if @attendance.change_attendance_permit = params[:attendance][:change_attendance_permit]
        @attendance.save
