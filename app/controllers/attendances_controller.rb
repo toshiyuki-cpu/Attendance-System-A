@@ -43,16 +43,17 @@ class AttendancesController < ApplicationController
     @user = User.find(params[:id])
     ActiveRecord::Base.transaction do # トランザクションを開始します。
       change_attendances_params.each do |id, item| # idがkey,itemがvalue
-      # attendance_idを取得
+      # attendanceを取得
       attendance = Attendance.find(id)
-      # もし上長が選択されたらstatusに”申請中を代入”
-      if attendance.change_attendance_superior_id?
-        attendance.change_attendance_status = :applying
-      end
-      attendance.update_attributes!(item)
+      # パラメーターを代入している 変更ないレコードはスルーさせる
+      attendance.attributes = item
+      next unless attendance.has_changes_to_save?
+        if attendance.change_attendance_superior_id?
+          attendance.change_attendance_status = :applying
+          attendance.save!(context: :change_attendance_update)
+        end
       end
     end
-    
     flash[:success] = "勤怠の変更を上長へ送信しました。"
     redirect_to user_url(date: params[:date])
   rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。

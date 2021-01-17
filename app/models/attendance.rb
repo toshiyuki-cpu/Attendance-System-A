@@ -76,6 +76,8 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   
   validate :change_note_and_change_attendance_superior_id_if_invalid
   
+  validate :superior_if_invalid, on: :change_attendance_update
+  
   # validateクラスメソッドを使って新しく定義したカスタムメソッドを呼び出します。
   # 今回は例外処理を発生させるためにこのようなカスタムメソッドを作成
   # validate :change_finished_at_is_invalid_without_a_change_started_at
@@ -121,6 +123,13 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   def change_note_and_change_attendance_superior_id_if_invalid
     if change_started_at.present? && change_finished_at.present?
       errors.add(:change_note, "が必要です") if change_note.blank? && change_attendance_superior_id.blank?
+    end
+  end
+  # validate :superior_if_invalid, on: :change_attendance_update
+  # 上長選択しなかったら
+  def superior_if_invalid
+    if change_attendance_superior_id.blank?
+      errors.add(:change_attendance_superior_id, "を選択して下さい。")
     end
   end
   
