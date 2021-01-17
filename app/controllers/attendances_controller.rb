@@ -48,10 +48,8 @@ class AttendancesController < ApplicationController
       # パラメーターを代入している 変更ないレコードはスルーさせる
       attendance.attributes = item
       next unless attendance.has_changes_to_save?
-        if attendance.change_attendance_superior_id?
-          attendance.change_attendance_status = :applying
-          attendance.save!(context: :change_attendance_update)
-        end
+      attendance.change_attendance_status = :applying
+      attendance.save!(context: :change_attendance_update)
       end
     end
     flash[:success] = "勤怠の変更を上長へ送信しました。"
