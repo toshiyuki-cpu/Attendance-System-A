@@ -45,11 +45,16 @@ class AttendancesController < ApplicationController
       change_attendances_params.each do |id, item| # idがkey,itemがvalue
       # attendanceを取得
       attendance = Attendance.find(id)
-      # パラメーターを代入している 変更ないレコードはスルーさせる
+      # パラメーターを代入している 
       attendance.attributes = item
-      next unless attendance.has_changes_to_save?
+      # 変更ないレコードはスルーさせる
+      # { |v| v.blank? }　valueが空ならnext　
+      # has_changes_to_save? 変更を検知して true / falseを返す
+      # (!マークをつけている)attendanceが変更ない(false)ならnext
+      next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save?
       attendance.change_attendance_status = :applying
       attendance.save!(context: :change_attendance_update)
+      # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
       end
     end
     flash[:success] = "勤怠の変更を上長へ送信しました。"

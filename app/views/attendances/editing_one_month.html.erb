@@ -32,13 +32,13 @@
                 <%= $days_of_the_week[day.worked_on.wday] %></td>
               <td><%= attendance.time_field :change_started_at, value: attendance.object.started_at&.strftime("%H:%M"), class: "form-control" %></td>
               <td><%= attendance.time_field :change_finished_at, value: attendance.object.finished_at&.strftime("%H:%M"), class: "form-control" %></td>
-              <td><%= attendance.check_box :next_day %></td>
+              <td><%= attendance.check_box :next_day, {}, true, nil %></td>
               <td>
                 <% if day.change_started_at.present? && day.change_finished_at.present? %>
                   <%= edit_working_times(day.next_day, day.change_started_at, day.change_finished_at) %>
                 <% end %>
               </td>
-              <td><%= attendance.text_field :change_note,  value: attendance.object.note, class: "form-control" %></td>
+              <td><%= attendance.text_field :change_note,  value: attendance.object.change_note, class: "form-control" %></td>
               <td><%= attendance.select :change_attendance_superior_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '上長選択' }, {class: "form-control"} %></td>
             </tr>
           <% end %>

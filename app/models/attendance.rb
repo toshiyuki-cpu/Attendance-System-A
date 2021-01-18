@@ -94,7 +94,7 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   # 出勤時間、退勤時間、翌日カラムが存在して「退勤時間が出勤時間より早い場合」
   def change_started_at_than_change_finished_at_fast_if_invalid
     if change_started_at.present? && change_finished_at.present? && next_day.blank?
-      errors.add(:change_started_at, "より早い退勤時��は無効です") if change_started_at > change_finished_at
+      errors.add(:change_started_at, "より早い退勤時間は無効です") if change_started_at > change_finished_at
     end
   end
   # validate :change_note_or_change_attendance_superior_id_if_invalid
