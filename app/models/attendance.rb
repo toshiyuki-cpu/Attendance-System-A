@@ -74,7 +74,7 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   
   validate :next_day_and_change_note_only_invalid
   
-  validate :change_note_and_change_attendance_superior_id_if_invalid
+  validate :change_note_if_invalid
   
   validate :superior_if_invalid, on: :change_attendance_update
   
@@ -101,28 +101,28 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   # 出勤時間が無い、かつ退勤時間が無い、かつ翌日カラムがなくて「備考又は上長idが存在する時」
   def change_note_or_change_attendance_superior_id_if_invalid
     if change_started_at.blank? && change_finished_at.blank? && next_day.blank?
-      errors.add(:change_note, "が必要です") if change_note.present? || change_attendance_superior_id.present?
+      errors.add(:change_started_at, "、退社時間が必要です") if change_note.present? || change_attendance_superior_id.present?
     end  
   end
   # validate :next_day_only_invalid
   #「出勤時間が無い、かつ退勤時間が無い、かつ備考が無い時「翌日カラムが存在する」場合
   def next_day_only_invalid
     if change_started_at.blank? && change_finished_at.blank? && change_note.blank?
-      errors.add(:change_started_at, "が必要です") if next_day.present? 
+      errors.add(:change_started_at, "、退社時間、変更理由を入力") if next_day.present? 
     end
   end
   # validate :next_day_and_change_note_only_invalid
   # 出勤時間が無い、かつ退勤時間が無い、かつ上長idが存在して「翌日カラム、かつ備考が存在する時」
   def next_day_and_change_note_only_invalid
     if change_started_at.blank? && change_finished_at.blank? && change_attendance_superior_id.present?
-      errors.add(:change_started_at, :change_finished_at, "が必要です") if next_day.present? && change_note.present? 
+      errors.add(:change_started_at, "が必要です") if next_day.present? && change_note.present? 
     end
   end
   # validate :change_note_and_change_attendance_superior_id_if_invalid
-  # 出勤時間、かつ退勤時間が存在して、「備考かつ上長idが存在しない時」
-  def change_note_and_change_attendance_superior_id_if_invalid
+  # 出勤時間、かつ退勤時間が存在して、「備考が存在しない時」
+  def change_note_if_invalid
     if change_started_at.present? && change_finished_at.present?
-      errors.add(:change_note, "が必要です") if change_note.blank? && change_attendance_superior_id.blank?
+      errors.add(:change_note, "が必要です") if change_note.blank?
     end
   end
   # validate :superior_if_invalid, on: :change_attendance_update
