@@ -50,6 +50,7 @@
 
 	
 	<div class="btn btn-users-show" >
+		<%= link_to "勤怠を編集2", attendances_editing_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
 		<%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
 		<!--paramsハッシュにdateキーとして、@first_dayを指定しています。
 		これで受け取ったparams[:date]をもとに、どの月の情報を表示するか判断できるようになります-->
@@ -117,16 +118,17 @@
 				<td><%= l(attendance.finished_at, format: :minute) if attendance.finished_at.present? %></td>
 				<td></td>
 				<td>
-				<% if attendance.started_at.present? && attendance.finished_at.present? %>
-				<!--繰り返し処理中の勤怠データに、started_atとfinished_atの値が存在するかを判定するもの-->
-				<%= str_times = working_times(attendance.started_at, attendance.finished_at) %>
-				<!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
-				<!--繰り返し処理の中で累計在社時間の計算は完了します。あとは@total_working_times変数をフッター部分に表示すればOKという仕組み-->
-				<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
-				<!--attendance helperに定義済み-->
-				<!--working_times(start, finish)-->
-				<!--format("%.2f", (((finish - start) / 60) / 60.0))-->
-				<% end %>
+					<% if attendance.next_day.present? %> <!-- 日をまたいだら-->
+						<% if attendance.started_at.present? && attendance.finished_at.present? %>
+							<%= str_times = edit_working_times(attendance.next_day, attendance.change_started_at, attendance.change_finished_at) %> <!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
+							<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+						<% end %>
+					<% else %>
+						<% if attendance.started_at.present? && attendance.finished_at.present? %>
+							<%= str_times = working_times(attendance.started_at, attendance.finished_at) %> <!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
+							<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
+						<% end %>
+					<% end %>
 				</td>
 				<td><%= attendance.note %></td>
 				<td><%= l(attendance.overtime_work_end_plan, format: :hour) if attendance.overtime_work_end_plan.present? %></td>

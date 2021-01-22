@@ -5,7 +5,7 @@
         入力エラーが<%= object.errors.count %>件ありました。<!--@user.errors.count-->
       </div>
       <ul>
-        <% object.errors.full_messages.each do |msg| %> <!--@user.errors.full_messages.each do |msg|-->
+        <% object.errors.full_messages.each do |msg| %> <!--.errors.full_messages.each do |msg|-->
           <li><%= msg %></li>
         <% end %>
       </ul>

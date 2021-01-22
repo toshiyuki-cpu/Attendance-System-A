@@ -35,4 +35,8 @@ ja:
           overtime_work_end_plan: 終了予定時刻
           hours_of_overtime: 時間外残業
           overtime_content: 業務処理内容
-          select_superior_id: 指示者確認
+          select_superior_id: 指示者
+          change_started_at: 出社時間
+          change_finished_at: 退社時間
+          change_note: 変更理由
+          change_attendance_superior_id: 上長

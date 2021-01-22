@@ -1,8 +1,8 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :update_one_month]
-  before_action :logged_in_user, only: [:update, :edit_one_month]
-  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :update_one_month]
-  before_action :set_one_month, only: [:edit_one_month]
+  before_action :set_user, only: [:edit_one_month, :editing_one_month, :update_one_month]
+  before_action :logged_in_user, only: [:update, :edit_one_month, :editing_one_month]
+  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :editing_one_month, :update_one_month]
+  before_action :set_one_month, only: [:edit_one_month, :editing_one_month]
     
   # 定数は下記のように大文字表記
   # 更新エラー用のテキストを2ヶ所で使用しているため、このように定義
@@ -32,8 +32,39 @@ class AttendancesController < ApplicationController
   def edit_one_month # ルーティングattendances/edit_one_monthを設定してからアクションを定義
   # 選択フォームに自分を載せない
   # user.rbでscopeメソッド :superior_except_me, ->(user) { where.not(id: user).with_role(:superior) }
-  @superiors = User.superior_except_me(current_user)
+    @superiors = User.superior_except_me(current_user)
   end
+  
+  def editing_one_month
+    @superiors = User.superior_except_me(current_user)
+  end
+  
+  def updating_one_month
+    @user = User.find(params[:id])
+    ActiveRecord::Base.transaction do # トランザクションを開始します。
+      change_attendances_params.each do |id, item| # idがkey,itemがvalue
+        # attendanceを取得
+        attendance = Attendance.find(id)
+        # パラメーターを代入している 
+        attendance.attributes = item
+        # 変更ないレコードはスルーさせる
+        # { |v| v.blank? }　valueが空ならnext　
+        # has_changes_to_save? 変更を検知して true / falseを返す
+        # (!マークをつけている)attendanceが変更ない(false)ならnext
+        next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save?
+        attendance.change_attendance_status = :applying
+        attendance.save!(context: :change_attendance_update)
+        # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
+      rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+        flash[:danger] = attendance.errors.full_messages.join(', ')
+        # flash[:danger] = attendance.errors.full_messages.to_sentence でも上と同じ
+        redirect_to attendances_editing_one_month_user_url(date: params[:date]) and return
+      end
+    end
+    flash[:success] = "上長へ勤怠の変更を申請しました。"
+    redirect_to user_url(date: params[:date])
+  end  
+  
   
   # 勤怠変更申請、上長へ送信
   def change_attendance_applying
@@ -76,9 +107,9 @@ class AttendancesController < ApplicationController
        @attendance.started_at = @attendance.change_started_at
        @attendance.finished_at = @attendance.change_finished_at
        @attendance.note = @attendance.change_note
-       @attendance.reset_change_attendance_columns # attendance.rbにインスタンスメソッド定義
+       #@attendance.reset_change_attendance_columns # attendance.rbにインスタンスメソッド定義
     end
-    # 否認（ negation）、なし（ cancel）の時はattendance_paramsのまま
+    # 否���（ negation）、なし（ cancel）の時はattendance_paramsのまま
     # STEP4 チェックボックス(change_attendance_permit)がtrueの時、@attendanceにtrue代入。そして@attendanceを保存します
     if @attendance.change_attendance_permit = params[:attendance][:change_attendance_permit]
        @attendance.save
@@ -179,9 +210,14 @@ class AttendancesController < ApplicationController
     params.require(:attendance).permit(:change_started_at, :change_finished_at, :next_day, :change_note, :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit )
   end
   
+  # 勤怠変更申請まとめて送信のパラメーター(アクション updating_one_month)
+  def change_attendances_params
+    params.require(:user).permit(attendances: [:change_started_at, :change_finished_at, :next_day, :change_note, :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit])[:attendances]
+  end
+  
   # 1ヶ月分の勤怠情報を扱います。
   def attendances_params
-    params.require(:user).permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+    params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :next_day, :change_note, :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit])[:attendances]
   end
   
     # 残業申請のパラメーター

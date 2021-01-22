@@ -16,7 +16,7 @@
     
     <div class="container">
       <% flash.each do |message_type, msg| %> <!--flashというオブジェクトを対象にハッシュのキーとバリューを繰り返し処理するプログラム-->
-        <div class="alert alert-<%= message_type %>"><%= msg.html_safe %></div>
+        <div class="alert alert-<%= message_type %>"><%= msg %></div>
       <% end %>
       <%= yield %>
       <%= debug(params) if Rails.env.development? %> <!--真(true)であればdebug(params)が表示される-->
