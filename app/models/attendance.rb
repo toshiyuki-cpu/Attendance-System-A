@@ -108,7 +108,7 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   #「出勤時間が無い、かつ退勤時間が無い、かつ備考が無い時「翌日カラムが存在する」場合
   def next_day_only_invalid
     if change_started_at.blank? && change_finished_at.blank? && change_note.blank?
-      errors.add(:change_started_at, "、退社時間、変更理由を入力") if next_day.present? 
+      errors.add(:change_started_at, "、退社時間、変更理由を入力して下さい") if next_day.present? 
     end
   end
   # validate :next_day_and_change_note_only_invalid
@@ -129,7 +129,7 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   # 上長選択しなかったら
   def superior_if_invalid
     if change_attendance_superior_id.blank?
-      errors.add(:change_attendance_superior_id, "を選択して下さい。")
+      errors.add(:change_attendance_superior_id, "を選択して下さい")
     end
   end
   

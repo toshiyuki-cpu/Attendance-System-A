@@ -43,27 +43,26 @@ class AttendancesController < ApplicationController
     @user = User.find(params[:id])
     ActiveRecord::Base.transaction do # トランザクションを開始します。
       change_attendances_params.each do |id, item| # idがkey,itemがvalue
-      # attendanceを取得
-      attendance = Attendance.find(id)
-      # パラメーターを代入している 
-      attendance.attributes = item
-      # 変更ないレコードはスルーさせる
-      # { |v| v.blank? }　valueが空ならnext　
-      # has_changes_to_save? 変更を検知して true / falseを返す
-      # (!マークをつけている)attendanceが変更ない(false)ならnext
-      next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save?
+        # attendanceを取得
+        attendance = Attendance.find(id)
+        # パラメーターを代入している 
+        attendance.attributes = item
+        # 変更ないレコードはスルーさせる
+        # { |v| v.blank? }　valueが空ならnext　
+        # has_changes_to_save? 変更を検知して true / falseを返す
+        # (!マークをつけている)attendanceが変更ない(false)ならnext
+        next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save?
         attendance.change_attendance_status = :applying
         attendance.save!(context: :change_attendance_update)
         # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
-        flash[:success] = "上長へ勤怠の変更を申請しました。"
-        redirect_to user_url(date: params[:date])
-        rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
-        flash[:danger] = attendance.errors.full_messages
-        #flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
-        redirect_to attendances_editing_one_month_user_url(date: params[:date])
+      rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+        flash[:danger] = attendance.errors.full_messages.join(', ')
+        # flash[:danger] = attendance.errors.full_messages.to_sentence でも上と同じ
+        redirect_to attendances_editing_one_month_user_url(date: params[:date]) and return
       end
-      # ここにnextの続きを定義する
     end
+    flash[:success] = "上長へ勤怠の変更を申請しました。"
+    redirect_to user_url(date: params[:date])
   end  
   
   
