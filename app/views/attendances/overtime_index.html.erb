@@ -1,0 +1,45 @@
+<%= form_with model: @user, url: attendances_overtime_reply_user_path(@user), local: true, method: :patch do |f| %>
+  <% @attendances.each do |key, values| %> <!-- |user, attendances| でもいい -->
+  <div class="center">
+    <h3>【<%= key.name %>からの残業申請】</h3>
+  </div>
+  <div>
+    <table class="table table-bordered table-condensed table-hover received-application-details-table">
+      <thead>
+        <tr>
+          <td>日付</td>
+          <td>曜日</td>
+          <td>終了予定時間</td>
+          <td>指定勤務終了時間</td>
+          <td>時間外時間</td>
+          <td>業務処理内容</td>
+          <td>指示者確認<%= "\u329e" %></td>
+          <td>変更</td>
+          <td>勤怠を確認する</td>
+        </tr>
+      </thead>
+      <tbody>
+      <!-- |keys, values|配列の中の[values]を取り出しattendanceに代入 -->
+      <% values.each do |day| %>	
+        <%= f.fields_for "attendances[]", day do |attendance| %>
+          <tr>
+            <td><%= l(day.worked_on, format: :short) %></td>
+            <td><%= $days_of_the_week[day.worked_on.wday] %></td>
+            <td><%= day.overtime_work_end_plan.strftime("%R") %></td>
+            <td><%= @user.designated_work_end_time.strftime("%R") %></td>
+            <td><%= hours_of_overtime(day.next_day, @user.designated_work_end_time, day.overtime_work_end_plan) %></td>
+            <td><%= day.overtime_content %></td>
+            <td><%= attendance.select :overtime_status, Attendance.overtime_status.options, {}, class: "form-control" %></td>
+            <td><%= attendance.check_box :change_permit, {}, true, false %></td>
+            <td><%= link_to '確認', user_path(day.user), class: "btn btn-primary" %></td>
+          </tr>
+        <% end %>
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+  <% end %>
+  <div class="center">
+    <%= f.submit '変更を送信する', class: "btn btn-lg btn-primary" %>
+  </div>
+<% end %> 

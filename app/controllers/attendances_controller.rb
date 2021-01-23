@@ -172,6 +172,31 @@ class AttendancesController < ApplicationController
     @attendances = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by { |item| item.user } 
   end
   
+  # 社員からの残業申請表示（まとめて返信用ルーティング）
+  def overtime_index
+    @user = User.find(params[:id])
+    @attendances = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by { |item| item.user }
+  end
+  
+  # 社員からの残業申請一括返信（まとめて返信用ルーティング）
+  def overtime_reply
+    @user = User.find(params[:id])
+    ActiveRecord::Base.transaction do
+      overtime_reply_params.each do |id, item|
+        attendance = Attendance.find(id)
+        attendance.attributes = item
+        next if attendance.change_permit == false
+        attendance.overtime_status = params[:user][:attendances][:overtime_status]
+        attendance.save!
+      rescue ActiveRecord::RecordInvalid
+        flash[:danger] = "変更にチェックを入れて下さい。"
+        redirect_to user_url(date: params[:date]) and return
+      end
+    end
+    flash[:success] = "社員からの残業申請を返信しました。"
+    redirect_to user_url(date: params[:date])
+  end
+  
   # 残業申請承認、社員へ返信
   def overtime_approval_reply
     # STEP1
@@ -225,11 +250,16 @@ class AttendancesController < ApplicationController
     params.require(:attendance).permit(:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id, :overtime_status, :change_permit)
     #params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id, :overtime_status, :change_permit])[:attendances]
   end
+  
+  # 残業申請まとめて返信のパラメーター
+  def overtime_reply_params
+    params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id, :overtime_status, :change_permit])[:attendances]
+  end
     # paramsハッシュの中の、
     # :userがキーのハッシュの中の、
     # :attendancesがキーのハッシュの中の
     # idがキーで、各カラム名がキーとなり、値がバリューとなった
-    # この説明ですが、これらを上記のコードと合わせていくと・・・
+    # この説明ですが、これらを上記のコードと合わせ��いくと・・・
     # paramsハッシュの中の・・・params
     # :userがキーのハッシュの中の・・・require(:user)
     # :attendancesがキーのハッシュの中にネストされたidと各カラムの値があるハッシュ
