@@ -184,7 +184,11 @@ class AttendancesController < ApplicationController
     overtime_reply_params.each do |id, item|
       attendance = Attendance.find(id)
       attendance.attributes = item
-      next if attendance.change_permit == false or attendance.overtime_status == :applying
+      if attendance.change_permit == false or attendance.overtime_status == :applying
+        flash[:danger] = "変更にチェックを入れて下さい。” 申請中 ”　以外で変更を送信して下さい。"
+        redirect_to user_url(date: params[:date]) and return
+        next
+      end
       attendance.overtime_status = params[:user][:attendances][:overtime_status]
       attendance.update_attributes(item)
     end
