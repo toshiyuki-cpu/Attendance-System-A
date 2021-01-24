@@ -181,17 +181,12 @@ class AttendancesController < ApplicationController
   # 社員からの残業申請一括返信（まとめて返信用ルーティング）
   def overtime_reply
     @user = User.find(params[:id])
-    ActiveRecord::Base.transaction do
-      overtime_reply_params.each do |id, item|
-        attendance = Attendance.find(id)
-        attendance.attributes = item
-        next if attendance.change_permit == false
-        attendance.overtime_status = params[:user][:attendances][:overtime_status]
-        attendance.save!
-      rescue ActiveRecord::RecordInvalid
-        flash[:danger] = "変更にチェックを入れて下さい。"
-        redirect_to user_url(date: params[:date]) and return
-      end
+    overtime_reply_params.each do |id, item|
+      attendance = Attendance.find(id)
+      attendance.attributes = item
+      next if attendance.change_permit == false or attendance.overtime_status == :applying
+      attendance.overtime_status = params[:user][:attendances][:overtime_status]
+      attendance.update_attributes(item)
     end
     flash[:success] = "社員からの残業申請を返信しました。"
     redirect_to user_url(date: params[:date])

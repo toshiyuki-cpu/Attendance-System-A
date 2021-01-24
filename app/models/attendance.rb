@@ -136,7 +136,7 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   end
   
   #def change_permit_if_invalid
-    #errors.add(:change_permit, "変更にチェックを入れて下さい") if change_permit.blank?
+    #errors.add(:change_permit, "変更にチェックを入れて下さい") if change_permit == false
   #end
   
   # change_attendance_approval_replyアクションで使用。変更後カラムを変更前カラムに代入後カラムの値をnilにする
