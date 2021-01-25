@@ -132,14 +132,14 @@
 					<% end %>
 				</td>
 				<td><%= attendance.note %></td>
-				<td><%= l(attendance.overtime_work_end_plan, format: :hour) if attendance.overtime_status == :approval %></td>
-				<td><%= l(attendance.overtime_work_end_plan, format: :minute) if attendance.overtime_status == :approval %></td>
+				<td><%= l(attendance.overtime_work_end_plan, format: :hour) if attendance.overtime_work_end_plan.present? && attendance.overtime_status.approval? %></td>
+				<td><%= l(attendance.overtime_work_end_plan, format: :minute) if attendance.overtime_work_end_plan.present? && attendance.overtime_status.approval? %></td>
 				<td>
 					<% if attendance.started_at.present? && attendance.overtime_work_end_plan.present? %>
-						<%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) if attendance.overtime_status == :approval %>
+						<%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) if attendance.overtime_work_end_plan.present? && attendance.overtime_status.approval? %>
 					<% end %>
 				</td>
-				<td><%= attendance.overtime_content if attendance.overtime_status == :approval %></td>
+				<td><%= attendance.overtime_content if attendance.overtime_work_end_plan.present? && attendance.overtime_status.approval? %></td>
 				<!-- superiorはattendance.rbにてselect_superior_idを外部キーとして設定-->
 				<td>
 					<%= overtime_reply_text(attendance) %><br>

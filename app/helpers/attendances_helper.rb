@@ -47,7 +47,7 @@ module AttendancesHelper
     when 'applying'
         "#{attendance.overtime_reply_superior.name}：残業申請中"
     when 'approval'
-        "#{attendance.overtime_reply_superior.name}：残業申請承認済"
+        "#{attendance.overtime_reply_superior.name}：残業申請承認済⭐️"
     when 'negation'
         "#{attendance.overtime_reply_superior.name}：残業申請否認"
     when 'cancel'
@@ -62,7 +62,7 @@ module AttendancesHelper
     when 'applying'
         "#{attendance.change_attendance_reply_superior.name}：勤怠変更申請中"
     when 'approval'
-        "#{attendance.change_attendance_reply_superior.name}：勤怠変更承認済"
+        "#{attendance.change_attendance_reply_superior.name}：勤怠変更承認済⭐️"
     when 'negation'
         "#{attendance.change_attendance_reply_superior.name}：勤怠変更否認"
     when 'cancel'

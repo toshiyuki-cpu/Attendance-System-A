@@ -184,12 +184,12 @@ class AttendancesController < ApplicationController
     overtime_reply_params.each do |id, item|
       attendance = Attendance.find(id)
       attendance.attributes = item
-      if attendance.change_permit == false or attendance.overtime_status == :applying
+      if attendance.change_permit == false || attendance.overtime_status.applying?
         flash[:danger] = "変更にチェックを入れて下さい。” 申請中 ”　以外で変更を送信して下さい。"
         redirect_to user_url(date: params[:date]) and return
         next
       end
-      attendance.overtime_status = params[:user][:attendances][:overtime_status]
+      attendance.overtime_status = item[:overtime_status]
       attendance.update_attributes(item)
     end
     flash[:success] = "社員からの残業申請を返信しました。"
@@ -258,7 +258,7 @@ class AttendancesController < ApplicationController
     # :userがキーのハッシュの中の、
     # :attendancesがキーのハッシュの中の
     # idがキーで、各カラム名がキーとなり、値がバリューとなった
-    # この説明ですが、これらを上記のコードと合わせ��いくと・・・
+    # この説明ですが、これらを上記のコードと合わせていくと・・・
     # paramsハッシュの中の・・・params
     # :userがキーのハッシュの中の・・・require(:user)
     # :attendancesがキーのハッシュの中にネストされたidと各カラムの値があるハッシュ

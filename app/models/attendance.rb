@@ -78,7 +78,6 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   
   validate :superior_if_invalid, on: :change_attendance_update
   
-  #validate :change_permit_if_invalid
   
   # validateクラスメソッドを使って新しく定義したカスタムメソッドを呼び出します。
   # 今回は例外処理を発生させるためにこのようなカスタムメソッドを作成
@@ -134,10 +133,6 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
       errors.add(:change_attendance_superior_id, "を選択して下さい")
     end
   end
-  
-  #def change_permit_if_invalid
-    #errors.add(:change_permit, "変更にチェックを入れて下さい") if change_permit == false
-  #end
   
   # change_attendance_approval_replyアクションで使用。変更後カラムを変更前カラムに代入後カラムの値をnilにする
   #def reset_change_attendance_columns
