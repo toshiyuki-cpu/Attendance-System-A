@@ -166,12 +166,6 @@ class AttendancesController < ApplicationController
     # redirect_back(fallback_location: user_url) この１行でも実装可能（74から81行省略して）
   end
   
-  # 上長ページ：残業申請モーダル表示
-  def overtime_employee_index
-    @user = User.find(params[:user_id])
-    @attendances = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by { |item| item.user } 
-  end
-  
   # 社員からの残業申請表示（まとめて返信用ルーティング）
   def overtime_index
     @user = User.find(params[:id])

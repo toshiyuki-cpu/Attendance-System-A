@@ -42,8 +42,7 @@
 		</p>
 		<p>【 残業申請のお知らせ 】
 			<% if @overtime_appliyings.present? %>
-				<%= link_to " #{@overtime_appliyings.count}件の通知があります", user_attendance_overtime_employee_index_path(@user, @attendances), remote: true, class: "notice-superior" %>
-				<%= link_to "社員からの残業申請", attendances_overtime_index_user_path(@user), class: "btn btn-success" %>
+				<%= link_to " #{@overtime_appliyings.count}件の通知があります",  attendances_overtime_index_user_path(@user), remote: true, class: "notice-superior" %>
 			<% end %>
 		</p>
 	</div>
@@ -191,7 +190,7 @@
 <div id="edit-overtime-work-end-plan" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <!-- 通知から勤怠変更申請モーダル表示 -->
 <div id="change_attendance_employee_index" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-<!--上長画面：通知から残業申請モーダルウインドウ表示-->
-<div id="overtime_employee_index" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<!--上長画面：通知から残業申請まとめて返信モーダルウインドウ表示-->
+<div id="overtime_index" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <!--上長画面：通知から1ヶ月分の勤怠申請モーダルウインドウ表示-->
 <div id="receiving_index" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>

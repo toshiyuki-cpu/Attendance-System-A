@@ -76,7 +76,6 @@ Rails.application.routes.draw do
       # get 'overtime_approval_reply_user'
       patch 'update_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/update_overtime_work_end_plan
       patch 'change_attendance_approval_reply' #  /users/:user_id/attendances/:attendance_id/change_attendance_approval_reply
-      get 'overtime_employee_index' # 通知から残業申請モーダル表示のルーティング
       get 'change_attendance_employee_index' # 通知から勤怠変更申請モーダル表示のルーティング
     end
     
