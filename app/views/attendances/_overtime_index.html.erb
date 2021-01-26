@@ -35,7 +35,13 @@
         <%= f.fields_for "attendances[]", day do |attendance| %>
           <tr>
             <td><%= l(day.worked_on, format: :short) %></td>
-            <td><%= $days_of_the_week[day.worked_on.wday] %></td>
+            <td>
+              <% if day.worked_on.wday == 0 %> <!--日曜日の色 赤-->
+					      <font color="#ff000">
+				      <% elsif day.worked_on.wday == 6 %> <!--土曜日の色 青-->
+					      <font color="#0033cc">
+				      <% end %>
+              <%= $days_of_the_week[day.worked_on.wday] %></td>
             <td><%= day.overtime_work_end_plan.strftime("%R") %></td>
             <td><%= @user.designated_work_end_time.strftime("%R") %></td>
             <td><%= hours_of_overtime(day.next_day, @user.designated_work_end_time, day.overtime_work_end_plan) %></td>
