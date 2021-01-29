@@ -78,6 +78,7 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   
   validate :superior_if_invalid, on: :change_attendance_update
   
+  
   # validateクラスメソッドを使って新しく定義したカスタムメソッドを呼び出します。
   # 今回は例外処理を発生させるためにこのようなカスタムメソッドを作成
   # validate :change_finished_at_is_invalid_without_a_change_started_at

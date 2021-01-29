@@ -59,6 +59,8 @@ Rails.application.routes.draw do
       get 'attendances/edit_one_month' #ルーティング設定してアクションを定義
       get 'attendances/editing_one_month' # 勤怠変更申請まとめて送信用
       patch 'attendances/updating_one_month' # 勤怠変更申請まとめて送信用
+      get 'attendances/overtime_index' # 社員からの残業申請表示（まとめて返信用ルーティング）
+      patch 'attendances/overtime_reply' # 社員からの残業申請一括返信（まとめて返信用ルーティング）
       patch 'attendances/update_one_month' #ルーティング設定してアクションを定義
       get 'attendances/edit_log' #勤怠ログ
       patch 'attendances/overtime_approval_reply'
@@ -74,7 +76,6 @@ Rails.application.routes.draw do
       # get 'overtime_approval_reply_user'
       patch 'update_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/update_overtime_work_end_plan
       patch 'change_attendance_approval_reply' #  /users/:user_id/attendances/:attendance_id/change_attendance_approval_reply
-      get 'overtime_employee_index' # 通知から残業申請モーダル表示のルーティング
       get 'change_attendance_employee_index' # 通知から勤怠変更申請モーダル表示のルーティング
     end
     
