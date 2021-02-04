@@ -57,7 +57,10 @@
               <td><%= l(day.change_finished_at, format: :minute) %></td>
               <td><%= day.change_note %></td>
               <td><%= attendance.select :change_attendance_status, Attendance.change_attendance_status.options, {}, class: "form-control" %></td>
-              <td><%= attendance.check_box :change_attendance_permit, {}, true, false %></td>
+              <td>
+                <%= attendance.hidden_field :change_attendance_permit %>
+                <%= attendance.check_box :change_attendance_permit, checked: false %>
+              </td>
               <td><%= link_to '確認', user_path(day.user), class: "btn btn-primary" %></td>
             </tr>
           <% end %>
