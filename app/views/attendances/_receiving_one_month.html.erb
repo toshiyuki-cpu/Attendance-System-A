@@ -1,0 +1,89 @@
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="center">
+        <h3 class="modal-title">⭐️ 勤怠変更申請のお知らせ ⭐️</h3>
+      </div>
+    </div>
+    <div class="modal-body">
+    <%= form_with model: @user, url: attendances_reply_one_month_user_path(@user), local: true, method: :patch do |f| %>
+      <% @attendances.each do |key, values| %> <!-- |user, attendances| でもいい -->
+      <div class="center">
+        <h3>【<%= key.name %>からの勤怠変更申請】</h3>
+      </div>
+      <div>
+        <table class="table table-bordered table-condensed table-hover received-application-details-table">
+          <thead>
+            <tr>
+              <th rowspan="4">日付</th>
+              <th rowspan="4">曜日</th>
+              <th colspan="4">変更前</th>
+              <th colspan="4">変更後</th>
+              <th rowspan="4">備考</th>
+              <th rowspan="4">指示者確認<%= "\u329e" %></th>
+              <th rowspan="4">変更</th>
+              <th rowspan="4">勤怠を確認する</th>
+            </tr>
+            <tr>
+              <th colspan="2">出社</th>
+              <th colspan="2">退社</th>
+              <th colspan="2">出社</th>
+              <th colspan="2">退社</th>
+            </tr>
+              <tr>
+              <tr>
+              <th>時</th>
+              <th>分</th>
+              <th>時</th>
+              <th>分</th>
+              <th>時</th>
+              <th>分</th>
+              <th>時</th>
+              <th>分</th>
+            </tr>
+          </thead>
+          <tbody>
+          <!-- |keys, values|配列の中の[values]を取り出しdayに代入 -->
+          <% values.each do |day| %>
+            <%= f.fields_for "attendances[]", day do |attendance| %>
+              <tr>
+                <td><%= l(day.worked_on, format: :short) %></td>
+                <td>
+                  <% if day.worked_on.wday == 0 %> <!--日曜日の色 赤-->
+                    <font color="#ff000">
+                  <% elsif day.worked_on.wday == 6 %> <!--土曜日の色 青-->
+                    <font color="#0033cc">
+                  <% end %>
+                <%= $days_of_the_week[day.worked_on.wday] %></td>
+                <td><%= l(day.started_at, format: :hour) if day.started_at %></td>
+                <td><%= l(day.started_at, format: :minute) if day.started_at %></td>
+                <td><%= l(day.finished_at, format: :hour) if day.finished_at %></td>
+                <td><%= l(day.finished_at, format: :minute) if day.finished_at %></td>
+                <td><%= l(day.change_started_at, format: :hour) %></td>
+                <td><%= l(day.change_started_at, format: :minute) %></td>
+                <td><%= l(day.change_finished_at, format: :hour) %></td>
+                <td><%= l(day.change_finished_at, format: :minute) %></td>
+                <td><%= day.change_note %></td>
+                <td><%= attendance.select :change_attendance_status, Attendance.change_attendance_status.options, {}, class: "form-control" %></td>
+                <td>
+                  <%= attendance.hidden_field :change_attendance_permit, value: false %>
+                  <%= attendance.check_box :change_attendance_permit, checked: false %>
+                </td>
+                <td><%= link_to '確認', user_path(day.user), class: "btn btn-primary" %></td>
+              </tr>
+            <% end %>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+    <div class="center">
+      <%= f.submit '変更を送信する', class: "btn btn-lg btn-primary" %>
+    </div>
+    <% end %>
+    </div>
+  </div>
+</div>

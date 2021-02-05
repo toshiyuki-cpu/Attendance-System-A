@@ -63,9 +63,39 @@ class AttendancesController < ApplicationController
     end
     flash[:success] = "上長へ勤怠の変更を申請しました。"
     redirect_to user_url(date: params[:date])
-  end  
+  end
   
+  # 勤怠変更申請まとめて返信表示
+  def receiving_one_month
+    @user = User.find(params[:id])
+    @attendances = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by { |item| item.user }
+  end
   
+  # 勤怠変更申請まとめて返信
+  def reply_one_month
+    @user = User.find(params[:id])
+    reply_one_month_params.each do |id, item|
+      attendance = Attendance.find(id)
+      attendance.attributes = item
+      if attendance.change_attendance_permit == false || attendance.change_attendance_status.applying?
+        flash[:danger] = "変更にチェックを入れて下さい。” 申請中 ”　以外で変更を送信して下さい。"
+        redirect_to user_url(date: params[:date]) and return
+        next
+      end
+      if attendance.change_attendance_status.approval?
+        attendance.started_at = attendance.change_started_at
+        attendance.finished_at = attendance.change_finished_at
+        attendance.note = attendance.change_note
+        attendance.update_attributes(item)
+      else
+        attendance.change_attendance_status = item[:change_attendance_status]
+        attendance.update_attributes(item)
+      end
+    end
+    flash[:success] = '勤怠変更を申請者へ送信しました。'
+    redirect_to user_url(current_user)
+  end
+
   # 勤怠変更申請、上長へ送信
   def change_attendance_applying
     @user = User.find(params[:user_id])
@@ -86,37 +116,6 @@ class AttendancesController < ApplicationController
     @first_day = @attendance.worked_on.beginning_of_month 
     # ストリングパラメータの値に月初を入れてリダイレクトする
     redirect_to user_url(@user, date: @first_day)
-  end
-  
-  # 勤怠変更申請モーダル表示
-  def change_attendance_employee_index
-    @user = User.find(params[:user_id])
-    @attendances = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by { |item| item.user }
-  end
-  
-  # 勤怠変更申請、社員へ送信
-  def change_attendance_approval_reply
-    # STEP1 対象のattendance_idを取得
-    @attendance = Attendance.find(params[:attendance_id])
-    # STEP2 @attendanceのchange_attendance_statusを変更する
-    # paramsの中にviewから渡ってきたchange_attendance_statusがあります。その値を@attendanceのchange_attendance_statusに代入してあげます
-    @attendance.change_attendance_status = params[:attendance][:change_attendance_status]
-    
-    # STEP3 承認（approval）の時、started_atの値をchange_started_atの値にして、承認後change_started_atをnilにする
-    if @attendance.change_attendance_status.approval?
-       @attendance.started_at = @attendance.change_started_at
-       @attendance.finished_at = @attendance.change_finished_at
-       @attendance.note = @attendance.change_note
-       #@attendance.reset_change_attendance_columns # attendance.rbにインスタンスメソッド定義
-    end
-    # 否���（ negation）、なし（ cancel）の時はattendance_paramsのまま
-    # STEP4 チェックボックス(change_attendance_permit)がtrueの時、@attendanceにtrue代入。そして@attendanceを保存します
-    if @attendance.change_attendance_permit = params[:attendance][:change_attendance_permit]
-       @attendance.save
-    end
-    # STEP5 上長（現在ログインしている上長）の勤怠ページにリダイレクト（今回はリロード）します。
-    flash[:success] = '勤怠変更を申請者へ送信しました。'
-    redirect_to user_url(current_user)
   end
   
   def update_one_month # ルーティングattendances/update_one_monthを設定してからアクションを定義
@@ -233,6 +232,11 @@ class AttendancesController < ApplicationController
     params.require(:user).permit(attendances: [:change_started_at, :change_finished_at, :next_day, :change_note, :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit])[:attendances]
   end
   
+  # 勤怠変更申請まとめて返信のパラメーター（アクション reply_one_month)
+  def reply_one_month_params
+    params.require(:user).permit(attendances: [:started_at, :change_started_at, :finished_at, :change_finished_at, :next_day, :note, :change_note, :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit])[:attendances]
+  end
+  
   # 1ヶ月分の勤怠情報を扱います。
   def attendances_params
     params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :next_day, :change_note, :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit])[:attendances]
@@ -271,6 +275,6 @@ class AttendancesController < ApplicationController
     unless current_user?(@user) || current_user.admin?
       flash[:danger] = "編集権限がありません。"
       redirect_to(root_url)
-    end  
+    end
   end
 end
