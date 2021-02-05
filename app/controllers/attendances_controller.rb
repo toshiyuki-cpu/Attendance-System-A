@@ -118,37 +118,6 @@ class AttendancesController < ApplicationController
     redirect_to user_url(@user, date: @first_day)
   end
   
-  # 勤怠変更申請モーダル表示
-  def change_attendance_employee_index
-    @user = User.find(params[:user_id])
-    @attendances = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by { |item| item.user }
-  end
-  
-  # 勤怠変更申請、社員へ送信
-  def change_attendance_approval_reply
-    # STEP1 対象のattendance_idを取得
-    @attendance = Attendance.find(params[:attendance_id])
-    # STEP2 @attendanceのchange_attendance_statusを変更する
-    # paramsの中にviewから渡ってきたchange_attendance_statusがあります。その値を@attendanceのchange_attendance_statusに代入してあげます
-    @attendance.change_attendance_status = params[:attendance][:change_attendance_status]
-    
-    # STEP3 承認（approval）の時、started_atの値をchange_started_atの値にして、承認後change_started_atをnilにする
-    if @attendance.change_attendance_status.approval?
-       @attendance.started_at = @attendance.change_started_at
-       @attendance.finished_at = @attendance.change_finished_at
-       @attendance.note = @attendance.change_note
-       #@attendance.reset_change_attendance_columns # attendance.rbにインスタンスメソッド定義
-    end
-    # 否認（ negation）、なし（ cancel）の時はattendance_paramsのまま
-    # STEP4 チェックボックス(change_attendance_permit)がtrueの時、@attendanceにtrue代入。そして@attendanceを保存します
-    if @attendance.change_attendance_permit = params[:attendance][:change_attendance_permit]
-       @attendance.save
-    end
-    # STEP5 上長（現在ログインしている上長）の勤怠ページにリダイレクト（今回はリロード）します。
-    flash[:success] = '勤怠変更を申請者へ送信しました。'
-    redirect_to user_url(current_user)
-  end
-  
   def update_one_month # ルーティングattendances/update_one_monthを設定してからアクションを定義
     ActiveRecord::Base.transaction do # トランザクションを開始します。
     attendances_params.each do |id, item|
