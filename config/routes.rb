@@ -63,6 +63,8 @@ Rails.application.routes.draw do
       patch 'attendances/overtime_reply' # 社員からの残業申請一括返信（まとめて返信用ルーティング）
       get 'attendances/receiving_one_month' # 社員からの勤怠変更申請表示（まとめて返信用ルーティング）
       patch 'attendances/reply_one_month' # 社員からの勤怠変更申請一括返信（まとめて返信用ルーティング）
+      get 'month_reports/receiving_employee' # 社員から1ヶ月の勤怠申請表示（まとめて返信用ルーティング）
+      patch 'month_reports/reply_employee' # 社員から1ヶ月の勤怠申請一括返信（まとめて返信用ルーティング）
       patch 'attendances/update_one_month' #ルーティング設定してアクションを定義
       get 'attendances/edit_log' #勤怠ログ
       patch 'attendances/overtime_approval_reply'

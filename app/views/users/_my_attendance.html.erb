@@ -33,6 +33,7 @@
 		<p>【 所属長承認申請のお知らせ 】
 			<% if @month_report_applyings.present? %>
 				<%= link_to " #{@month_report_applyings.count}件の通知があります", user_month_report_receiving_index_path(@user, @month_report), remote: true, class: "notice-superior" %>
+				<%= link_to " #{@month_report_applyings.count}件の通知があります", month_reports_receiving_employee_user_path(@user), class: "btn btn-md btn-success" %>
 			<% end %>
 		</p>
 		<p>【 勤怠変更申請のお知らせ 】
