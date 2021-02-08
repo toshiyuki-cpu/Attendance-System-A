@@ -21,8 +21,7 @@
                 <td><%= l(report.month, format: :month) %></td>
                 <td><%= month_reports.select :status, MonthReport.status.options, {}, class: "form-control" %></td>
                 <td>
-                  <%= hidden_field_tag 'report[reply]', false %>
-                  <%= check_box_tag 'report[reply]', true, false, {} %>
+                  <%= month_reports.check_box "reply", checked: false %>
                 </td>
                 <td><%= link_to '確認', user_path(key, date: report.month), class: "btn btn-primary" %></td>
               </tr>

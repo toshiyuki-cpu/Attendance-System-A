@@ -60,15 +60,15 @@ class MonthReportsController < ApplicationController
   def reply_employee
     @user = User.find(params[:id])
     month_reports_params.each do |id, item|
-      month_report = MonthReport.find(id)
-      month_report.attributes = item
-      if params[:report][:reply] == false || month_report.status.applying?
+     month_report = MonthReport.find(id)
+      month_report.status = item[:status]
+      if item[:reply] == "0" || item[:status] == "applying" # 文字列が渡ってきたため
         flash[:danger] = "変更にチェックを入れて下さい。” 申請中 ”　以外で変更を送信して下さい。"
         redirect_to user_url(date: params[:date]) and return
         next
       end
       month_report.status = item[:status]
-      month_report.update_attributes(item)
+      month_report.save(item)
     end
     flash[:success] = '1ヶ月分の勤怠申請を申請者へ送信しました。'
     # 送信後、なぜかstring parameterにdateが渡ってないので、引数にdate: Time.current.beginning_of_month.to_date.to_sを入れた
@@ -96,7 +96,6 @@ class MonthReportsController < ApplicationController
   end
   
   def month_reports_params
-    params.require(:user).permit(month_reports: [:month, :status, :approver_id, :user_id])[:month_reports]
+    params.require(:user).permit(month_reports: [:status, :reply])[:month_reports]
   end
-  
 end
