@@ -51,6 +51,30 @@ class MonthReportsController < ApplicationController
     @report_receivings = MonthReport.where(approver_id: @user.id, status: 'applying').group_by { |item| item.user }
   end
   
+  def receiving_employee
+    @user = User.find(params[:id])
+    @report_receivings = MonthReport.where(approver_id: @user.id, status: 'applying').group_by { |item| item.user }
+  end
+  
+  # 1ヶ月の勤怠申請返信
+  def reply_employee
+    @user = User.find(params[:id])
+    month_reports_params.each do |id, item|
+     month_report = MonthReport.find(id)
+      month_report.status = item[:status]
+      if item[:reply] == "0" || item[:status] == "applying" # 文字列が渡ってきたため
+        flash[:danger] = "変更にチェックを入れて下さい。” 申請中 ”　以外で変更を送信して下さい。"
+        redirect_to user_url(date: params[:date]) and return
+        next
+      end
+      month_report.status = item[:status]
+      month_report.save(item)
+    end
+    flash[:success] = '1ヶ月分の勤怠申請を申請者へ送信しました。'
+    # 送信後、なぜかstring parameterにdateが渡ってないので、引数にdate: Time.current.beginning_of_month.to_date.to_sを入れた
+    redirect_to user_url(current_user, date: Time.current.beginning_of_month.to_date.to_s)
+  end
+  
   def reply
     @user = User.find(params[:user_id])
     @month_report = MonthReport.find(params[:month_report_id])
@@ -60,7 +84,7 @@ class MonthReportsController < ApplicationController
     if params[:report][:reply] 
       @month_report.save
     end
-    flash[:success] = '1ヶ月分の勤怠申請を申請者へ送信しました。'
+    flash[:success] = '1ヶ月分の勤怠申請を送信しました。'
     # 送信後、なぜかstring parameterにdateが渡ってないので、引数にdate: Time.current.beginning_of_month.to_date.to_sを入れた
     redirect_to user_url(current_user, date: Time.current.beginning_of_month.to_date.to_s)
   end
@@ -71,4 +95,7 @@ class MonthReportsController < ApplicationController
     params.require(:month_report).permit(:approver_id, :month)
   end
   
+  def month_reports_params
+    params.require(:user).permit(month_reports: [:status, :reply])[:month_reports]
+  end
 end

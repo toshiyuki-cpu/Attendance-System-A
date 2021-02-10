@@ -29,16 +29,12 @@ class AttendancesController < ApplicationController
     redirect_to @user
   end
   
-  def edit_one_month # ルーティングattendances/edit_one_monthを設定してからアクションを定義
-  # 選択フォームに自分を載せない
-  # user.rbでscopeメソッド :superior_except_me, ->(user) { where.not(id: user).with_role(:superior) }
-    @superiors = User.superior_except_me(current_user)
-  end
-  
+  # 勤怠変更申請、上長へまとめて送信の表示
   def editing_one_month
     @superiors = User.superior_except_me(current_user)
   end
   
+  # 勤怠変更申請、上長へまとめて送信
   def updating_one_month
     @user = User.find(params[:id])
     ActiveRecord::Base.transaction do # トランザクションを開始します。
@@ -95,47 +91,6 @@ class AttendancesController < ApplicationController
     flash[:success] = '勤怠変更を申請者へ送信しました。'
     redirect_to user_url(current_user)
   end
-
-  # 勤怠変更申請、上長へ送信
-  def change_attendance_applying
-    @user = User.find(params[:user_id])
-    @attendance = Attendance.find(params[:attendance_id])
-    # 変更前の時間と内容を維持、画面からpostされた値を各change_〜に入れてあげる
-    # change_attendance_paramsを@attendanceに代入する（まだDBには保存されてない）
-    @attendance.attributes = change_attendance_params # viewのname属性も変更する
-    
-    # 指示者確認欄に申請中と表示
-    @attendance.change_attendance_status = :applying
-    # 再申請すると上長ページでチェックが入ってしまうのでfalseで返す。
-    @attendance.change_permit = false 
-    # 保存
-    @attendance.save
-    
-    flash[:success] = "勤怠の変更をへ送信しました。"
-    # worked_onの日付から月の初日をとる
-    @first_day = @attendance.worked_on.beginning_of_month 
-    # ストリングパラメータの値に月初を入れてリダイレクトする
-    redirect_to user_url(@user, date: @first_day)
-  end
-  
-  def update_one_month # ルーティングattendances/update_one_monthを設定してからアクションを定義
-    ActiveRecord::Base.transaction do # トランザクションを開始します。
-    attendances_params.each do |id, item|
-    # id,itemはattendances_params（Attendanceモデルオブジェクト）の中の
-    # {"1" => {"started_at"=>"10:00", "finished_at"=>"18:00", "note"=>"シフトA"},
-      attendance = Attendance.find(id)
-      attendance.update_attributes!(item)
-    # 今回のように!をつけている場合はfalseでは無く例外処理を返します
-    # 繰り返し処理で複数のオブジェクトのデータを更新する場合は、これらの処理が全て正常に終了することを保証することが大事です。
-    # あるデータは更新できたが、あるデータは更新できていなかった。となるとデータの整合性がなくなってしまいます
-      end
-    end
-    flash[:success] = "１ヶ月分の勤怠情報を更新しました。"
-    redirect_to user_url(date: params[:date])
-  rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
-    flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
-    redirect_to attendances_edit_one_month_user_url(date: params[:date])
-  end
   
   def edit_log
   end
@@ -187,32 +142,6 @@ class AttendancesController < ApplicationController
     end
     flash[:success] = "社員からの残業申請を返信しました。"
     redirect_to user_url(date: params[:date])
-  end
-  
-  # 残業申請承認、社員へ返信
-  def overtime_approval_reply
-    # STEP1
-    # 対象のattendanceオブジェクトを探す(paramsのなかに対象のattendanceのidがはいっているはず)
-    @attendance = Attendance.find(params[:attendance_id])
-   
-    # STEP2
-    # @attendanceのovertime_statusを変更する
-    # paramsの中にviewから渡ってきたovertime_statusがあります。その値を@attendanceのovertime_statusに代入してあげます。
-    @attendance.overtime_status = params[:attendance][:overtime_status]
-    
-    # STEP3
-    # チェックボックスがtrueの時、@attendanceにtrue代入。そして@attendanceを保存します。
-    # チェックボックス がfalseなら更新できない。viewに required: true追加してメッセージ出す
-    # (check_boxヘルパーのチェックボックス に入力された値をコントローラーやモデルで使用する時は
-    # params[モデル名][カラム名]で取得する（値が格納される)) 注意）htmlで記述されたname属性の中身に依る
-    if @attendance.change_permit = params[:attendance][:change_permit]
-       @attendance.save
-    end
-      
-    # STEP4
-    # 上長（現在ログインしている上長）の勤怠ページにリダイレクト（今回はリロード）します。
-    flash[:success] = '変更を申請者へ送信しました。'
-    redirect_to user_url(current_user)
   end
   
   private

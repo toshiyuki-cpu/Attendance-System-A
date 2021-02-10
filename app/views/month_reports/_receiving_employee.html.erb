@@ -1,0 +1,51 @@
+<div class="modal-dialog modal-lg modal-dialog-center">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="center">
+        <h3 class="modal-title">⭐️ 1ヶ月分の勤怠申請のお知らせ ⭐️</h3>
+      </div>
+    </div>
+    <div class="modal-body">
+    <!-- NOTE: @report_receivings = MonthReport.where(approver_id: @user.id, status: 'applying').group_by { |item| item.user } -->
+    <%= form_with(model: @user, url: month_reports_reply_employee_user_path(@user), local: true, method: :patch) do |f| %>
+      <% @report_receivings.each do |key, values| %>
+        <div class="center">
+          <h3>【<%= key.name %>からの1ヶ月分勤怠申請】</h3>
+        </div>
+        <div class="center">
+          <table class="table table-bordered table-condensed table-hover received-application-details-table" id="table-month-report">
+            <thead>
+              <tr>
+                <th>月</th>
+                <th>指示者確認<%= "\u329e" %></th>
+                <th>変更</th>
+                <th>勤怠を確認する</th>
+              </tr>
+            </thead>
+            <tbody>
+            <% values.each do |report| %>
+              <%= f.fields_for "month_reports[]", report do |month_reports| %>
+              <tr>
+                <td><%= l(report.month, format: :month) %></td>
+                <td><%= month_reports.select :status, MonthReport.status.options, {}, class: "form-control" %></td>
+                <td>
+                  <%= month_reports.check_box "reply", checked: false %>
+                </td>
+                <td><%= link_to '確認', user_path(key, date: report.month), class: "btn btn-primary" %></td>
+              </tr>
+              <% end %>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+    <div class="center">
+      <%= f.submit '送信する', class: "btn btn-lg btn-success" %>
+    </div>
+    <% end %>
+    </div>
+  </div>
+</div>

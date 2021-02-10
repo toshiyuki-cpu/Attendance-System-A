@@ -32,7 +32,7 @@
 	<div class="notice">
 		<p>【 所属長承認申請のお知らせ 】
 			<% if @month_report_applyings.present? %>
-				<%= link_to " #{@month_report_applyings.count}件の通知があります", user_month_report_receiving_index_path(@user, @month_report), remote: true, class: "notice-superior" %>
+				<%= link_to " #{@month_report_applyings.count}件の通知があります", month_reports_receiving_employee_user_path(@user), remote: true, class: "notice-superior" %>
 			<% end %>
 		</p>
 		<p>【 勤怠変更申請のお知らせ 】
@@ -50,8 +50,7 @@
 
 	
 	<div class="btn btn-users-show" >
-		<%= link_to "勤怠を編集2", attendances_editing_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
-		<%= link_to "勤怠を編集", attendances_edit_one_month_user_path(date: @first_day), class: "btn btn-success" %>
+		<%= link_to "勤怠を編集", attendances_editing_one_month_user_path(date: @first_day), class: "btn btn-primary" %>
 		<!--paramsハッシュにdateキーとして、@first_dayを指定しています。
 		これで受け取ったparams[:date]をもとに、どの月の情報を表示するか判断できるようになります-->
 		<%=link_to "CSV出力", '#', class: "btn btn-primary" %>
@@ -192,5 +191,5 @@
 <div id="overtime_index" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
 <!--上長画面：通知から勤怠変更申請まとめて返信モーダルウインドウ表示-->
 <div id="receiving_one_month" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
-<!--上長画面：通知から1ヶ月分の勤怠申請モーダルウインドウ表示-->
-<div id="receiving_index" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
+<!--上長画面：通知から1ヶ月分の勤怠申請まとめて返信モーダルウインドウ表示-->
+<div id="receiving_employee" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true"></div>
