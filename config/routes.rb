@@ -56,7 +56,6 @@ Rails.application.routes.draw do
       get 'attend_employees' #出勤中社員一覧
       get 'edit_basic-info' #ルーティング設定してアクションを定義
       patch 'update_basic_info' #ルーティング設定してアクションを定義
-      get 'attendances/edit_one_month' #ルーティング設定してアクションを定義
       get 'attendances/editing_one_month' # 勤怠変更申請まとめて送信用
       patch 'attendances/updating_one_month' # 勤怠変更申請まとめて送信用
       get 'attendances/overtime_index' # 社員からの残業申請表示（まとめて返信用ルーティング）
@@ -65,19 +64,14 @@ Rails.application.routes.draw do
       patch 'attendances/reply_one_month' # 社員からの勤怠変更申請一括返信（まとめて返信用ルーティング）
       get 'month_reports/receiving_employee' # 社員から1ヶ月の勤怠申請表示（まとめて返信用ルーティング）
       patch 'month_reports/reply_employee' # 社員から1ヶ月の勤怠申請一括返信（まとめて返信用ルーティング）
-      patch 'attendances/update_one_month' #ルーティング設定してアクションを定義
       get 'attendances/edit_log' #勤怠ログ
-      patch 'attendances/overtime_approval_reply'
     end
     
     # resourcesでonly:またはexcept:オプションを使用することで、主要な7つのアクション(index, show, new, create, edit, update, destroy)を限定することができます
     # index =>  /users/1/attendances
     resources :attendances, only: :update do # ネストさせる（1人のユーザーはたくさんのアテンダンスを持っている）
       patch 'overtime_approval_reply' # /users/:user_id/attendances/:attendance_id/overtime_approval_reply
-      patch 'change_attendance_applying'
       get 'edit_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/edit_overtime_work_end_plan
-      # get 'edit_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/edit_overtime_work_end_plan
-      # get 'overtime_approval_reply_user'
       patch 'update_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/update_overtime_work_end_plan
       patch 'change_attendance_approval_reply' #  /users/:user_id/attendances/:attendance_id/change_attendance_approval_reply
     end
