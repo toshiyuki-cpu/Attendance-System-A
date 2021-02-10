@@ -113,8 +113,8 @@ class UsersController < ApplicationController
   #出勤中社員一覧
   def in_attendance_employees
     @user = User.find(params[:id])
-    # started_atが存在、finished_atがnil
-    @in_attendance_employees = Attendance.where.not(started_at: nil).where(finished_at: nil)
+    # started_atが存在、finished_atがnil、本日であること
+    @in_attendance_employees = Attendance.where.not(started_at: nil).where(finished_at: nil, worked_on: Date.current)
   end
   
   private # Web経由で外部のユーザーが知る必要は無いため、次に記すようにRubyのprivateキーワードを用いて外部からは使用できないようにする
