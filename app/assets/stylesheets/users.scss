@@ -60,6 +60,19 @@
   }
 }
 
+/* 出勤中社員画面 */
+#in_attendance_employees-table {
+  th {
+    vertical-align: middle;
+    text-align: center;
+    width: 30%;
+  }
+  tr {
+    vertical-align: middle;
+    text-align: center;
+  }
+}
+
 /* 上長勤怠ページ、申請通知お知らせ項目 */
 .notice {
   p {

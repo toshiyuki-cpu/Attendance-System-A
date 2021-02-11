@@ -1,0 +1,24 @@
+<% provide(:title, '出勤中') %>
+<div class="center">
+  <h1>出勤中社員一覧</h1>  
+</div>
+
+<div class="col-md-6 col-md-offset-3">
+  <table class="table table-bordered table-condensed table-hover" id="in_attendance_employees-table">
+    <thead>
+      <tr>
+        <th>社員番号</th>
+        <th>名前</th>
+      </tr>
+    </thead>
+   <% @in_attendance_employees.each do |working| %>
+    <tbody>
+      <tr>
+        <td><%= working.user.employee_number %></td>
+        <td><%= working.user.name %></td>
+      </tr>
+    </tbody>
+  <% end %>
+  </table>
+</div>
+  

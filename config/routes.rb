@@ -53,7 +53,7 @@ Rails.application.routes.draw do
 
   resources :users do #4つの基本操作（POST GET PATCH DELETE）が定義されている
     member do #生成されたurlにuserを識別するための:idが自動で追加されます（collection(集合)はidなし、member(個別)はidあり）
-      get 'attend_employees' #出勤中社員一覧
+      get 'in_attendance_employees' #出勤中社員一覧
       get 'edit_basic-info' #ルーティング設定してアクションを定義
       patch 'update_basic_info' #ルーティング設定してアクションを定義
       get 'attendances/editing_one_month' # 勤怠変更申請まとめて送信用

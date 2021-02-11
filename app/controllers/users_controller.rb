@@ -91,11 +91,6 @@ class UsersController < ApplicationController
     redirect_to users_url
   end
   
-  #出勤社員一覧
-  def attend_employees
-    # @user = working_users
-  end
-  
   def edit_basic_info
     # @user = User.find(params[:id]) set_userへ
   end
@@ -113,6 +108,13 @@ class UsersController < ApplicationController
       # この実装により、エラーメッセージを配列の要素ごとに区切る際に指定した<br>がHTMLとして有効になり改行される仕組み
     end
     redirect_to users_url
+  end
+  
+  #出勤中社員一覧
+  def in_attendance_employees
+    @user = User.find(params[:id])
+    # started_atが存在、finished_atがnil、本日であること
+    @in_attendance_employees = Attendance.where.not(started_at: nil).where(finished_at: nil, worked_on: Time.current.to_date)
   end
   
   private # Web経由で外部のユーザーが知る必要は無いため、次に記すようにRubyのprivateキーワードを用いて外部からは使用できないようにする
