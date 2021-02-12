@@ -44,7 +44,6 @@ class ApplicationController < ActionController::Base
     #   Date.current.biginning_of_month
     # else params[:date].to_date
     # end
-    
     @last_day = @first_day.end_of_month
     one_month = [*@first_day..@last_day] # 対象の月の日数を代入します。showアクションでは使わない為ローカル変数に代入
     # ユーザーに紐付く一ヶ月分のレコードを検索し取得します。
