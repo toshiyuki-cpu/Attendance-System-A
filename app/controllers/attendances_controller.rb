@@ -12,7 +12,7 @@ class AttendancesController < ApplicationController
   # viewファイルも作成（csv_output.csv.ruby）
   def csv_output
     @user = User.find(params[:id])
-    @first_day = params[:date].nil? ? Date.current.beginning_of_month : params[:date].to_date
+    @first_day = params[:date].nil? ? Time.current.beginning_of_month : params[:date].to_date
     @last_day = @first_day.end_of_month
     @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
     # ↑の定義、アプリケーションコントローラーのset_user , set_one_month
