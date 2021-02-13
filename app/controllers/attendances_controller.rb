@@ -8,6 +8,21 @@ class AttendancesController < ApplicationController
   # 更新エラー用のテキストを2ヶ所で使用しているため、このように定義
   UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
   
+  # 勤怠のcsv出力
+  # viewファイルも作成（csv_output.csv.ruby）
+  def csv_output
+    @user = User.find(params[:id])
+    @first_day = params[:date].nil? ? Time.current.beginning_of_month : params[:date].to_date
+    @last_day = @first_day.end_of_month
+    @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
+    # ↑の定義、アプリケーションコントローラーのset_user , set_one_month
+    respond_to do |format|
+      format.csv do |csv|
+        send_data render_to_string, filename: "#{@user.name}の勤怠.csv", type: :csv
+      end
+    end
+  end
+  
   def update
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
