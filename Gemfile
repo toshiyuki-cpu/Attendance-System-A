@@ -16,6 +16,7 @@ gem 'turbolinks',   '~> 5'
 gem 'jbuilder',     '~> 2.5'
 gem 'annotate'
 gem 'enumerize'
+gem 'roo' # csv import
 
 group :development, :test do
   gem 'sqlite3'
