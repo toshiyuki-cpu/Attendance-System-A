@@ -119,16 +119,24 @@ class UsersController < ApplicationController
   
   # csvファイルのインポート
   def import
-    if params[:file].blank?
-      flash[:danger] = "CSVファイルを選択して下さい。"
-      redirect_to users_url
-    else
-      User.import(params[:file])
-      flash[:success] = "CSVファイルをインポートしました。"
-      redirect_to users_url
+    # フォームからアップロードされたファイルを取得
+    # File.extname("ファイルパス"), extname はファイルの拡張子のみを取りだすことができる パラメータのoriginal_filenameでチェック
+    if params[:file].present? && params[:file].original_filename && File.extname(params[:file].original_filename) == ".csv"
+      begin
+        # エラーが発生する処理
+        User.import(params[:file])
+        flash[:success] = "ユーザーを追加/更新しました"
+        redirect_to user_url
+      return false # 失敗しなければここまで来る。double render error対策にreturn falseして終了
+      rescue # 途中でエラー(CSVのnewでエラーが起きたら)ここに飛ぶ
+      # 復旧処理
+      end
     end
+    flash[:danger] = "CSVファイルを選択して下さい。"
+    redirect_to users_url
   end
-  
+end
+
   private # Web経由で外部のユーザーが知る必要は無いため、次に記すようにRubyのprivateキーワードを用いて外部からは使用できないようにする
   
   def user_params #このメソッドは前述したparams[:user]の代わり
@@ -169,4 +177,3 @@ class UsersController < ApplicationController
   # def admin_user
   #   redirect_to root_url unless current_user.admin?
   # end
-end
