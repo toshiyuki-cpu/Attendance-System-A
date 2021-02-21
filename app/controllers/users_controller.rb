@@ -120,21 +120,39 @@ class UsersController < ApplicationController
   # csvファイルのインポート
   def import
     # フォームからアップロードされたファイルを取得
-    # File.extname("ファイルパス"), extname はファイルの拡張子のみを取りだすことができる パラメータのoriginal_filenameでチェック
-    if params[:file].present? && params[:file].original_filename && File.extname(params[:file].original_filename) == ".csv"
-      begin
-        # エラーが発生する処理
-        User.import(params[:file])
-        flash[:success] = "ユーザーを追加/更新しました"
-        redirect_to user_url
-      return false # 失敗しなければここまで来る。double render error対策にreturn falseして終了
-      rescue # 途中でエラー(CSVのnewでエラーが起きたら)ここに飛ぶ
-      # 復旧処理
-      end
+    begin
+      # エラーが発生する処理（読み込みで例外が発生-->rescueへ）
+      User.import(params[:file])
+      flash[:success] = "ユーザーを追加/更新しました"
+      redirect_to users_url
+      #return 失敗しなければここまで来る。double render error対策にreturn falseして終了
+    # 途中でエラー(CSVのnewでエラーが起きたら)ここに飛ぶ
+    # 復旧処理
+    # 何もファイルを選択してない時
+    rescue NoMethodError 
+      flash[:danger] = "ファイルが選択されていません。"
+      redirect_to users_url
+    # CSVファイル以外又はインポート用ファイルではない時
+    rescue CSV::MalformedCSVError
+      flash[:danger] = "違うファイル形式またはインポート用ファイルではありません。CSVファイルを選択して下さい。"
+      redirect_to users_url
     end
-    flash[:danger] = "CSVファイルを選択して下さい。"
-    redirect_to users_url
   end
+   
+  # csvファイルのインポート 
+  #def import
+    # if params[:file].blank?
+      # flash[:danger] = '読み込むCSVを選択してください'
+      # redirect_to users_url
+    # elsif File.extname(params[:file].original_filename) != ".csv"
+      # flash[:danger] =  'csvファイルのみ読み込み可能です'
+      # redirect_to users_url
+    # else
+     # User.import(params[:file])
+     # flash[:success] = "ユーザーを追加/更新しました"
+     # redirect_to users_url 
+     #end
+  #end
 end
 
   private # Web経由で外部のユーザーが知る必要は無いため、次に記すようにRubyのprivateキーワードを用いて外部からは使用できないようにする
