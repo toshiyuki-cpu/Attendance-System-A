@@ -129,10 +129,13 @@ class UsersController < ApplicationController
     # 途中でエラー(CSVのnewでエラーが起きたら)ここに飛ぶ
     # 復旧処理
     # 何もファイルを選択してない時
+    # userモデルにカスタムメソッド定義
     rescue NoMethodError 
       flash[:danger] = "ファイルが選択されていません。"
+      #flash[:danger] = user.errors.full_messages
       redirect_to users_url
     # CSVファイル以外又はインポート用ファイルではない時
+    # userモデルにカスタムメソッド定義
     rescue CSV::MalformedCSVError
       flash[:danger] = "違うファイル形式またはインポート用ファイルではありません。CSVファイルを選択して下さい。"
       redirect_to users_url

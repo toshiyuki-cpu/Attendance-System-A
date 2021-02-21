@@ -70,7 +70,25 @@ class User < ApplicationRecord #Userモデル
   # 3.authenticateメソッドが使用可能となる。
   # このメソッドは引数の文字列がパスワードと一致した場合オブジェクトを返し、パスワードが一致しない場合はfalseを返す。
   # allow_nil: trueはユーザー情報更新でパスワード入力しなくても更新できるメソッド
-
+  
+  # CSVインポート=>ファイルが選択されてない時
+  validate :validate_csv_path
+  # CSVファイル形式以外だったら
+  validate :validate_csv_file
+  
+  # カスタムメソッド
+  def validate_csv_path
+    unless File.exists?(params[:file])
+      errors.add(params[:file], 'ファイルが見つかりません。')
+    end
+  end
+  # カスタムメソッド
+  def validates_csv_file
+    unless File.extname(params[:file].original_filename) == ".csv"
+      errors.add(params[:file], 'csvファイルを選択して下さい。')
+    end
+  end
+  
   def self.search(search) # ここでのself.はUser.を意味する 
     if search
       where(['name LIKE ?', "%#{search}%"]) #検索とnameの部分一致を表示。User.は省略
@@ -118,6 +136,7 @@ class User < ApplicationRecord #Userモデル
     update_attribute(:remember_digest,nil)
   end
   
+  # CSVインポート
   def self.import(file)
     CSV.foreach(file.path, headers: true) do |row|
      
@@ -131,8 +150,8 @@ class User < ApplicationRecord #Userモデル
     end
   end
   
+  # CSVインポート時に受信するカラムを設定する
   def self.updatable_attributes
-    # CSVインポート時に受信するカラムを設定する
     ["name", "email", "affiliation", "employee_number", "uid", "basic_work_time", "designated_work_start_time", "designated_work_end_time", "admin", "role", "password"]
   end
 end
