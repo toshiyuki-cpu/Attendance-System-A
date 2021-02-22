@@ -71,24 +71,6 @@ class User < ApplicationRecord #Userモデル
   # このメソッドは引数の文字列がパスワードと一致した場合オブジェクトを返し、パスワードが一致しない場合はfalseを返す。
   # allow_nil: trueはユーザー情報更新でパスワード入力しなくても更新できるメソッド
   
-  # CSVインポート=>ファイルが選択されてない時
-  validate :validate_csv_path
-  # CSVファイル形式以外だったら
-  validate :validate_csv_file
-  
-  # カスタムメソッド
-  def validate_csv_path
-    unless File.exists?(params[:file])
-      errors.add(params[:file], 'ファイルが見つかりません。')
-    end
-  end
-  # カスタムメソッド
-  def validates_csv_file
-    unless File.extname(params[:file].original_filename) == ".csv"
-      errors.add(params[:file], 'csvファイルを選択して下さい。')
-    end
-  end
-  
   def self.search(search) # ここでのself.はUser.を意味する 
     if search
       where(['name LIKE ?', "%#{search}%"]) #検索とnameの部分一致を表示。User.は省略
