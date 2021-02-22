@@ -119,23 +119,26 @@ class UsersController < ApplicationController
   
   # csvファイルのインポート
   def import
-    # フォームからアップロードされたファイルを取得
+    # privateにvalid_file?定義
+    unless valid_file?
+      flash[:danger] = 'CSVファイルを選択して下さい。'
+      redirect_to users_url and return
+    end
     begin
       # エラーが発生する処理（読み込みで例外が発生-->rescueへ）
       User.import(params[:file])
       flash[:success] = "ユーザーを追加/更新しました"
       redirect_to users_url
-      #return 失敗しなければここまで来る。double render error対策にreturn falseして終了
+      #return 失敗しなければここまで来る。
     # 途中でエラー(CSVのnewでエラーが起きたら)ここに飛ぶ
     # 復旧処理
-    # 何もファイルを選択してない時
-    rescue NoMethodError 
-      flash[:danger] = "ファイルが選択されていません。"
-      #flash[:danger] = .errors.full_messages
+    # インポート用ファイルではない時
+    rescue ActiveRecord::RecordInvalid
+      flash[:danger] = "インポート用ファイルではありません。"
       redirect_to users_url
-    # CSVファイル以外又はインポート用ファイルではない時
+    # CSVファイルに違うカラムが含まれてた時  
     rescue CSV::MalformedCSVError
-      flash[:danger] = "違うファイル形式またはインポート用ファイルではありません。CSVファイルを選択して下さい。"
+      flash[:danger] = "異なるデータが含まれてます。"
       redirect_to users_url
     end
   end
@@ -154,7 +157,6 @@ class UsersController < ApplicationController
      # redirect_to users_url 
      #end
   #end
-end
 
   private # Web経由で外部のユーザーが知る必要は無いため、次に記すようにRubyのprivateキーワードを用いて外部からは使用できないようにする
   
@@ -167,6 +169,11 @@ end
   def basic_info_params
     params.require(:user).permit(:affiliation, :basic_time, :work_time)
   end
+  
+  def valid_file?
+    params[:file].present? && File.extname(params[:file].original_filename) == ".csv"
+  end
+end
   
   
   # applocation_controllerへ移動１２２行目まで
