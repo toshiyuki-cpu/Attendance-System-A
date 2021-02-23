@@ -5,10 +5,10 @@
 #  id                         :integer          not null, primary key
 #  admin                      :boolean          default(FALSE)
 #  affiliation                :string
-#  basic_time                 :datetime         default(Wed, 03 Feb 2021 08:00:00 JST +09:00)
+#  basic_time                 :datetime         default(Tue, 23 Feb 2021 08:00:00 JST +09:00)
 #  basic_work_time            :datetime
-#  designated_work_end_time   :datetime         default(Wed, 03 Feb 2021 18:00:00 JST +09:00)
-#  designated_work_start_time :datetime         default(Wed, 03 Feb 2021 09:00:00 JST +09:00)
+#  designated_work_end_time   :datetime         default(Tue, 23 Feb 2021 18:00:00 JST +09:00)
+#  designated_work_start_time :datetime         default(Tue, 23 Feb 2021 09:00:00 JST +09:00)
 #  email                      :string
 #  employee_number            :string
 #  name                       :string
@@ -16,7 +16,7 @@
 #  remember_digest            :string
 #  role                       :string           default("employee"), not null
 #  uid                        :string
-#  work_time                  :datetime         default(Wed, 03 Feb 2021 07:30:00 JST +09:00)
+#  work_time                  :datetime         default(Tue, 23 Feb 2021 07:30:00 JST +09:00)
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
 #
@@ -70,7 +70,7 @@ class User < ApplicationRecord #Userモデル
   # 3.authenticateメソッドが使用可能となる。
   # このメソッドは引数の文字列がパスワードと一致した場合オブジェクトを返し、パスワードが一致しない場合はfalseを返す。
   # allow_nil: trueはユーザー情報更新でパスワード入力しなくても更新できるメソッド
-
+  
   def self.search(search) # ここでのself.はUser.を意味する 
     if search
       where(['name LIKE ?', "%#{search}%"]) #検索とnameの部分一致を表示。User.は省略
@@ -116,5 +116,22 @@ class User < ApplicationRecord #Userモデル
   # ユーザーのログイン情報を破棄します。
   def forget
     update_attribute(:remember_digest,nil)
+  end
+  
+  # CSVインポート
+  def self.import(file)
+    CSV.foreach(file.path, headers: true) do |row|
+      # インポートするデータに同じnameが見つかればそのレコードを呼び出し、見つかれなければ新しく作成する。
+      user = User.find_by(name: row["name"]) || User.new
+      # CSVファイルからデータを取得する
+      user.attributes = row.to_hash.slice(*updatable_attributes)
+      # !はCSVファイルでもインポート用ファイルではない、また異なるカラムを受信した時,例外を発生させる
+      user.save!
+    end
+  end
+  
+  # CSVインポート時に受信するカラムを設定する
+  def self.updatable_attributes
+    ["name", "email", "affiliation", "employee_number", "uid", "basic_work_time", "designated_work_start_time", "designated_work_end_time", "admin", "role", "password"]
   end
 end

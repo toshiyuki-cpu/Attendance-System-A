@@ -12,8 +12,10 @@
 
 <!--CSVをインポート-->
 <div class="col-md-2 col-md-offset-1">
-   <%= file_field_tag "upload" %>
-   </br><%= submit_tag "CSVをインポート", class: "btn btn-primary btn-csv" %>
+  <%= form_tag import_users_path, multipart: true do %>
+    <%= file_field_tag :file %></br>
+    <%= submit_tag "CSVをインポート", class: "btn btn-primary btn-csv" %>
+  <% end %>
 </div>
 
 <!--検索機能　user.rbとusers_controllerにも定義-->

@@ -117,6 +117,47 @@ class UsersController < ApplicationController
     @in_attendance_employees = Attendance.where.not(started_at: nil).where(finished_at: nil, worked_on: Time.current.to_date)
   end
   
+  # csvファイルのインポート
+  def import
+    # privateにvalid_file?定義
+    unless valid_file?
+      flash[:danger] = 'CSVファイルを選択して下さい。'
+      redirect_to users_url and return
+    end
+    begin
+      # エラーが発生する処理（読み込みで例外が発生-->rescueへ）
+      User.import(params[:file])
+      flash[:success] = "ユーザーを追加/更新しました"
+      redirect_to users_url
+      #return 失敗しなければここまで来る。
+    # 途中でエラー(CSVのnewでエラーが起きたら)ここに飛ぶ
+    # 復旧処理
+    # インポート用ファイルではない時
+    rescue ActiveRecord::RecordInvalid
+      flash[:danger] = "インポート用ファイルではありません。"
+      redirect_to users_url
+    # CSVファイルに違うカラムが含まれてた時  
+    rescue CSV::MalformedCSVError
+      flash[:danger] = "異なるデータが含まれてます。"
+      redirect_to users_url
+    end
+  end
+   
+  # csvファイルのインポート 
+  #def import
+    # if params[:file].blank?
+      # flash[:danger] = '読み込むCSVを選択してください'
+      # redirect_to users_url
+    # elsif File.extname(params[:file].original_filename) != ".csv"
+      # flash[:danger] =  'csvファイルのみ読み込み可能です'
+      # redirect_to users_url
+    # else
+     # User.import(params[:file])
+     # flash[:success] = "ユーザーを追加/更新しました"
+     # redirect_to users_url 
+     #end
+  #end
+
   private # Web経由で外部のユーザーが知る必要は無いため、次に記すようにRubyのprivateキーワードを用いて外部からは使用できないようにする
   
   def user_params #このメソッドは前述したparams[:user]の代わり
@@ -128,6 +169,11 @@ class UsersController < ApplicationController
   def basic_info_params
     params.require(:user).permit(:affiliation, :basic_time, :work_time)
   end
+  
+  def valid_file?
+    params[:file].present? && File.extname(params[:file].original_filename) == ".csv"
+  end
+end
   
   
   # applocation_controllerへ移動１２２行目まで
@@ -157,4 +203,3 @@ class UsersController < ApplicationController
   # def admin_user
   #   redirect_to root_url unless current_user.admin?
   # end
-end
