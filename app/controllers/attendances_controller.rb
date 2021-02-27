@@ -107,7 +107,14 @@ class AttendancesController < ApplicationController
     redirect_to user_url(current_user)
   end
   
-  def edit_log
+  def approval_log
+    # Viewのformで取得したパラメータをモデルに渡す
+    @user = User.find(params[:id])
+    @approval_logs = @user.attendances.where(worked_on: params[:search], change_attendance_status: 'approval')
+    # 変更前出社時間は出社時間（出社ボタン押した時間）を表示、もしnilなら一番最初に申請した変更前時刻
+    # 変更前退社時間は退社時間（退社ボタン押した時間）を表示、もしnilなら一番最初に申請した変更前時刻
+    # 変更後出社時間は一番最後に申請した変更後時刻を表示
+    # 変更後退社時間は一番最後に申請した変更後時刻を表示
   end
   
   # 残業申請モーダル表示

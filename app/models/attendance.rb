@@ -140,4 +140,12 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
     self.change_finished_at = nil
     self.change_note = nil
   end
+  
+  def self.search(search)
+    if search
+      Attendance.where(worked_on: params[:search].in_time_zone.all_month, change_attendance_status: 'approval')
+    else
+      all
+    end
+  end
 end

@@ -208,4 +208,5 @@ ja:
       time: "%H：%M"
       hour: "%H"
       minute: "%M"
+      day: "%-m/%-d"
     pm: 午後
