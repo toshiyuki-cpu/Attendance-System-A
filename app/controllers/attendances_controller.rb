@@ -107,10 +107,14 @@ class AttendancesController < ApplicationController
     redirect_to user_url(current_user)
   end
   
+  # 勤怠ログ（勤怠変更申請の承認済）
   def approval_log
-    # Viewのformで取得したパラメータをモデルに渡す
     @user = User.find(params[:id])
-    @approval_logs = @user.attendances.where(worked_on: params[:search], change_attendance_status: 'approval')
+    # Parameters: {"utf8"=>"✓", "search(1i)"=>"2021", "search(2i)"=>"2", "search(3i)"=>"1", "commit"=>"検索", "id"=>"5"}をTimeWithZoneクラスに変換
+    beginning_of_month = "#{params['search(1i)']}-#{params['search(2i)']}-#{params['search(3i)']}".in_time_zone
+    # @beginning_of_monthがなければ@end_of_monthはエラーになるためif文追加
+    end_of_month = beginning_of_month.end_of_month if beginning_of_month.present?
+    @approval_logs = @user.attendances.where(worked_on: beginning_of_month..end_of_month, change_attendance_status: 'approval')
     # 変更前出社時間は出社時間（出社ボタン押した時間）を表示、もしnilなら一番最初に申請した変更前時刻
     # 変更前退社時間は退社時間（退社ボタン押した時間）を表示、もしnilなら一番最初に申請した変更前時刻
     # 変更後出社時間は一番最後に申請した変更後時刻を表示

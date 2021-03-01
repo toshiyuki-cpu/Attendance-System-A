@@ -29,6 +29,7 @@
 #  index_attendances_on_user_id  (user_id)
 #
 class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデルとの関連性は1対1
+  
   belongs_to :user
   # rails g model Attendance worked_on:date started_at:datetime finished_at:datetime note:string user:referencesにより
   # Attendanceモデルが生成され、コードでは、Userモデルと1対1の関係を示すbelongs_to :userというコードが記述されています。
@@ -139,13 +140,5 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
     self.change_started_at = nil
     self.change_finished_at = nil
     self.change_note = nil
-  end
-  
-  def self.search(search)
-    if search
-      Attendance.where(worked_on: params[:search].in_time_zone.all_month, change_attendance_status: 'approval')
-    else
-      all
-    end
   end
 end
