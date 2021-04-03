@@ -29,8 +29,17 @@
     <tbody>
       <tr>
         <td><%= l(approval.worked_on, format: :short) %></td>
-        <td><%= l(approval.started_at, format: :time) %></td>
-        <td><%= l(approval.finished_at, format: :time) %></td>
+        <td>
+          <!--started_atがあればstarted_at表示 -->
+          <% if approval.started_at.present? %>
+            <%= l(approval.started_at, format: :time) %>
+          <% end%>
+        </td>
+        <td>
+          <% if approval.finished_at.present? %>
+            <%= l(approval.finished_at, format: :time) %>
+          <% end%>
+        </td>
         <td><%= l(approval.change_started_at, format: :time) %></td>
         <td><%= l(approval.change_finished_at, format: :time) %></td>
         <td><%= approval.change_attendance_reply_superior.name %></td>

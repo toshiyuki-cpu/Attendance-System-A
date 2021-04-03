@@ -103,18 +103,41 @@
 				<% end %>
 				<%= $days_of_the_week[attendance.worked_on.wday] %></td>
 				<td>
-					<%= l(attendance.started_at, format: :hour) if attendance.started_at.present? %>
+					<!-- change_started_atが存在すればchange_started_atを表示し、なければstarted_at表示 -->
+					<% if attendance.change_started_at.present? %>
+						<%= l(attendance.change_started_at, format: :hour) %>
+					<% else %>
+						<%= l(attendance.started_at, format: :hour) if attendance.started_at.present? %>
+					<% end %>
 					<!--後置きのifによって、started_atの値が存在する場合のみ表示できるよう制御しています-->
 				</td>
-				<td><%= l(attendance.started_at, format: :minute) if attendance.started_at.present? %></td>
+				<td>
+					<% if attendance.change_started_at.present? %>
+						<%= l(attendance.change_started_at, format: :minute) %>
+					<% else %>
+						<%= l(attendance.started_at, format: :minute) if attendance.started_at.present? %>
+					<% end %>
+				</td>
 				<td>
 				<!--Attendances Helperにattendance_state(attendance)を定義した為下記の記述になる-->
 				<% if btn_text = attendance_state(attendance) %>
 					<%= link_to "#{btn_text}", user_attendance_path(@user, attendance), method: :patch, class: "btn btn-primary btn-attendance" %>
 				<% end %>
 				</td>
-				<td><%= l(attendance.finished_at, format: :hour) if attendance.finished_at.present? %></td>
-				<td><%= l(attendance.finished_at, format: :minute) if attendance.finished_at.present? %></td>
+				<td>
+					<% if attendance.change_finished_at.present? %>
+						<%= l(attendance.change_finished_at, format: :hour) %>
+					<% else %>
+						<%= l(attendance.finished_at, format: :hour) if attendance.finished_at.present? %>
+					<% end %>
+				</td>
+				<td>
+					<% if attendance.change_finished_at.present? %>
+						<%= l(attendance.change_finished_at, format: :minute) %>
+					<% else %>
+						<%= l(attendance.finished_at, format: :minute) if attendance.finished_at.present? %>
+					<% end %>
+				</td>
 				<td></td>
 				<td>
 					<% if attendance.next_day.present? %> <!-- 日をまたいだら-->

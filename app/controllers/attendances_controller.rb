@@ -88,22 +88,26 @@ class AttendancesController < ApplicationController
     reply_one_month_params.each do |id, item|
       attendance = Attendance.find(id)
       attendance.attributes = item
-      if attendance.change_attendance_permit == false || attendance.change_attendance_status.applying?
-        flash[:danger] = "変更にチェックを入れて下さい。” 申請中 ”　以外で変更を送信して下さい。"
-        redirect_to user_url(date: params[:date]) and return
+      if attendance.change_attendance_permit == false #|| attendance.change_attendance_status.applying?
+        
+        #redirect_to user_url(date: params[:date]) and return
         next
-      end
-      if attendance.change_attendance_status.approval?
-        attendance.started_at = attendance.change_started_at
-        attendance.finished_at = attendance.change_finished_at
-        attendance.note = attendance.change_note
-        attendance.update_attributes(item)
       else
-        attendance.change_attendance_status = item[:change_attendance_status]
-        attendance.update_attributes(item)
+        if attendance.change_attendance_status.approval?
+          attendance.started_at = attendance.change_started_at
+          attendance.finished_at = attendance.change_finished_at
+          attendance.note = attendance.change_note
+          attendance.update_attributes(item)
+        else
+          attendance.change_attendance_status = item[:change_attendance_status]
+          attendance.update_attributes(item)
+        end
+        flash[:success] = '勤怠変更を申請者へ送信しました。'
       end
     end
-    flash[:success] = '勤怠変更を申請者へ送信しました。'
+    # 1つでも承認があればflash[:danger]は表示させない
+    #flash[:danger] = nil
+    flash[:danger] = "変更にチェックを入れて下さい。" if flash[:success].blank?
     redirect_to user_url(current_user)
   end
   
