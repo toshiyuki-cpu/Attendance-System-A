@@ -88,9 +88,7 @@ class AttendancesController < ApplicationController
     reply_one_month_params.each do |id, item|
       attendance = Attendance.find(id)
       attendance.attributes = item
-      if attendance.change_attendance_permit == false #|| attendance.change_attendance_status.applying?
-        
-        #redirect_to user_url(date: params[:date]) and return
+      if attendance.change_attendance_permit == false
         next
       else
         if attendance.change_attendance_status.approval?
@@ -162,16 +160,15 @@ class AttendancesController < ApplicationController
     overtime_reply_params.each do |id, item|
       attendance = Attendance.find(id)
       attendance.attributes = item
-      if attendance.change_permit == false || attendance.overtime_status.applying?
-        flash[:danger] = "変更にチェックを入れて下さい。” 申請中 ”　以外で変更を送信して下さい。"
-        redirect_to user_url(date: params[:date]) and return
+      if attendance.change_permit == false
         next
       end
       attendance.overtime_status = item[:overtime_status]
       attendance.update_attributes(item)
+      flash[:success] = "社員からの残業申請を返信しました。"
     end
-    flash[:success] = "社員からの残業申請を返信しました。"
-    redirect_to user_url(date: params[:date])
+    flash[:danger] = "変更にチェックを入れて下さい。" if flash[:success].blank?
+    redirect_to user_url(date: params[:date]) 
   end
   
   private
