@@ -92,8 +92,8 @@ class AttendancesController < ApplicationController
         next
       else
         if attendance.change_attendance_status.approval?
-          attendance.started_at = attendance.change_started_at
-          attendance.finished_at = attendance.change_finished_at
+          #attendance.started_at = attendance.change_started_at
+          #attendance.finished_at = attendance.change_finished_at
           attendance.note = attendance.change_note
           attendance.update_attributes(item)
         else
@@ -104,7 +104,6 @@ class AttendancesController < ApplicationController
       end
     end
     # 1つでも承認があればflash[:danger]は表示させない
-    #flash[:danger] = nil
     flash[:danger] = "変更にチェックを入れて下さい。" if flash[:success].blank?
     redirect_to user_url(current_user)
   end

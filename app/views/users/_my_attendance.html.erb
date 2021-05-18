@@ -104,7 +104,7 @@
 				<%= $days_of_the_week[attendance.worked_on.wday] %></td>
 				<td>
 					<!-- change_started_atが存在すればchange_started_atを表示し、なければstarted_at表示 -->
-					<% if attendance.change_started_at.present? %>
+					<% if attendance.change_attendance_status&.approval? %>
 						<%= l(attendance.change_started_at, format: :hour) %>
 					<% else %>
 						<%= l(attendance.started_at, format: :hour) if attendance.started_at.present? %>
@@ -112,7 +112,7 @@
 					<!--後置きのifによって、started_atの値が存在する場合のみ表示できるよう制御しています-->
 				</td>
 				<td>
-					<% if attendance.change_started_at.present? %>
+					<% if attendance.change_attendance_status&.approval? %>
 						<%= l(attendance.change_started_at, format: :minute) %>
 					<% else %>
 						<%= l(attendance.started_at, format: :minute) if attendance.started_at.present? %>
@@ -125,14 +125,14 @@
 				<% end %>
 				</td>
 				<td>
-					<% if attendance.change_finished_at.present? %>
+					<% if attendance.change_attendance_status&.approval? %>
 						<%= l(attendance.change_finished_at, format: :hour) %>
 					<% else %>
 						<%= l(attendance.finished_at, format: :hour) if attendance.finished_at.present? %>
 					<% end %>
 				</td>
 				<td>
-					<% if attendance.change_finished_at.present? %>
+					<% if attendance.change_attendance_status&.approval? %>
 						<%= l(attendance.change_finished_at, format: :minute) %>
 					<% else %>
 						<%= l(attendance.finished_at, format: :minute) if attendance.finished_at.present? %>
