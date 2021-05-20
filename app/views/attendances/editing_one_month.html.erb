@@ -34,7 +34,7 @@
               <td><%= attendance.time_field :change_finished_at, value: attendance.object.finished_at&.strftime("%H:%M"), class: "form-control" %></td>
               <td><%= attendance.check_box :next_day, {}, true, nil %></td>
               <td>
-                <% if day.change_started_at.present? && day.change_finished_at.present? %>
+                <% if day.change_attendance_status&.approval? %>
                   <%= edit_working_times(day.next_day, day.change_started_at, day.change_finished_at) %>
                 <% end %>
               </td>

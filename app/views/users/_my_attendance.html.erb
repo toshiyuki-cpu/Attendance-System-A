@@ -140,16 +140,12 @@
 				</td>
 				<td></td>
 				<td>
-					<% if attendance.next_day.present? %> <!-- 日をまたいだら-->
-						<% if attendance.started_at.present? && attendance.finished_at.present? %>
-							<%= str_times = edit_working_times(attendance.next_day, attendance.change_started_at, attendance.change_finished_at) %> <!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
-							<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
-						<% end %>
+					<% if attendance.change_attendance_status&.approval? %>
+						<%= str_times = edit_working_times(attendance.next_day, attendance.change_started_at, attendance.change_finished_at) %>
+						<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
 					<% else %>
-						<% if attendance.started_at.present? && attendance.finished_at.present? %>
-							<%= str_times = working_times(attendance.started_at, attendance.finished_at) %> <!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
-							<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
-						<% end %>
+						<%= str_times = working_times(attendance.started_at, attendance.finished_at) if attendance.started_at.present? && attendance.finished_at.present? %> <!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
+						<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
 					<% end %>
 				</td>
 				<td><%= attendance.note %></td>
@@ -157,8 +153,8 @@
 				<td><%= l(attendance.overtime_work_end_plan, format: :hour) if attendance.overtime_status&.approval? %></td>
 				<td><%= l(attendance.overtime_work_end_plan, format: :minute) if attendance.overtime_status&.approval? %></td>
 				<td>
-					<% if attendance.started_at.present? && attendance.overtime_work_end_plan.present? %>
-						<%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) if attendance.overtime_status&.approval? %>
+					<% if attendance.overtime_status&.approval? %>
+						<%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %>
 					<% end %>
 				</td>
 				<td><%= attendance.overtime_content if attendance.overtime_status&.approval? %></td>

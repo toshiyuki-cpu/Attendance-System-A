@@ -60,11 +60,13 @@ class MonthReportsController < ApplicationController
   def reply_employee
     @user = User.find(params[:id])
     month_reports_params.each do |id, item|
-     month_report = MonthReport.find(id)
-      month_report.status = item[:status]
-      if item[:reply] == "0" 
+      if item[:reply] == "0"
+      # month_report = MonthReport.find(id)
+      # month_report.status = item[:status]
+      # if item[:reply] == "0" 
         next
       end
+      month_report = MonthReport.find(id)
       month_report.status = item[:status]
       month_report.save(item)
       flash[:success] = '1ヶ月分の勤怠申請を申請者へ送信しました。'

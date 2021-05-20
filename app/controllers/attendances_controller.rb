@@ -159,9 +159,8 @@ class AttendancesController < ApplicationController
     overtime_reply_params.each do |id, item|
       attendance = Attendance.find(id)
       attendance.attributes = item
-      if attendance.change_permit == false
-        next
-      end
+      # if attendance.change_permit == false
+        next unless attendance.change_permit
       attendance.overtime_status = item[:overtime_status]
       attendance.update_attributes(item)
       flash[:success] = "社員からの残業申請を返信しました。"
