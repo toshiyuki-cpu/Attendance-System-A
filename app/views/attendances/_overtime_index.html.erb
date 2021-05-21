@@ -48,7 +48,7 @@
                 <td><%= day.overtime_content %></td>
                 <td><%= attendance.select :overtime_status, Attendance.overtime_status.options, {}, class: "form-control" %></td>
                 <td><%= attendance.check_box :change_permit, {}, true, false %></td>
-                <td><%= link_to '確認', user_path(key, date: day.worked_on), class: "btn btn-primary" %></td>
+                <td><%= link_to '確認', user_path(key, date: @first_day), class: "btn btn-primary" %></td>
               </tr>
             <% end %>
           <% end %>
