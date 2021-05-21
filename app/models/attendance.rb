@@ -71,14 +71,15 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   
   validate :change_note_or_change_attendance_superior_id_if_invalid
   
-  validate :next_day_only_invalid
+  validate :next_day_only_invalid, on: :change_attendance_update
+  # onオプション、コンテキスト名、コントローラーのupdating_one_monthで定義、バリデーションのタイミングを指定
   
   validate :next_day_and_change_note_only_invalid
   
   validate :change_note_if_invalid
   
   validate :superior_if_invalid, on: :change_attendance_update
-  
+  # onオプション、コンテキスト名、コントローラーのupdating_one_monthで定義、バリデーションのタイミングを指定
   
   # validateクラスメソッドを使って新しく定義したカスタムメソッドを呼び出します。
   # 今回は例外処理を発生させるためにこのようなカスタムメソッドを作成

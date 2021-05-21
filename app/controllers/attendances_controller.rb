@@ -64,7 +64,7 @@ class AttendancesController < ApplicationController
         # (!マークをつけている)attendanceが変更ない(false)ならnext
         next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save?
         attendance.change_attendance_status = :applying
-        attendance.save!(context: :change_attendance_update)
+        attendance.save!(context: :change_attendance_update) # コンテキストattendance.rbで
         # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
       rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
         flash[:danger] = attendance.errors.full_messages.join(', ')
