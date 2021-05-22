@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info]
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :edit_basic_info, :update_basic_info] # ログイン済みのユーザー
+  before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info] # ログイン済みのユーザー
   before_action :correct_user, only: [:edit, :update] # アクセスしたユーザーが現在ログインしているユーザーか
   before_action :correct_user, only: :edit # ユーザー一覧から更新する為updateを削除
-  before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info]
+  before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info, :in_attendance_employees]
   before_action :set_one_month, only: :show
   
   def index
@@ -173,7 +173,6 @@ class UsersController < ApplicationController
   def valid_file?
     params[:file].present? && File.extname(params[:file].original_filename) == ".csv"
   end
-end
   
   
   # applocation_controllerへ移動１２２行目まで
@@ -185,13 +184,14 @@ end
   # end
   
   # ログイン済みのユーザーか確認
-  # def logged_in_user
-  #   unless logged_in? # unlessは条件式がfalseの場合のみ記述した処理が実行される構文
-  #     store_location
-  #     flash[:danger] = "ログインしてください。"
-  #     redirect_to login_url
-  #   end
-  # end
+  def logged_in_user
+    unless logged_in? # unlessは条件式がfalseの場合のみ記述した処理が実行される構文
+      store_location
+      flash[:danger] = "ログインしてください。"
+      redirect_to login_url
+    end
+  end
+end
   
   # アクセスしたユーザーが現在ログインしているユーザーか確認
   # def correct_user

@@ -1,8 +1,8 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :editing_one_month, :update_one_month]
-  before_action :logged_in_user, only: [:update, :edit_one_month, :editing_one_month]
-  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :editing_one_month, :update_one_month]
-  before_action :set_one_month, only: [:edit_one_month, :editing_one_month]
+  before_action :set_user, only: [:editing_one_month, :updating_one_month, :approval_log]
+  before_action :logged_in_user, only: [:update, :editing_one_month]
+  before_action :admin_or_correct_user, only: [:update, :editing_one_month, :updating_one_month, :approval_log]
+  before_action :set_one_month, only: [:editing_one_month]
     
   # 定数は下記のように大文字表記
   # 更新エラー用のテキストを2ヶ所で使用しているため、このように定義
