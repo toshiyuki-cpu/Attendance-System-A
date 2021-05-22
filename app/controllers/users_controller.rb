@@ -3,6 +3,7 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :show, :edit, :update, :destroy, :edit_basic_info, :update_basic_info] # ログイン済みのユーザー
   before_action :correct_user, only: [:edit, :update] # アクセスしたユーザーが現在ログインしているユーザーか
   before_action :correct_user, only: :edit # ユーザー一覧から更新する為updateを削除
+  before_action :admin_or_correct_user, only: :show
   before_action :admin_user, only: [:index, :destroy, :edit_basic_info, :update_basic_info, :in_attendance_employees]
   before_action :set_one_month, only: :show
   
@@ -174,6 +175,15 @@ class UsersController < ApplicationController
     params[:file].present? && File.extname(params[:file].original_filename) == ".csv"
   end
   
+  def admin_or_correct_user
+    # どちらかの条件式がtrueか、どちらもtrueの時には何も実行されない処理。
+    # このフィルターに引っかかった場合は、トップページへ強制移動
+    @user = User.find(params[:user_id]) if @user.blank?
+    unless current_user?(@user) || current_user.admin?
+      flash[:danger] = "編集権限がありません。"
+      redirect_to(root_url)
+    end
+  end
   
   # applocation_controllerへ移動１２２行目まで
   # beforeフィルター
@@ -184,13 +194,13 @@ class UsersController < ApplicationController
   # end
   
   # ログイン済みのユーザーか確認
-  def logged_in_user
-    unless logged_in? # unlessは条件式がfalseの場合のみ記述した処理が実行される構文
-      store_location
-      flash[:danger] = "ログインしてください。"
-      redirect_to login_url
-    end
-  end
+  #def logged_in_user
+    #unless logged_in? # unlessは条件式がfalseの場合のみ記述した処理が実行される構文
+      #store_location
+      #flash[:danger] = "ログインしてください。"
+      #redirect_to login_url
+    #end
+  #end
 end
   
   # アクセスしたユーザーが現在ログインしているユーザーか確認
