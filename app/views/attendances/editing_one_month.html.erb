@@ -30,8 +30,13 @@
                   <font color="#0033cc">
                 <% end %>
                 <%= $days_of_the_week[day.worked_on.wday] %></td>
-              <td><%= attendance.time_field :change_started_at, value: attendance.object.started_at&.strftime("%H:%M"), class: "form-control" %></td>
-              <td><%= attendance.time_field :change_finished_at, value: attendance.object.finished_at&.strftime("%H:%M"), class: "form-control" %></td>
+                <% if day.change_started_at.present? && day.change_finished_at.present? %>
+                  <td><%= attendance.time_field :change_started_at, class: "form-control" %></td>
+                  <td><%= attendance.time_field :change_finished_at, class: "form-control" %></td>
+                <% else %>
+                  <td><%= attendance.time_field :change_started_at, value: attendance.object.started_at&.strftime("%H:%M"), class: "form-control" %></td>
+                  <td><%= attendance.time_field :change_finished_at, value: attendance.object.finished_at&.strftime("%H:%M"), class: "form-control" %></td>
+                <% end %>
               <td><%= attendance.check_box :next_day, {}, true, nil %></td>
               <td>
                 <% if day.change_attendance_status&.approval? %>

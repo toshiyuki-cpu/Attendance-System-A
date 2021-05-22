@@ -63,34 +63,58 @@
               <font color="#0033cc">
           <% end %>
 					<%= $days_of_the_week[day.worked_on.wday] %></td> 
-				<td><%= l(day.started_at, format: :hour) if day.started_at.present? %></td>
-				<td><%= l(day.started_at, format: :minute) if day.started_at.present? %></td>
-				<td></td>
-				<td><%= l(day.finished_at, format: :hour) if day.finished_at.present? %></td>
-				<td><%= l(day.finished_at, format: :minute) if day.finished_at.present? %></td>
+				<td>
+					<% if day.change_attendance_status&.approval? %>
+						<%= l(day.change_started_at, format: :hour) %>
+					<% else %>
+						<%= l(day.started_at, format: :hour) if day.started_at.present? %>
+					<% end %>
+				</td>
+				<td>
+					<% if day.change_attendance_status&.approval? %>
+						<%= l(day.change_started_at, format: :minute) %>
+					<% else %>
+						<%= l(day.started_at, format: :minute) if day.started_at.present? %>
+					<% end %>
+				</td>
 				<td></td>
 				<td>
-					<% if day.started_at.present? && day.finished_at.present? %>
-					<!--繰り返し処理中の勤怠データに、started_atとfinished_atの値が存在するかを判定するもの-->
-						<%= str_times = working_times(day.started_at, day.finished_at) %>
-						<!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
-						<!--繰り返し処理の中で累計在社時間の計算は完了します。あとは@total_working_times変数をフッター部分に表示すればOKという仕組み-->
+					<% if day.change_attendance_status&.approval? %>
+						<%= l(day.change_finished_at, format: :hour) %>
+					<% else %>
+						<%= l(day.finished_at, format: :hour) if day.finished_at.present? %>
+					<% end %>
+				</td>
+				<td>
+					<% if day.change_attendance_status&.approval? %>
+						<%= l(day.change_finished_at, format: :minute) %>
+					<% else %>
+						<%= l(day.finished_at, format: :minute) if day.finished_at.present? %>
+					<% end %>
+				</td>
+				<td></td>
+				<td>
+					<% if day.change_attendance_status&.approval? %>
+						<%= str_times = edit_working_times(day.next_day, day.change_started_at, day.change_finished_at) %>
 						<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
-						<!--attendance helperに定義済み-->
-						<!--working_times(start, finish)-->
-						<!--format("%.2f", (((finish - start) / 60) / 60.0))-->
+					<% else %>
+						<%= str_times = working_times(day.started_at, day.finished_at) if day.started_at.present? && day.finished_at.present? %> <!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
+						<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
 					<% end %>
 				</td>
 				<td><%= day.note %></td>
-				<td><%= l(day.overtime_work_end_plan, format: :hour) if day.overtime_work_end_plan.present? %></td>
-				<td><%= l(day.overtime_work_end_plan, format: :minute) if day.overtime_work_end_plan.present? %></td>
+				<td><%= l(day.overtime_work_end_plan, format: :hour) if day.overtime_status&.approval? %></td>
+				<td><%= l(day.overtime_work_end_plan, format: :minute) if day.overtime_status&.approval? %></td>
 				<td>
-					<% if day.started_at.present? && day.overtime_work_end_plan.present? %>
-          		<%= hours_of_overtime(day.next_day, @user.designated_work_end_time, day.overtime_work_end_plan) %>
+					<% if day.overtime_status&.approval? %>
+						<%= hours_of_overtime(day.next_day, @user.designated_work_end_time, day.overtime_work_end_plan) %>
 					<% end %>
 				</td>
-				<td><%= day.overtime_content %></td>
-				<td><%= day.overtime_status_text %></td>　<!-- _text加えることにより日本語に変換-->
+				<td><%= day.overtime_content if day.overtime_status&.approval? %></td>
+				<td>
+					<%= overtime_reply_text(day) %><br>
+					<%= change_attendance_reply_text(day) %>
+				</td>　<!-- _text加えることにより日本語に変換-->
 			</tr>
 			<% end %>
 		</tbody>
