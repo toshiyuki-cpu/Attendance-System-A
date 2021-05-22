@@ -113,9 +113,9 @@
 				</td>
 				<td>
 					<% if attendance.change_attendance_status&.approval? %>
-						<%= l(attendance.change_started_at, format: :minute) %>
+						<%= attendance.change_started_at.floor_to(15.minutes).strftime("%M") %>
 					<% else %>
-						<%= l(attendance.started_at, format: :minute) if attendance.started_at.present? %>
+						<%= attendance.started_at.floor_to(15.minutes).strftime("%M") if attendance.started_at.present? %>
 					<% end %>
 				</td>
 				<td>
@@ -133,28 +133,28 @@
 				</td>
 				<td>
 					<% if attendance.change_attendance_status&.approval? %>
-						<%= l(attendance.change_finished_at, format: :minute) %>
+						<%= attendance.change_finished_at.floor_to(15.minutes).strftime("%M") %>
 					<% else %>
-						<%= l(attendance.finished_at, format: :minute) if attendance.finished_at.present? %>
+						<%= attendance.finished_at.floor_to(15.minutes).strftime("%M") if attendance.finished_at.present? %>
 					<% end %>
 				</td>
 				<td></td>
 				<td>
 					<% if attendance.change_attendance_status&.approval? %>
-						<%= str_times = edit_working_times(attendance.next_day, attendance.change_started_at, attendance.change_finished_at) %>
+						<%= str_times = edit_working_times(attendance.next_day, attendance.change_started_at.floor_to(15.minutes), attendance.change_finished_at.floor_to(15.minutes)) %>
 						<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
 					<% else %>
-						<%= str_times = working_times(attendance.started_at, attendance.finished_at) if attendance.started_at.present? && attendance.finished_at.present? %> <!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
+						<%= str_times = working_times(attendance.started_at.floor_to(15.minutes), attendance.finished_at.floor_to(15.minutes)) if attendance.started_at.present? && attendance.finished_at.present? %> <!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
 						<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
 					<% end %>
 				</td>
 				<td><%= attendance.note %></td>
 				<!--NOTE: &.(ぼっち演算子)とはレシーバーであるオブジェクトがnilでなければそのまま結果を返し、nilの場合はnilを返す演算子-->
 				<td><%= l(attendance.overtime_work_end_plan, format: :hour) if attendance.overtime_status&.approval? %></td>
-				<td><%= l(attendance.overtime_work_end_plan, format: :minute) if attendance.overtime_status&.approval? %></td>
+				<td><%= attendance.overtime_work_end_plan.floor_to(15.minutes).strftime("%M") if attendance.overtime_status&.approval? %></td>
 				<td>
 					<% if attendance.overtime_status&.approval? %>
-						<%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) %>
+						<%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time.floor_to(15.minutes), attendance.overtime_work_end_plan.floor_to(15.minutes)) %>
 					<% end %>
 				</td>
 				<td><%= attendance.overtime_content if attendance.overtime_status&.approval? %></td>

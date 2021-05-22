@@ -8,14 +8,14 @@ CSV.generate do |csv|
       l(attendance.worked_on, format: :short),
       $days_of_the_week[attendance.worked_on.wday],
       if attendance.change_started_at.present?
-        attendance.change_started_at&.strftime("%R")
+        attendance.change_started_at&.floor_to(15.minutes)&.strftime("%R")
       else
-        attendance.started_at&.strftime("%R")
+        attendance.started_at&.floor_to(15.minutes)&.strftime("%R")
       end,
       if attendance.change_finished_at.present?
-        attendance.change_finished_at&.strftime("%R")
+        attendance.change_finished_at&.floor_to(15.minutes)&.strftime("%R")
       else
-        attendance.finished_at&.strftime("%R")
+        attendance.finished_at&.floor_to(15.minutes)&.strftime("%R")
       end
     ]
     csv << column_values
