@@ -185,6 +185,11 @@ class UsersController < ApplicationController
     end
   end
   
+  def admin_user
+    redirect_to root_url unless current_user.admin?
+  end
+end
+  
   # applocation_controllerへ移動１２２行目まで
   # beforeフィルター
   
@@ -201,7 +206,7 @@ class UsersController < ApplicationController
       #redirect_to login_url
     #end
   #end
-end
+#end
   
   # アクセスしたユーザーが現在ログインしているユーザーか確認
   # def correct_user
@@ -210,6 +215,3 @@ end
   # end
   
   # システム管理権限所有かどうか判定
-  # def admin_user
-  #   redirect_to root_url unless current_user.admin?
-  # end

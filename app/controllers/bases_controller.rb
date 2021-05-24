@@ -40,11 +40,10 @@ class BasesController < ApplicationController
   end
 end
 
-private
-
-def base_params #このメソッドはparams[:base]の代わり
-    params.require(:base).permit(:base_number, :base_name, :base_type) #Storong Parameter
-    #必須となるパラメータと許可されたパラメータを指定することができる
-    #paramsハッシュでは:userキーを必須とする
-end
-
+  private
+  
+  def base_params #このメソッドはparams[:base]の代わり
+      params.require(:base).permit(:base_number, :base_name, :base_type) #Storong Parameter
+      #必須となるパラメータと許可されたパラメータを指定することができる
+      #paramsハッシュでは:userキーを必須とする
+  end
