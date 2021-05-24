@@ -1,32 +1,37 @@
 <% provide(:title, '拠点') %>
 
 <h1>拠点一覧</h1>
-
-<div>
-  <table class="table table-bordered table-condensed table-hover base-table">
-    <thead>
-      <tr>
-        <td></td>
-        <td></td>
-        <td>拠点番号</td>
-        <td>拠点名</td>
-        <td>勤怠種類</td>
-      </tr>
-    </thead>
-    <% @bases.each do |base| %>
-    <tbody>
-      <tr>
-        <td><%= link_to "修正", edit_basis_path(base.id), class: "btn btn-primary base-btn-editbutton" %></td>
-        <td><%= link_to "削除", base, method: :delete,
-          data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary btn-sm" %></td>
-        <td><%= base.base_number %></td>
-        <td><%= base.base_name %></td>
-        <td><%= base.base_type %></td>
-      </tr>
-    </tbody>
-    <% end %>
-  </table>
-</div>
+<% if @bases.present? %>
+  <div>
+    <table class="table table-bordered table-condensed table-hover base-table">
+      <thead>
+        <tr>
+          <td></td>
+          <td></td>
+          <td>拠点番号</td>
+          <td>拠点名</td>
+          <td>勤怠種類</td>
+        </tr>
+      </thead>
+      <% @bases.each do |base| %>
+      <tbody>
+        <tr>
+          <td><%= link_to "修正", edit_basis_path(base.id), class: "btn btn-primary base-btn-editbutton" %></td>
+          <td><%= link_to "削除", base, method: :delete,
+            data: { confirm: "削除してよろしいですか？" }, class: "btn btn-primary btn-sm" %></td>
+          <td><%= base.base_number %></td>
+          <td><%= base.base_name %></td>
+          <td><%= base.base_type %></td>
+        </tr>
+      </tbody>
+      <% end %>
+    </table>
+  </div>
+<% else %>
+  <div class="center">
+    <h3>拠点情報はありません。</h3>
+  </div>
+<% end %>
 
 <div class="well well-sm">
   <div>
