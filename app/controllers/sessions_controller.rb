@@ -12,7 +12,11 @@ class SessionsController < ApplicationController
       params[:session][:remember_me] == '1' ? remember(user) : forget(user)
       # チェックボックスの値を評価します。オンの時はユーザー情報を記憶します。オフの場合は記憶しません。
       # 三項演算子 [条件式] ? [真（true）の場合実行される処理] : [偽（false）の場合実行される処理]
-      redirect_back_or user_url(user, date: Time.current.beginning_of_month.to_date.to_s) #引数にuserを指定することで、デフォルトのURLを設定しています
+      if current_user.admin?
+        redirect_to users_url
+      else
+        redirect_back_or user_url(user, date: Time.current.beginning_of_month.to_date.to_s) #引数にuserを指定することで、デフォルトのURLを設定しています
+      end
     else
       flash.now[:danger] = '認証に失敗しました。' # .nowはリダイレクトはしないがフラッシュを表示したい時
       render :new
