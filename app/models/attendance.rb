@@ -29,6 +29,7 @@
 #  index_attendances_on_user_id  (user_id)
 #
 class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデルとの関連性は1対1
+  
   belongs_to :user
   # rails g model Attendance worked_on:date started_at:datetime finished_at:datetime note:string user:referencesにより
   # Attendanceモデルが生成され、コードでは、Userモデルと1対1の関係を示すbelongs_to :userというコードが記述されています。
@@ -70,14 +71,15 @@ class Attendance < ApplicationRecord # AttendanceモデルからみたUserモデ
   
   validate :change_note_or_change_attendance_superior_id_if_invalid
   
-  validate :next_day_only_invalid
+  validate :next_day_only_invalid, on: :change_attendance_update
+  # onオプション、コンテキスト名、コントローラーのupdating_one_monthで定義、バリデーションのタイミングを指定
   
   validate :next_day_and_change_note_only_invalid
   
   validate :change_note_if_invalid
   
   validate :superior_if_invalid, on: :change_attendance_update
-  
+  # onオプション、コンテキスト名、コントローラーのupdating_one_monthで定義、バリデーションのタイミングを指定
   
   # validateクラスメソッドを使って新しく定義したカスタムメソッドを呼び出します。
   # 今回は例外処理を発生させるためにこのようなカスタムメソッドを作成

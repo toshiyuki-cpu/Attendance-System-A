@@ -30,16 +30,40 @@
                   <font color="#0033cc">
                 <% end %>
                 <%= $days_of_the_week[day.worked_on.wday] %></td>
-              <td><%= attendance.time_field :change_started_at, value: attendance.object.started_at&.strftime("%H:%M"), class: "form-control" %></td>
-              <td><%= attendance.time_field :change_finished_at, value: attendance.object.finished_at&.strftime("%H:%M"), class: "form-control" %></td>
-              <td><%= attendance.check_box :next_day, {}, true, nil %></td>
-              <td>
+              <% if Date.current < day.worked_on %> <!-- 当日から判断して翌日以降は編集不可 -->
                 <% if day.change_started_at.present? && day.change_finished_at.present? %>
-                  <%= edit_working_times(day.next_day, day.change_started_at, day.change_finished_at) %>
+                  <td><%= attendance.time_field :change_started_at, readonly: true, class: "form-control" %></td>
+                  <td><%= attendance.time_field :change_finished_at, readonly: true, class: "form-control" %></td>
+                <% else %>
+                  <td><%= attendance.time_field :change_started_at, readonly: true, value: attendance.object.started_at&.strftime("%H:%M"), class: "form-control" %></td>
+                  <td><%= attendance.time_field :change_finished_at, readonly: true, value: attendance.object.finished_at&.strftime("%H:%M"), class: "form-control" %></td>
                 <% end %>
-              </td>
-              <td><%= attendance.text_field :change_note,  value: attendance.object.change_note, class: "form-control" %></td>
-              <td><%= attendance.select :change_attendance_superior_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '上長選択' }, {class: "form-control"} %></td>
+              <% else %>
+                <% if day.change_started_at.present? && day.change_finished_at.present? %>
+                  <td><%= attendance.time_field :change_started_at, class: "form-control" %></td>
+                  <td><%= attendance.time_field :change_finished_at, class: "form-control" %></td>
+                <% else %>
+                  <td><%= attendance.time_field :change_started_at, value: attendance.object.started_at&.strftime("%H:%M"), class: "form-control" %></td>
+                  <td><%= attendance.time_field :change_finished_at, value: attendance.object.finished_at&.strftime("%H:%M"), class: "form-control" %></td>
+                <% end %>
+              <% end %>
+              <% if Date.current < day.worked_on %> <!-- 当日から判断して翌日以降は編集不可 -->
+                <td><%= attendance.check_box :next_day, {disabled: true}, true, nil %></td>
+              <% else %>
+                <td><%= attendance.check_box :next_day, {}, true, nil %></td>
+              <% end %>
+                <td>
+                  <% if day.change_attendance_status&.approval? %>
+                    <%= edit_working_times(day.next_day, day.change_started_at, day.change_finished_at) %>
+                  <% end %>
+                </td>
+              <% if Date.current < day.worked_on %> <!-- 当日から判断して翌日以降は編集不可 -->
+                <td><%= attendance.text_field :change_note, value: attendance.object.change_note, readonly: true, class: "form-control" %></td>
+                <td><%= attendance.select :change_attendance_superior_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '上長選択' }, readonly: true, class: "form-control" %></td>
+              <% else %>
+                <td><%= attendance.text_field :change_note, value: attendance.object.change_note, class: "form-control" %></td>
+                <td><%= attendance.select :change_attendance_superior_id, @superiors.map { |u| [u.name, u.id] }, { include_blank: '上長選択' }, {class: "form-control"} %></td>
+              <% end %>
               <td><%= day.change_attendance_status_text %></td>
             </tr>
           <% end %>

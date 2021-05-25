@@ -68,7 +68,7 @@ Rails.application.routes.draw do
       patch 'attendances/reply_one_month' # 社員からの勤怠変更申請一括返信（まとめて返信用ルーティング）
       get 'month_reports/receiving_employee' # 社員から1ヶ月の勤怠申請表示（まとめて返信用ルーティング）
       patch 'month_reports/reply_employee' # 社員から1ヶ月の勤怠申請一括返信（まとめて返信用ルーティング）
-      get 'attendances/edit_log' #勤怠ログ
+      get 'attendances/approval_log' #勤怠ログ
     end
     
     # resourcesでonly:またはexcept:オプションを使用することで、主要な7つのアクション(index, show, new, create, edit, update, destroy)を限定することができます

@@ -72,7 +72,7 @@
                   <%= attendance.hidden_field :change_attendance_permit, value: false %>
                   <%= attendance.check_box :change_attendance_permit, checked: false %>
                 </td>
-                <td><%= link_to '確認', user_path(day.user), class: "btn btn-primary" %></td>
+                <td><%= link_to '確認', user_path(key, date: day.worked_on.beginning_of_month.to_s), class: "btn btn-primary" %></td>
               </tr>
             <% end %>
           <% end %>

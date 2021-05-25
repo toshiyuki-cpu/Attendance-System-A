@@ -1,8 +1,8 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:edit_one_month, :editing_one_month, :update_one_month]
-  before_action :logged_in_user, only: [:update, :edit_one_month, :editing_one_month]
-  before_action :admin_or_correct_user, only: [:update, :edit_one_month, :editing_one_month, :update_one_month]
-  before_action :set_one_month, only: [:edit_one_month, :editing_one_month]
+  before_action :set_user, only: [:editing_one_month, :updating_one_month, :approval_log]
+  before_action :logged_in_user, only: [:update, :editing_one_month]
+  before_action :admin_or_correct_user, only: [:update, :editing_one_month, :updating_one_month, :approval_log]
+  before_action :set_one_month, only: [:editing_one_month]
     
   # 定数は下記のように大文字表記
   # 更新エラー用のテキストを2ヶ所で使用しているため、このように定義
@@ -64,7 +64,7 @@ class AttendancesController < ApplicationController
         # (!マークをつけている)attendanceが変更ない(false)ならnext
         next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save?
         attendance.change_attendance_status = :applying
-        attendance.save!(context: :change_attendance_update)
+        attendance.save!(context: :change_attendance_update) # コンテキストattendance.rbで
         # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
       rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
         flash[:danger] = attendance.errors.full_messages.join(', ')
@@ -88,26 +88,38 @@ class AttendancesController < ApplicationController
     reply_one_month_params.each do |id, item|
       attendance = Attendance.find(id)
       attendance.attributes = item
-      if attendance.change_attendance_permit == false || attendance.change_attendance_status.applying?
-        flash[:danger] = "変更にチェックを入れて下さい。” 申請中 ”　以外で変更を送信して下さい。"
-        redirect_to user_url(date: params[:date]) and return
+      if attendance.change_attendance_permit == false
         next
-      end
-      if attendance.change_attendance_status.approval?
-        attendance.started_at = attendance.change_started_at
-        attendance.finished_at = attendance.change_finished_at
-        attendance.note = attendance.change_note
-        attendance.update_attributes(item)
       else
-        attendance.change_attendance_status = item[:change_attendance_status]
-        attendance.update_attributes(item)
+        if attendance.change_attendance_status.approval?
+          #attendance.started_at = attendance.change_started_at
+          #attendance.finished_at = attendance.change_finished_at
+          attendance.note = attendance.change_note
+          attendance.update_attributes(item)
+        else
+          attendance.change_attendance_status = item[:change_attendance_status]
+          attendance.update_attributes(item)
+        end
+        flash[:success] = '勤怠変更を申請者へ送信しました。'
       end
     end
-    flash[:success] = '勤怠変更を申請者へ送信しました。'
+    # 1つでも承認があればflash[:danger]は表示させない
+    flash[:danger] = "変更にチェックを入れて下さい。" if flash[:success].blank?
     redirect_to user_url(current_user)
   end
   
-  def edit_log
+  # 勤怠ログ（勤怠変更申請の承認済）
+  def approval_log
+    @user = User.find(params[:id])
+    # Parameters: {"utf8"=>"✓", "search(1i)"=>"2021", "search(2i)"=>"2", "search(3i)"=>"1", "commit"=>"検索", "id"=>"5"}をTimeWithZoneクラスに変換
+    beginning_of_month = "#{params['search(1i)']}-#{params['search(2i)']}-#{params['search(3i)']}".in_time_zone
+    # @beginning_of_monthがなければ@end_of_monthはエラーになるためif文追加
+    end_of_month = beginning_of_month.end_of_month if beginning_of_month.present?
+    @approval_logs = @user.attendances.where(worked_on: beginning_of_month..end_of_month, change_attendance_status: 'approval')
+    # 変更前出社時間は出社時間（出社ボタン押した時間）を表示、もしnilなら一番最初に申請した変更前時刻
+    # 変更前退社時間は退社時間（退社ボタン押した時間）を表示、もしnilなら一番最初に申請した変更前時刻
+    # 変更後出社時間は一番最後に申請した変更後時刻を表示
+    # 変更後退社時間は一番最後に申請した変更後時刻を表示
   end
   
   # 残業申請モーダル表示
@@ -147,16 +159,14 @@ class AttendancesController < ApplicationController
     overtime_reply_params.each do |id, item|
       attendance = Attendance.find(id)
       attendance.attributes = item
-      if attendance.change_permit == false || attendance.overtime_status.applying?
-        flash[:danger] = "変更にチェックを入れて下さい。” 申請中 ”　以外で変更を送信して下さい。"
-        redirect_to user_url(date: params[:date]) and return
-        next
-      end
+      # if attendance.change_permit == false
+        next unless attendance.change_permit
       attendance.overtime_status = item[:overtime_status]
       attendance.update_attributes(item)
+      flash[:success] = "社員からの残業申請を返信しました。"
     end
-    flash[:success] = "社員からの残業申請を返信しました。"
-    redirect_to user_url(date: params[:date])
+    flash[:danger] = "変更にチェックを入れて下さい。" if flash[:success].blank?
+    redirect_to user_url(date: params[:date]) 
   end
   
   private

@@ -125,3 +125,30 @@ p {
 .month-apply-form {
   margin-top: 5px;
 }
+
+/* 勤怠ログ検索フォーム */
+
+.search-form {
+  width: 95%;
+  height: 50px;
+  line-height: 2;
+  font-size: 15px;
+}
+
+.approver-logs {
+  width: 15%;
+  height: 35px;
+  line-height: 1;
+  font-size: 15px;
+  border-radius: 5px;
+}
+
+.btn-attendance-logs {
+  width: 20%;
+  height: 35px;
+  line-height: 1;
+  font-size: 15px;
+  border-radius: 5px;
+  margin-right: 2px;
+  margin-bottom: 3px;
+}

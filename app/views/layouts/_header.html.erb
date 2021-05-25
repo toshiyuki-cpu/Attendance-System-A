@@ -3,33 +3,33 @@
    <%= link_to "勤怠システム", root_path, id: "logo" %>  <!-- viewではpathを使う-->
    <nav>
      <ul class="nav navbar-nav navbar-right">
-        <li><%= link_to "トップへ", root_path %></li>  <!-- viewではpathを使う-->
-        <% if logged_in? %>
-          <% if current_user.admin %> <!--管理者のみ閲覧-->
-        <li><%= link_to "ユーザー一覧", users_path %></li>
-        <li><%= link_to "出勤社員一覧", in_attendance_employees_user_path(current_user) %></li>
-        <li><%= link_to "拠点情報の修正", bases_path(current_user) %></li>
-        <li><%= link_to "基本情報の修正", edit_basic_info_user_path(current_user) %></li>
-          <% end %>
+       <li><%= link_to "トップへ", root_path %></li>  <!-- viewではpathを使う-->
+       <% if logged_in? %>
+         <% if current_user.admin %> <!--管理者のみ閲覧-->
+           <li><%= link_to "ユーザー一覧", users_path %></li>
+           <li><%= link_to "出勤社員一覧", in_attendance_employees_user_path(current_user) %></li>
+           <li><%= link_to "拠点情報の修正", bases_path(current_user) %></li>
+           <li><%= link_to "基本情報の修正", edit_basic_info_user_path(current_user) %></li>
+           <li><%= link_to "ログアウト", logout_path, method: :delete %></li>
+         <% else %>
            <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
              アカウント<b class="caret"></b>
              </a>
              <ul class="dropdown-menu">
-               <li><%= link_to "勤怠", current_user %></li>
-               <% if current_user.admin %> <!--管理者のみ閲覧-->
-               <li><%= link_to "管理者情報編集", edit_user_path(current_user) %></li>
-               <% end %>
+               <li><%= link_to "勤怠情報", current_user %></li>
+                 <li><%= link_to "ユーザー情報編集", edit_user_path(current_user) %></li>
                <li class="divider"></li>
                <li>
                  <%= link_to "ログアウト", logout_path, method: :delete %>
                  <!--ログアウト処理はHTTPリクエストがDELETEなので、引数にmethod: :deleteというハッシュを渡している-->
                </li>
              </ul>
-          </li>
-         <% else %>
-          <li><%= link_to "ログイン", login_path %></li>
+           </li>
          <% end %>
+       <% else %>
+        <li><%= link_to "ログイン", login_path %></li>
+       <% end %>
       </ul>
    </nav>
   </div>

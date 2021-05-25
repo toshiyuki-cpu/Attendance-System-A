@@ -54,7 +54,7 @@
 		<!--paramsハッシュにdateキーとして、@first_dayを指定しています。
 		これで受け取ったparams[:date]をもとに、どの月の情報を表示するか判断できるようになります-->
 		<%=link_to "CSV出力", attendances_csv_output_user_path(format: :csv, date: @first_day), class: "btn btn-primary" %>
-		<%= link_to "勤怠修正ログ (承認済)", attendances_edit_log_user_path, class: "btn btn-primary attendance-edit-log" %>
+		<%= link_to "勤怠修正ログ (承認済)", attendances_approval_log_user_path(@user), class: "btn btn-primary attendance-approval-log" %>
 	</div>
 
 <div>
@@ -103,39 +103,58 @@
 				<% end %>
 				<%= $days_of_the_week[attendance.worked_on.wday] %></td>
 				<td>
-					<%= l(attendance.started_at, format: :hour) if attendance.started_at.present? %>
+					<!-- change_started_atが存在すればchange_started_atを表示し、なければstarted_at表示 -->
+					<% if attendance.change_attendance_status&.approval? %>
+						<%= l(attendance.change_started_at, format: :hour) %>
+					<% else %>
+						<%= l(attendance.started_at, format: :hour) if attendance.started_at.present? %>
+					<% end %>
 					<!--後置きのifによって、started_atの値が存在する場合のみ表示できるよう制御しています-->
 				</td>
-				<td><%= l(attendance.started_at, format: :minute) if attendance.started_at.present? %></td>
+				<td>
+					<% if attendance.change_attendance_status&.approval? %>
+						<%= attendance.change_started_at.floor_to(15.minutes).strftime("%M") %>
+					<% else %>
+						<%= attendance.started_at.floor_to(15.minutes).strftime("%M") if attendance.started_at.present? %>
+					<% end %>
+				</td>
 				<td>
 				<!--Attendances Helperにattendance_state(attendance)を定義した為下記の記述になる-->
 				<% if btn_text = attendance_state(attendance) %>
 					<%= link_to "#{btn_text}", user_attendance_path(@user, attendance), method: :patch, class: "btn btn-primary btn-attendance" %>
 				<% end %>
 				</td>
-				<td><%= l(attendance.finished_at, format: :hour) if attendance.finished_at.present? %></td>
-				<td><%= l(attendance.finished_at, format: :minute) if attendance.finished_at.present? %></td>
+				<td>
+					<% if attendance.change_attendance_status&.approval? %>
+						<%= l(attendance.change_finished_at, format: :hour) %>
+					<% else %>
+						<%= l(attendance.finished_at, format: :hour) if attendance.finished_at.present? %>
+					<% end %>
+				</td>
+				<td>
+					<% if attendance.change_attendance_status&.approval? %>
+						<%= attendance.change_finished_at.floor_to(15.minutes).strftime("%M") %>
+					<% else %>
+						<%= attendance.finished_at.floor_to(15.minutes).strftime("%M") if attendance.finished_at.present? %>
+					<% end %>
+				</td>
 				<td></td>
 				<td>
-					<% if attendance.next_day.present? %> <!-- 日をまたいだら-->
-						<% if attendance.started_at.present? && attendance.finished_at.present? %>
-							<%= str_times = edit_working_times(attendance.next_day, attendance.change_started_at, attendance.change_finished_at) %> <!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
-							<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
-						<% end %>
+					<% if attendance.change_attendance_status&.approval? %>
+						<%= str_times = edit_working_times(attendance.next_day, attendance.change_started_at.floor_to(15.minutes), attendance.change_finished_at.floor_to(15.minutes)) %>
+						<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
 					<% else %>
-						<% if attendance.started_at.present? && attendance.finished_at.present? %>
-							<%= str_times = working_times(attendance.started_at, attendance.finished_at) %> <!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
-							<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
-						<% end %>
+						<%= str_times = working_times(attendance.started_at.floor_to(15.minutes), attendance.finished_at.floor_to(15.minutes)) if attendance.started_at.present? && attendance.finished_at.present? %> <!--working_timesメソッドの値をstr_times変数に代入しています。これは在社時間を計算に使用するため-->
+						<% @total_working_times = @total_working_times.to_f + str_times.to_f %>
 					<% end %>
 				</td>
 				<td><%= attendance.note %></td>
 				<!--NOTE: &.(ぼっち演算子)とはレシーバーであるオブジェクトがnilでなければそのまま結果を返し、nilの場合はnilを返す演算子-->
 				<td><%= l(attendance.overtime_work_end_plan, format: :hour) if attendance.overtime_status&.approval? %></td>
-				<td><%= l(attendance.overtime_work_end_plan, format: :minute) if attendance.overtime_status&.approval? %></td>
+				<td><%= attendance.overtime_work_end_plan.floor_to(15.minutes).strftime("%M") if attendance.overtime_status&.approval? %></td>
 				<td>
-					<% if attendance.started_at.present? && attendance.overtime_work_end_plan.present? %>
-						<%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time, attendance.overtime_work_end_plan) if attendance.overtime_status&.approval? %>
+					<% if attendance.overtime_status&.approval? %>
+						<%= hours_of_overtime(attendance.next_day, @user.designated_work_end_time.floor_to(15.minutes), attendance.overtime_work_end_plan.floor_to(15.minutes)) %>
 					<% end %>
 				</td>
 				<td><%= attendance.overtime_content if attendance.overtime_status&.approval? %></td>

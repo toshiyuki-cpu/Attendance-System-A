@@ -1,0 +1,58 @@
+<% provide title: @user %>
+
+<h1>勤怠ログ</h1>
+
+<div class="search-form">
+  <div class="col-md-8 col-md-offset-2">
+  <%= form_with url: attendances_approval_log_user_path, method: :get, local: true do |f| %>
+    <%= f.date_select :search,
+    { discard_day: true,
+      use_month_numbers: true,
+      start_year: 2021,
+      selected: "#{params['search(1i)']}-#{params['search(2i)']}-#{params['search(3i)']}".in_time_zone,
+      date_separator: '年 '},
+      {class: "approver-logs"} %> 月
+    <%= f.submit '検索', {class: "btn btn-primary btn-attendance-logs"} %>
+  <% end %>
+  </div>
+</div>
+  
+<div class ="row">
+  <div class="col-md-8 col-md-offset-2">
+  <table class="table table-bordered table-condensed table-hover" id="attend-edit-table">
+    <thead>
+      <tr>
+        <th>日付</th>
+        <th>変更前出社時間</th>
+        <th>変更前退社時間</th>
+        <th>変更後出社時間</th>
+        <th>変更後出社時間</th>
+        <th>指示者</th>
+        <th>承認日</th>
+      </tr>
+    </thead>
+    <% @approval_logs.each do |approval| %>
+    <tbody>
+      <tr>
+        <td><%= l(approval.worked_on, format: :short) %></td>
+        <td>
+          <!--started_atがあればstarted_at表示 -->
+          <% if approval.started_at.present? %>
+            <%= approval.started_at.floor_to(15.minutes).strftime("%H:%M") %>
+          <% end%>
+        </td>
+        <td>
+          <% if approval.finished_at.present? %>
+            <%= approval.finished_at.floor_to(15.minutes).strftime("%H:%M") %>
+          <% end%>
+        </td>
+        <td><%= approval.change_started_at.floor_to(15.minutes).strftime("%H:%M") %></td>
+        <td><%= approval.change_finished_at.floor_to(15.minutes).strftime("%H:%M") %></td>
+        <td><%= approval.change_attendance_reply_superior.name %></td>
+        <td><%= l(approval.updated_at, format: :day) %></td>
+      </tr>
+    </tbody>
+    <% end %>
+  </table>
+  </div>
+</div>
