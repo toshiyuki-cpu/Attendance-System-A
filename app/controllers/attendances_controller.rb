@@ -1,13 +1,13 @@
 class AttendancesController < ApplicationController
-  before_action :set_user, only: [:editing_one_month, :updating_one_month, :approval_log]
-  before_action :logged_in_user, only: [:update, :editing_one_month]
-  before_action :admin_or_correct_user, only: [:update, :editing_one_month, :updating_one_month, :approval_log]
+  before_action :set_user, only: %i[editing_one_month updating_one_month approval_log]
+  before_action :logged_in_user, only: %i[update editing_one_month]
+  before_action :admin_or_correct_user, only: %i[update editing_one_month updating_one_month approval_log]
   before_action :set_one_month, only: [:editing_one_month]
-    
+
   # 定数は下記のように大文字表記
   # 更新エラー用のテキストを2ヶ所で使用しているため、このように定義
-  UPDATE_ERROR_MSG = "勤怠登録に失敗しました。やり直してください。"
-  
+  UPDATE_ERROR_MSG = '勤怠登録に失敗しました。やり直してください。'
+
   # 勤怠のcsv出力
   # viewファイルも作成（csv_output.csv.ruby）
   def csv_output
@@ -17,12 +17,12 @@ class AttendancesController < ApplicationController
     @attendances = @user.attendances.where(worked_on: @first_day..@last_day).order(:worked_on)
     # ↑の定義、アプリケーションコントローラーのset_user , set_one_month
     respond_to do |format|
-      format.csv do |csv|
+      format.csv do |_csv|
         send_data render_to_string, filename: "#{@user.name}の勤怠.csv", type: :csv
       end
     end
   end
-  
+
   def update
     @user = User.find(params[:user_id])
     @attendance = Attendance.find(params[:id])
@@ -30,25 +30,25 @@ class AttendancesController < ApplicationController
     if @attendance.started_at.nil?
       if @attendance.update_attributes(started_at: Time.current.change(sec: 0)) # changeメソッド 秒数を０に変換する
         # update_attributes バリデーションを通す
-        flash[:info] = "おはようございます！"
+        flash[:info] = 'おはようございます！'
       else
         flash[:danger] = UPDATE_ERROR_MSG
       end
     elsif @attendance.finished_at.nil?
       if @attendance.update_attributes(finished_at: Time.current.change(sec: 0))
-          flash[:info] = "お疲れ様でした。"
+        flash[:info] = 'お疲れ様でした。'
       else
-          flash[:danger] = UPDATE_ERROR_MSG
+        flash[:danger] = UPDATE_ERROR_MSG
       end
     end
     redirect_to @user
   end
-  
+
   # 勤怠変更申請、上長へまとめて送信の表示
   def editing_one_month
     @superiors = User.superior_except_me(current_user)
   end
-  
+
   # 勤怠変更申請、上長へまとめて送信
   def updating_one_month
     @user = User.find(params[:id])
@@ -56,13 +56,14 @@ class AttendancesController < ApplicationController
       change_attendances_params.each do |id, item| # idがkey,itemがvalue
         # attendanceを取得
         attendance = Attendance.find(id)
-        # パラメーターを代入している 
+        # パラメーターを代入している
         attendance.attributes = item
         # 変更ないレコードはスルーさせる
         # { |v| v.blank? }　valueが空ならnext　
         # has_changes_to_save? 変更を検知して true / falseを返す
         # (!マークをつけている)attendanceが変更ない(false)ならnext
         next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save?
+
         attendance.change_attendance_status = :applying
         attendance.save!(context: :change_attendance_update) # コンテキストattendance.rbで
         # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
@@ -72,16 +73,19 @@ class AttendancesController < ApplicationController
         redirect_to attendances_editing_one_month_user_url(date: params[:date]) and return
       end
     end
-    flash[:success] = "上長へ勤怠の変更を申請しました。"
+    flash[:success] = '上長へ勤怠の変更を申請しました。'
     redirect_to user_url(date: params[:date])
   end
-  
+
   # 勤怠変更申請まとめて返信表示
   def receiving_one_month
     @user = User.find(params[:id])
-    @attendances = Attendance.where(change_attendance_superior_id: @user.id, change_attendance_status: 'applying').group_by { |item| item.user }
+    @attendances = Attendance.where(change_attendance_superior_id: @user.id,
+                                    change_attendance_status: 'applying').group_by do |item|
+      item.user
+    end
   end
-  
+
   # 勤怠変更申請まとめて返信
   def reply_one_month
     @user = User.find(params[:id])
@@ -92,8 +96,8 @@ class AttendancesController < ApplicationController
         next
       else
         if attendance.change_attendance_status.approval?
-          #attendance.started_at = attendance.change_started_at
-          #attendance.finished_at = attendance.change_finished_at
+          # attendance.started_at = attendance.change_started_at
+          # attendance.finished_at = attendance.change_finished_at
           attendance.note = attendance.change_note
           attendance.update_attributes(item)
         else
@@ -104,10 +108,10 @@ class AttendancesController < ApplicationController
       end
     end
     # 1つでも承認があればflash[:danger]は表示させない
-    flash[:danger] = "変更にチェックを入れて下さい。" if flash[:success].blank?
+    flash[:danger] = '変更にチェックを入れて下さい。' if flash[:success].blank?
     redirect_to user_url(current_user)
   end
-  
+
   # 勤怠ログ（勤怠変更申請の承認済）
   def approval_log
     @user = User.find(params[:id])
@@ -115,13 +119,14 @@ class AttendancesController < ApplicationController
     beginning_of_month = "#{params['search(1i)']}-#{params['search(2i)']}-#{params['search(3i)']}".in_time_zone
     # @beginning_of_monthがなければ@end_of_monthはエラーになるためif文追加
     end_of_month = beginning_of_month.end_of_month if beginning_of_month.present?
-    @approval_logs = @user.attendances.where(worked_on: beginning_of_month..end_of_month, change_attendance_status: 'approval')
+    @approval_logs = @user.attendances.where(worked_on: beginning_of_month..end_of_month,
+                                             change_attendance_status: 'approval')
     # 変更前出社時間は出社時間（出社ボタン押した時間）を表示、もしnilなら一番最初に申請した変更前時刻
     # 変更前退社時間は退社時間（退社ボタン押した時間）を表示、もしnilなら一番最初に申請した変更前時刻
     # 変更後出社時間は一番最後に申請した変更後時刻を表示
     # 変更後退社時間は一番最後に申請した変更後時刻を表示
   end
-  
+
   # 残業申請モーダル表示
   def edit_overtime_work_end_plan
     @user = User.find(params[:user_id])
@@ -130,7 +135,7 @@ class AttendancesController < ApplicationController
     # user.rbでscopeメソッド :superior_except_me, ->(user) { where.not(id: user).with_role(:superior) }
     @superiors = User.superior_except_me(current_user)
   end
-  
+
   # 残業申請、上長へ送信
   def update_overtime_work_end_plan
     @user = User.find(params[:user_id])
@@ -138,21 +143,23 @@ class AttendancesController < ApplicationController
     @attendance.overtime_status = :applying # 指示者確認欄にapplyingと表示
     @attendance.change_permit = false # 再申請すると上長ページでチェックが入ってしまうのでfalseで返す。
     @attendance.update_attributes(overtime_work_end_plan_params)
-    #end
-    flash[:success] = "残業を申請しました。"
+    # end
+    flash[:success] = '残業を申請しました。'
     # worked_onの日付から月の初日をとる
     first_day = @attendance.worked_on.beginning_of_month
     # ストリングパラメータの値に月初を入れてリダイレクトする
     redirect_to user_url(@user, date: first_day)
     # redirect_back(fallback_location: user_url) この１行でも実装可能（74から81行省略して）
   end
-  
+
   # 社員からの残業申請表示（まとめて返信用ルーティング）
   def overtime_index
     @user = User.find(params[:id])
-    @attendances = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by { |item| item.user }
+    @attendances = Attendance.where(select_superior_id: @user.id, overtime_status: 'applying').group_by do |item|
+      item.user
+    end
   end
-  
+
   # 社員からの残業申請一括返信（まとめて返信用ルーティング）
   def overtime_reply
     @user = User.find(params[:id])
@@ -160,74 +167,82 @@ class AttendancesController < ApplicationController
       attendance = Attendance.find(id)
       attendance.attributes = item
       # if attendance.change_permit == false
-        next unless attendance.change_permit
+      next unless attendance.change_permit
+
       attendance.overtime_status = item[:overtime_status]
       attendance.update_attributes(item)
-      flash[:success] = "社員からの残業申請を返信しました。"
+      flash[:success] = '社員からの残業申請を返信しました。'
     end
-    flash[:danger] = "変更にチェックを入れて下さい。" if flash[:success].blank?
-    redirect_to user_url(date: params[:date]) 
+    flash[:danger] = '変更にチェックを入れて下さい。' if flash[:success].blank?
+    redirect_to user_url(date: params[:date])
   end
-  
+
   private
-  
+
   # 勤怠変更前のパラメーター
   def attendance_params
-    params.require(:attendance).permit(:started_at, :finished_at, :next_day, :note, :change_attendance_superior_id, :change_attendance_permit )
+    params.require(:attendance).permit(:started_at, :finished_at, :next_day, :note, :change_attendance_superior_id,
+                                       :change_attendance_permit)
   end
-  
+
   # 勤怠変更申請時のパラメーター
   def change_attendance_params
-    params.require(:attendance).permit(:change_started_at, :change_finished_at, :next_day, :change_note, :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit )
+    params.require(:attendance).permit(:change_started_at, :change_finished_at, :next_day, :change_note,
+                                       :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit)
   end
-  
+
   # 勤怠変更申請まとめて送信のパラメーター(アクション updating_one_month)
   def change_attendances_params
-    params.require(:user).permit(attendances: [:change_started_at, :change_finished_at, :next_day, :change_note, :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit])[:attendances]
+    params.require(:user).permit(attendances: %i[change_started_at change_finished_at next_day change_note
+                                                 change_attendance_superior_id change_attendance_status change_attendance_permit])[:attendances]
   end
-  
+
   # 勤怠変更申請まとめて返信のパラメーター（アクション reply_one_month)
   def reply_one_month_params
-    params.require(:user).permit(attendances: [:started_at, :change_started_at, :finished_at, :change_finished_at, :next_day, :note, :change_note, :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit])[:attendances]
+    params.require(:user).permit(attendances: %i[started_at change_started_at finished_at change_finished_at
+                                                 next_day note change_note change_attendance_superior_id change_attendance_status change_attendance_permit])[:attendances]
   end
-  
+
   # 1ヶ月分の勤怠情報を扱います。
   def attendances_params
-    params.require(:user).permit(attendances: [:started_at, :finished_at, :note, :next_day, :change_note, :change_attendance_superior_id, :change_attendance_status, :change_attendance_permit])[:attendances]
+    params.require(:user).permit(attendances: %i[started_at finished_at note next_day change_note
+                                                 change_attendance_superior_id change_attendance_status change_attendance_permit])[:attendances]
   end
-  
-    # 残業申請のパラメーター
+
+  # 残業申請のパラメーター
   def overtime_work_end_plan_params
-    params.require(:attendance).permit(:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id, :overtime_status, :change_permit)
-    #params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id, :overtime_status, :change_permit])[:attendances]
+    params.require(:attendance).permit(:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id,
+                                       :overtime_status, :change_permit)
+    # params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id, :overtime_status, :change_permit])[:attendances]
   end
-  
+
   # 残業申請まとめて返信のパラメーター
   def overtime_reply_params
-    params.require(:user).permit(attendances: [:overtime_work_end_plan, :next_day, :overtime_content, :select_superior_id, :overtime_status, :change_permit])[:attendances]
+    params.require(:user).permit(attendances: %i[overtime_work_end_plan next_day overtime_content
+                                                 select_superior_id overtime_status change_permit])[:attendances]
   end
-    # paramsハッシュの中の、
-    # :userがキーのハッシュの中の、
-    # :attendancesがキーのハッシュの中の
-    # idがキーで、各カラム名がキーとなり、値がバリューとなった
-    # この説明ですが、これらを上記のコードと合わせていくと・・・
-    # paramsハッシュの中の・・・params
-    # :userがキーのハッシュの中の・・・require(:user)
-    # :attendancesがキーのハッシュの中にネストされたidと各カラムの値があるハッシュ
-    # ・・・permit(attendances: [:started_at, :finished_at, :note])[:attendances]
-    # このメソッドでパラメータを取得すると次のようになります
-    # {"1" => {"started_at"=>"10:00", "finished_at"=>"18:00", "note"=>"シフトA"},
-    # {"2"=> {"started_at"=>"11:00", "finished_at"=>"19:00", "note"=>"シフトB"},
-    # {"3"=> {"started_at"=>"12:00", "finished_at"=>"20:00", "note"=>"シフトC"}
-    
-    # beforeフィルター
-    # 管理権限者、または現在ログインしているユーザーを許可します。
+  # paramsハッシュの中の、
+  # :userがキーのハッシュの中の、
+  # :attendancesがキーのハッシュの中の
+  # idがキーで、各カラム名がキーとなり、値がバリューとなった
+  # この説明ですが、これらを上記のコードと合わせていくと・・・
+  # paramsハッシュの中の・・・params
+  # :userがキーのハッシュの中の・・・require(:user)
+  # :attendancesがキーのハッシュの中にネストされたidと各カラムの値があるハッシュ
+  # ・・・permit(attendances: [:started_at, :finished_at, :note])[:attendances]
+  # このメソッドでパラメータを取得すると次のようになります
+  # {"1" => {"started_at"=>"10:00", "finished_at"=>"18:00", "note"=>"シフトA"},
+  # {"2"=> {"started_at"=>"11:00", "finished_at"=>"19:00", "note"=>"シフトB"},
+  # {"3"=> {"started_at"=>"12:00", "finished_at"=>"20:00", "note"=>"シフトC"}
+
+  # beforeフィルター
+  # 管理権限者、または現在ログインしているユーザーを許可します。
   def admin_or_correct_user
     # どちらかの条件式がtrueか、どちらもtrueの時には何も実行されない処理。
     # このフィルターに引っかかった場合は、トップページへ強制移動
     @user = User.find(params[:user_id]) if @user.blank?
     unless current_user?(@user) || current_user.admin?
-      flash[:danger] = "編集権限がありません。"
+      flash[:danger] = '編集権限がありません。'
       redirect_to(root_url)
     end
   end
