@@ -1,4 +1,8 @@
 class BasesController < ApplicationController
+  before_action :logged_in_user, only: [:index, :new, :creat, :edit, :destroy]
+  before_action :admin_or_correct_user, only: [:index, :new, :creat, :edit, :update, :destroy]
+  before_action :admin_user, only: [:index, :new, :creat, :edit, :update, :destroy]
+  
   def index
     @bases = Base.all
   end
@@ -37,6 +41,7 @@ class BasesController < ApplicationController
     flash[:success] = "#{@base.base_name}のデータを削除しました。"
     redirect_to bases_url
   end
+  
 end
 
   private
@@ -47,3 +52,24 @@ def base_params
   # 必須となるパラメータと許可されたパラメータを指定することができる
   # paramsハッシュでは:userキーを必須とする
 end
+
+def logged_in_user
+  unless logged_in?
+    store_location
+    flash[:danger] = "ログインしてください。"
+    redirect_to login_url
+  end
+end
+
+# システム管理権限所有かどうか判定します。
+def admin_user
+  redirect_to root_url unless current_user.admin?
+end
+
+def admin_or_correct_user
+  unless current_user.admin?
+  flash[:danger] = '編集権限がありません。'
+  redirect_to(root_url)
+  end
+end
+
