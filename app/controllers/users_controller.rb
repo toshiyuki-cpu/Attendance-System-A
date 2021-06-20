@@ -181,7 +181,7 @@ class UsersController < ApplicationController
     # どちらかの条件式がtrueか、どちらもtrueの時には何も実行されない処理。
     # このフィルターに引っかかった場合は、トップページへ強制移動
     @user = User.find(params[:user_id]) if @user.blank?
-    unless current_user?(@user) || current_user.admin?
+    unless current_user?(@user) || current_user.admin? || User.superior_except_me(current_user)
     flash[:danger] = '編集権限がありません。'
     redirect_to(root_url)
     end
