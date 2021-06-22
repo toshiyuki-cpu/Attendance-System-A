@@ -10,68 +10,66 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201227085127) do
-
-  create_table "attendances", force: :cascade do |t|
-    t.date "worked_on"
-    t.datetime "started_at"
-    t.datetime "finished_at"
-    t.string "note"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "overtime_work_end_plan"
-    t.string "overtime_content"
-    t.integer "select_superior_id"
-    t.string "hours_of_overtime"
-    t.boolean "next_day"
-    t.string "overtime_status"
-    t.boolean "change_permit"
-    t.datetime "change_started_at"
-    t.datetime "change_finished_at"
-    t.string "change_note"
-    t.integer "change_attendance_superior_id"
-    t.string "change_attendance_status"
-    t.boolean "change_attendance_permit"
-    t.index ["user_id"], name: "index_attendances_on_user_id"
+ActiveRecord::Schema.define(version: 20_201_227_085_127) do
+  create_table 'attendances', force: :cascade do |t|
+    t.date 'worked_on'
+    t.datetime 'started_at'
+    t.datetime 'finished_at'
+    t.string 'note'
+    t.integer 'user_id'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.datetime 'overtime_work_end_plan'
+    t.string 'overtime_content'
+    t.integer 'select_superior_id'
+    t.string 'hours_of_overtime'
+    t.boolean 'next_day'
+    t.string 'overtime_status'
+    t.boolean 'change_permit'
+    t.datetime 'change_started_at'
+    t.datetime 'change_finished_at'
+    t.string 'change_note'
+    t.integer 'change_attendance_superior_id'
+    t.string 'change_attendance_status'
+    t.boolean 'change_attendance_permit'
+    t.index ['user_id'], name: 'index_attendances_on_user_id'
   end
 
-  create_table "bases", force: :cascade do |t|
-    t.integer "base_number"
-    t.string "base_name"
-    t.string "base_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["base_number"], name: "index_bases_on_base_number", unique: true
+  create_table 'bases', force: :cascade do |t|
+    t.integer 'base_number'
+    t.string 'base_name'
+    t.string 'base_type'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.index ['base_number'], name: 'index_bases_on_base_number', unique: true
   end
 
-  create_table "month_reports", force: :cascade do |t|
-    t.date "month"
-    t.string "status"
-    t.integer "approver_id"
-    t.integer "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table 'month_reports', force: :cascade do |t|
+    t.date 'month'
+    t.string 'status'
+    t.integer 'approver_id'
+    t.integer 'user_id'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "password_digest"
-    t.string "remember_digest"
-    t.boolean "admin", default: false
-    t.string "affiliation"
-    t.datetime "basic_time", default: "2021-05-22 23:00:00"
-    t.datetime "work_time", default: "2021-05-22 22:30:00"
-    t.string "employee_number"
-    t.string "uid"
-    t.datetime "basic_work_time"
-    t.datetime "designated_work_start_time", default: "2021-05-23 00:00:00"
-    t.datetime "designated_work_end_time", default: "2021-05-23 09:00:00"
-    t.string "role", default: "employee", null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
+  create_table 'users', force: :cascade do |t|
+    t.string 'name'
+    t.string 'email'
+    t.datetime 'created_at', null: false
+    t.datetime 'updated_at', null: false
+    t.string 'password_digest'
+    t.string 'remember_digest'
+    t.boolean 'admin', default: false
+    t.string 'affiliation'
+    t.datetime 'basic_time', default: '2021-05-22 23:00:00'
+    t.datetime 'work_time', default: '2021-05-22 22:30:00'
+    t.string 'employee_number'
+    t.string 'uid'
+    t.datetime 'basic_work_time'
+    t.datetime 'designated_work_start_time', default: '2021-05-23 00:00:00'
+    t.datetime 'designated_work_end_time', default: '2021-05-23 09:00:00'
+    t.string 'role', default: 'employee', null: false
+    t.index ['email'], name: 'index_users_on_email', unique: true
   end
-
 end

@@ -15,8 +15,8 @@ class MonthReport < ApplicationRecord
   # approver_idを外部キーのカラムと認識させるためuserのidとmonth_reportのapprover_idを外部キーとして関連付ける
   # month_reportヘルパーファイルでも定義している
   belongs_to :month_report_apply_superior, class_name: 'User', foreign_key: :approver_id, optional: true
-  
+
   extend Enumerize
-  # 1ヶ月の勤怠申請状態 ymlファイルも定義する 
-  enumerize :status, in: %i(applying approval negation cancel), scope: true
+  # 1ヶ月の勤怠申請状態 ymlファイルも定義する
+  enumerize :status, in: %i[applying approval negation cancel], scope: true
 end

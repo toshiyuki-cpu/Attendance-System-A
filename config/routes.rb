@@ -37,7 +37,6 @@
 #                                                DELETE /users/:id(.:format)                                                         users#destroy
 
 Rails.application.routes.draw do
-
   root 'static_pages#top'
   get  '/signup', to: 'users#new'
 
@@ -47,19 +46,18 @@ Rails.application.routes.draw do
 
   resources :bases do
     member do
-    get '/edit_basis', to: 'bases#edit'
+      get '/edit_basis', to: 'bases#edit'
     end
   end
 
-  resources :users do #4つの基本操作（POST GET PATCH DELETE）が定義されている
-  
+  resources :users do # 4つの基本操作（POST GET PATCH DELETE）が定義されている
     collection { post :import }
-    
-    member do #生成されたurlにuserを識別するための:idが自動で追加されます（collection(集合)はidなし、member(個別)はidあり）
-      get 'attendances/csv_output' #勤怠のcsv出力
-      get 'in_attendance_employees' #出勤中社員一覧
-      get 'edit_basic-info' #ルーティング設定してアクションを定義
-      patch 'update_basic_info' #ルーティング設定してアクションを定義
+
+    member do # 生成されたurlにuserを識別するための:idが自動で追加されます（collection(集合)はidなし、member(個別)はidあり）
+      get 'attendances/csv_output' # 勤怠のcsv出力
+      get 'in_attendance_employees' # 出勤中社員一覧
+      get 'edit_basic-info' # ルーティング設定してアクションを定義
+      patch 'update_basic_info' # ルーティング設定してアクションを定義
       get 'attendances/editing_one_month' # 勤怠変更申請まとめて送信用
       patch 'attendances/updating_one_month' # 勤怠変更申請まとめて送信用
       get 'attendances/overtime_index' # 社員からの残業申請表示（まとめて返信用ルーティング）
@@ -68,9 +66,9 @@ Rails.application.routes.draw do
       patch 'attendances/reply_one_month' # 社員からの勤怠変更申請一括返信（まとめて返信用ルーティング）
       get 'month_reports/receiving_employee' # 社員から1ヶ月の勤怠申請表示（まとめて返信用ルーティング）
       patch 'month_reports/reply_employee' # 社員から1ヶ月の勤怠申請一括返信（まとめて返信用ルーティング）
-      get 'attendances/approval_log' #勤怠ログ
+      get 'attendances/approval_log' # 勤怠ログ
     end
-    
+
     # resourcesでonly:またはexcept:オプションを使用することで、主要な7つのアクション(index, show, new, create, edit, update, destroy)を限定することができます
     # index =>  /users/1/attendances
     resources :attendances, only: :update do # ネストさせる（1人のユーザーはたくさんのアテンダンスを持っている）
@@ -79,20 +77,19 @@ Rails.application.routes.draw do
       patch 'update_overtime_work_end_plan' # /users/:user_id/attendances/:attendance_id/update_overtime_work_end_plan
       patch 'change_attendance_approval_reply' #  /users/:user_id/attendances/:attendance_id/change_attendance_approval_reply
     end
-    
-    resources :month_reports do 
+
+    resources :month_reports do
       # patch 'receiving' # 上長ページにひとまず表示させる(モーダルにするから必要ない)
       get 'receiving_index' # 通知からモーダル表示
       patch 'reply'
     end
   end
-    # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます
+  # onlyオプションで指定することで、updateアクション以外のルーティングを制限できます
   # Usersリソースのブロック内に記述しているため、設定されるルーティングは
   # HTTP PATCH
   # URL /users/:user_id/attendances/:id  params[:user_id]でユーザーIDが取得できる
-  # PATH user_attendance_path	
+  # PATH user_attendance_path
   # コントローラー#アクション attendances#update となる
- 
-  # get '/overtime_approval_index', to: 'attendances#overtime_approval_index' 
-  
+
+  # get '/overtime_approval_index', to: 'attendances#overtime_approval_index'
 end
