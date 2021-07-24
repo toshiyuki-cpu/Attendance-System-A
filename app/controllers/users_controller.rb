@@ -181,9 +181,15 @@ class UsersController < ApplicationController
     # どちらかの条件式がtrueか、どちらもtrueの時には何も実行されない処理。
     # このフィルターに引っかかった場合は、トップページへ強制移動
     @user = User.find(params[:user_id]) if @user.blank?
-    # 上長の部下（部下の勤怠確認するため）
+    # 上長の部下（部下の勤怠確認するため）roleがsuperiorのidの時
+    
+    # 下記のidとcurrent_userが同じidなら部下の勤怠閲覧できる
+    # select_superior_id(残業申請)attendanceモデル
+    # change_attendance_superior_id（勤怠変更申請）attendanceモデル
+    # approver_id（1ヶ月分の勤怠申請）month_reportモデル
+    
     @subordinate = User.joins(:attendances).merge(Attendance.where(select_superior_id: @user.id).or (Attendance.where(change_attendance_superior_id: @user.id)))
-    unless current_user?(@user) || current_user.admin?
+    unless current_user?(@user) || current_user.admin? || current_user.role.superior?
     flash[:danger] = '編集権限がありません。'
     redirect_to(root_url)
     end
