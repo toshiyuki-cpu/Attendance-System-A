@@ -192,17 +192,16 @@ class UsersController < ApplicationController
     # change_attendance_superior_id（勤怠変更申請）attendanceモデル
     # approver_id（1ヶ月分の勤怠申請）month_reportモデル
     
-    @subordinate = User.joins(:attendances).merge(Attendance.where(select_superior_id: @user.id).or (Attendance.where(change_attendance_superior_id: @user.id)))
-    unless current_user?(@user) || current_user.admin? || current_user.role.superior?
-    flash[:danger] = '編集権限がありません。'
-    redirect_to(root_url)
+    unless current_user?(@user) || current_user.admin? || (current_user.role.superior? && current_user.my_subordinat?(@user)) # my_subordinate?(user)ユーザーモデルで定義
+      flash[:danger] = '編集権限がありません。'
+      redirect_to(root_url)
     end
   end
 
   def admin_user
     unless current_user.admin?
-    flash[:danger] = '編集権限がありません。'
-    redirect_to(root_url)
+      flash[:danger] = '編集権限がありません。'
+      redirect_to(root_url)
     end
   end
 end

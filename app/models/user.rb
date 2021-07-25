@@ -139,4 +139,12 @@ class User < ApplicationRecord
     %w[name email affiliation employee_number uid basic_work_time designated_work_start_time
        designated_work_end_time admin role password]
   end
+  
+  # 引数のユーザーが自分の部下であるかどうか判定する(user_controllerのadmin_or_correct_userで使用)
+  # paramater: user object
+  # Return: boolean
+  def my_subordinat?(user)
+    return false if self.role.employee?
+    user.attendances.exists?(select_superior_id: self.id) || user.attendances.exists?(change_attendance_superior_id: self.id) || user.month_reports.exists?(approver_id: self.id)
+  end
 end
