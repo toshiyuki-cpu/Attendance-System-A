@@ -79,7 +79,11 @@ class UsersController < ApplicationController
     if @user.update_attributes(user_params)
       # user controllerのvalidationにallow_nil: trueオプションを追加するとパスワード入力しなくても更新できる
       flash[:success] = 'ユーザー情報を更新しました。'
-      redirect_to users_url
+      if current_user.admin?
+        redirect_to users_url
+      else
+        redirect_to @user 
+      end
     else
       render :edit
     end
@@ -183,7 +187,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:user_id]) if @user.blank?
     # 上長の部下（部下の勤怠確認するため）roleがsuperiorのidの時
     
-    # 下記のidとcurrent_userが同じidなら部下の勤怠閲覧できる
+    # 下記のidとcurrent_userが同じidなら部下。上長は部下の勤怠閲覧できる
     # select_superior_id(残業申請)attendanceモデル
     # change_attendance_superior_id（勤怠変更申請）attendanceモデル
     # approver_id（1ヶ月分の勤怠申請）month_reportモデル
