@@ -168,7 +168,7 @@ class UsersController < ApplicationController
 
   # このメソッドは前述したparams[:user]の代わり
   def user_params
-    params.require(:user).permit(:name, :email, :affiliation, :employee_number, :password, :password_confirmation) # Storong Parameter
+    params.require(:user).permit(:name, :email, :affiliation, :employee_number, :password, :password_confirmation, :uid, :basic_time, :designated_work_start_time, :designated_work_end_time) # Storong Parameter
     # 必須となるパラメータと許可されたパラメータを指定することができる
     # paramsハッシュでは:userキーを必須とする
   end
