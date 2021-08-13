@@ -6,7 +6,6 @@
         <%= link_to :back do %><button type="button" class="close" >&times;</button>
         <% end %></h3>
       </div>
-     
     </div>
     <div class="modal-body">
     <%= form_with model: @user, url: attendances_overtime_reply_user_path(@user), local: true, method: :patch do |f| %>
