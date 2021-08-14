@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: %i[show edit update destroy edit_basic_info update_basic_info]
   before_action :logged_in_user, only: %i[index show edit update destroy edit_basic_info update_basic_info] # ログイン済みのユーザー
   before_action :correct_user, only: %i[edit_basic_info] # アクセスしたユーザーが現在ログインしているユーザーか
+  before_action :superior_and_subordinate, only: :edit
   before_action :admin_or_correct_user, only: %i[show edit edit_basic_info]
   before_action :admin_user, only: %i[index destroy edit_basic_info update_basic_info in_attendance_employees]
   before_action :set_one_month, only: :show
@@ -194,7 +195,16 @@ class UsersController < ApplicationController
     # approver_id（1ヶ月分の勤怠申請）month_reportモデル
     
     unless current_user?(@user) || (current_user.role.superior? && current_user.my_subordinat?(@user)) # my_subordinate?(user)ユーザーモデルで定義
-    # 部下のユーザー編集画面には遷移できないようにしたい
+      flash[:danger] = '編集権限がありません。'
+      redirect_to(root_url)
+    end
+  end
+  
+  # 部下のユーザー編集画面には遷移できないように
+  # before_action :superior_and_subordinate, only: :editを
+  # before_action :admin_or_correct_user, only: %i[show edit edit_basic_info]の前に記述
+  def superior_and_subordinate
+    if current_user.role.superior? && current_user.my_subordinat?(@user)
       flash[:danger] = '編集権限がありません。'
       redirect_to(root_url)
     end
