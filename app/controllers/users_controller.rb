@@ -194,6 +194,7 @@ class UsersController < ApplicationController
     # approver_id（1ヶ月分の勤怠申請）month_reportモデル
     
     unless current_user?(@user) || (current_user.role.superior? && current_user.my_subordinat?(@user)) # my_subordinate?(user)ユーザーモデルで定義
+    # 部下のユーザー編集画面には遷移できないようにしたい
       flash[:danger] = '編集権限がありません。'
       redirect_to(root_url)
     end
