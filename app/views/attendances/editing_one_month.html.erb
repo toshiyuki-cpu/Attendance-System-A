@@ -48,9 +48,9 @@
                 <% end %>
               <% end %>
               <% if Date.current < day.worked_on %> <!-- 当日から判断して翌日以降は編集不可 -->
-                <td><%= attendance.check_box :next_day, {disabled: true}, true, nil %></td>
+                <td><%= attendance.check_box :next_day, {checked: false}, true, nil %></td>
               <% else %>
-                <td><%= attendance.check_box :next_day, {}, true, nil %></td>
+                <td><%= attendance.check_box :next_day, {checked: false}, true, nil %></td>
               <% end %>
                 <td>
                   <% if day.change_attendance_status&.approval? %>
