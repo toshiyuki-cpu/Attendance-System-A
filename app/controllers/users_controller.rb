@@ -5,6 +5,7 @@ class UsersController < ApplicationController
   before_action :authorize_subordinate, only: :edit
   before_action :admin_or_correct_user, only: %i[show edit edit_basic_info]
   before_action :admin_user, only: %i[index destroy edit_basic_info update_basic_info in_attendance_employees]
+  before_action :authorize_admin, only: %i[show edit]
   before_action :set_one_month, only: :show
 
   def index
@@ -205,6 +206,14 @@ class UsersController < ApplicationController
   # before_action :admin_or_correct_user, only: %i[show edit edit_basic_info]の前に記述
   def authorize_subordinate
     if current_user.role.superior? && current_user.my_subordinat?(@user)
+      flash[:danger] = '編集権限がありません。'
+      redirect_to(root_url)
+    end
+  end
+  
+  # 管理者は自分の勤怠、編集画面できない
+  def authorize_admin
+    if current_user.admin?
       flash[:danger] = '編集権限がありません。'
       redirect_to(root_url)
     end
