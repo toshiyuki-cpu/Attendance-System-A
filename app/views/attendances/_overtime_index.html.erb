@@ -47,7 +47,7 @@
                 <td><%= hours_of_overtime(day.next_day, @user.designated_work_end_time, day.overtime_work_end_plan) %></td>
                 <td><%= day.overtime_content %></td>
                 <td><%= attendance.select :overtime_status, Attendance.overtime_status.options, {}, class: "form-control" %></td>
-                <td><%= attendance.check_box :change_permit, {}, true, false %></td>
+                <td><%= attendance.check_box :change_permit, checked: false %></td>
                 <td><%= link_to '確認', user_path(key, date: day.worked_on.beginning_of_month.to_s), class: "btn btn-primary" %></td>
               </tr>
             <% end %>
