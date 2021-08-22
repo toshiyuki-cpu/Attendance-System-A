@@ -63,7 +63,6 @@ class AttendancesController < ApplicationController
         # has_changes_to_save? 変更を検知して true / falseを返す
         # (!マークをつけている)attendanceが変更ない(false)ならnext
         next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save?
-
         attendance.change_attendance_status = :applying
         attendance.save!(context: :change_attendance_update) # コンテキストattendance.rbで
         # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
@@ -165,10 +164,10 @@ class AttendancesController < ApplicationController
     @user = User.find(params[:id])
     overtime_reply_params.each do |id, item|
       attendance = Attendance.find(id)
+      attendance.change_permit = false # 複数回同じ申請をチェックして繰り返すと、見た目チェック無しでもDB的にtrueになってしまうのでリセットする
       attendance.attributes = item
       # if attendance.change_permit == false
       next unless attendance.change_permit
-
       attendance.overtime_status = item[:overtime_status]
       attendance.update_attributes(item)
       flash[:success] = '社員からの残業申請を返信しました。'
