@@ -63,7 +63,6 @@ class AttendancesController < ApplicationController
         # has_changes_to_save? 変更を検知して true / falseを返す
         # (!マークをつけている)attendanceが変更ない(false)ならnext
         next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save?
-
         attendance.change_attendance_status = :applying
         attendance.save!(context: :change_attendance_update) # コンテキストattendance.rbで
         # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
