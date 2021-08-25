@@ -62,7 +62,7 @@ class AttendancesController < ApplicationController
         # { |v| v.blank? }　valueが空ならnext　
         # has_changes_to_save? 変更を検知して true / falseを返す
         # (!マークをつけている)attendanceが変更ない(false)ならnext
-        next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save?
+        next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save? #ここの条件が原因？2回目以降は失敗とみなしてしまう？
         attendance.change_attendance_status = :applying
         attendance.save!(context: :change_attendance_update) # コンテキストattendance.rbで
         # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
@@ -75,7 +75,7 @@ class AttendancesController < ApplicationController
     flash[:success] = '上長へ勤怠の変更を申請しました。'
     redirect_to user_url(date: params[:date])
   end
-
+  
   # 勤怠変更申請まとめて返信表示
   def receiving_one_month
     @user = User.find(params[:id])
