@@ -52,25 +52,28 @@ class AttendancesController < ApplicationController
   # 勤怠変更申請、上長へまとめて送信
   def updating_one_month
     @user = User.find(params[:id])
-    ActiveRecord::Base.transaction do # トランザクションを開始します。
-      change_attendances_params.each do |id, item| # idがkey,itemがvalue
-        # attendanceを取得
-        attendance = Attendance.find(id)
-        # パラメーターを代入している
-        attendance.attributes = item
-        # 変更ないレコードはスルーさせる
-        # { |v| v.blank? }　valueが空ならnext　
-        # has_changes_to_save? 変更を検知して true / falseを返す
-        # (!マークをつけている)attendanceが変更ない(false)ならnext
-        next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save? #ここの条件が原因？2回目以降は失敗とみなしてしまう？
-        attendance.change_attendance_status = :applying
-        attendance.save!(context: :change_attendance_update) # コンテキストattendance.rbで
-        # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
-      rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
-        flash[:danger] = attendance.errors.full_messages.join(', ')
-        # flash[:danger] = attendance.errors.full_messages.to_sentence でも上と同じ
-        redirect_to attendances_editing_one_month_user_url(date: params[:date]) and return
+    begin
+      ActiveRecord::Base.transaction do # トランザクションを開始します。
+        change_attendances_params.each do |id, item| # idがkey,itemがvalue
+          attendance = Attendance.find(id)
+          # パラメーターを代入している
+          attendance.attributes = item
+          # 変更ないレコードはスルーさせる
+          # { |v| v.blank? }　valueが空ならnext　
+          # has_changes_to_save? 変更を検知して true / falseを返す
+          # (!マークをつけている)attendanceが変更ない(false)ならnext
+          next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save? #ここの条件が原因？2回目以降は失敗とみなしてしまう？
+          attendance.change_attendance_status = :applying
+          attendance.save!(context: :change_attendance_update) # コンテキストattendance.rbで
+          # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
+        #rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+        end
       end
+    rescue
+      #[:danger] = attendance.errors.full_messages.join(', ')
+      flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
+      #flash[:danger] = attendance.errors.full_messages.to_sentence でも上と同じ
+      redirect_to attendances_editing_one_month_user_url(date: params[:date]) and return
     end
     flash[:success] = '上長へ勤怠の変更を申請しました。'
     redirect_to user_url(date: params[:date])
