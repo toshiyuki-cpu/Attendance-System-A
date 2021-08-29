@@ -54,19 +54,19 @@ class AttendancesController < ApplicationController
   def updating_one_month
     @user = User.find(params[:id])
     begin
-      ActiveRecord::Base.transaction do # トランザクションを開始します。
-        change_attendances_params.each do |id, item| # idがkey,itemがvalue
-          attendance = Attendance.find(id)
-          # パラメーターを代入している
-          attendance.attributes = item
-          # 変更ないレコードはスルーさせる
-          # { |v| v.blank? }　valueが空ならnext　
-          # has_changes_to_save? 変更を検知して true / falseを返す
-          # (!マークをつけている)attendanceが変更ない(false)ならnext
-          next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save? #ここの条件が原因？2回目以降は失敗とみなしてしまう？
-          attendance.change_attendance_status = :applying
-          attendance.save!(context: :change_attendance_update) # コンテキストattendance.rbで
-          # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
+    ActiveRecord::Base.transaction do # トランザクションを開始します。
+      change_attendances_params.each do |id, item| # idがkey,itemがvalue
+        attendance = Attendance.find(id)
+        # パラメーターを代入している
+        attendance.attributes = item
+        # 変更ないレコードはスルーさせる
+        # { |v| v.blank? }　valueが空ならnext　
+        # has_changes_to_save? 変更を検知して true / falseを返す
+        # (!マークをつけている)attendanceが変更ない(false)ならnext
+        next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save?
+        attendance.change_attendance_status = :applying
+        attendance.save(context: :change_attendance_update) # コンテキストattendance.rbで
+        # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
         #rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
         end
       end
@@ -250,7 +250,7 @@ class AttendancesController < ApplicationController
     end
   end
   
-  # 管理者の制限(勤怠編集画面に遷移させない
+  # 管理者の制限(勤怠編集画面に遷移させない）
   def authorize_admin
     if current_user.admin?
       flash[:danger] = '編集権限がありません。'
