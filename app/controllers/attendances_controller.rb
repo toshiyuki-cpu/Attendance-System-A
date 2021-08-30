@@ -53,6 +53,7 @@ class AttendancesController < ApplicationController
   # 勤怠変更申請、上長へまとめて送信
   def updating_one_month
     @user = User.find(params[:id])
+    @attendance = Attendance.find(params[:id])
     begin
     ActiveRecord::Base.transaction do # トランザクションを開始します。
       change_attendances_params.each do |id, item| # idがkey,itemがvalue
@@ -68,16 +69,23 @@ class AttendancesController < ApplicationController
         attendance.save(context: :change_attendance_update) # コンテキストattendance.rbで
         # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
         #rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+        @errors = attendance.errors.full_messages
+        #@errors_count = attendance.errors.full_messages.count
         end
       end
     rescue
       #[:danger] = attendance.errors.full_messages.join(', ')
-      flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
+      #flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
       #flash[:danger] = attendance.errors.full_messages.to_sentence でも上と同じ
-      redirect_to attendances_editing_one_month_user_url(date: params[:date]) and return
+      #redirect_to attendances_editing_one_month_user_url(date: params[:date]) and return
     end
-    flash[:success] = '上長へ勤怠の変更を申請しました。'
-    redirect_to user_url(date: params[:date])
+    if @errors.present?
+      flash[:danger] = "無効な入力データがありました。再度申請して下さい。"
+      redirect_to user_url(date: params[:date])
+    else
+      flash[:success] = "上長へ勤怠変更申請しました。"
+      redirect_to user_url(date: params[:date])
+    end
   end
   
   # 勤怠変更申請まとめて返信表示
