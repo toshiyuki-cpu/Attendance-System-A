@@ -53,7 +53,6 @@ class AttendancesController < ApplicationController
   # 勤怠変更申請、上長へまとめて送信
   def updating_one_month
     @user = User.find(params[:id])
-    @attendance = Attendance.find(params[:id])
     error_messages = []
     success = false
     # トランザクションを開始します。
