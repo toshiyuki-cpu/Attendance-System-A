@@ -54,30 +54,34 @@ class AttendancesController < ApplicationController
   def updating_one_month
     @user = User.find(params[:id])
     @attendance = Attendance.find(params[:id])
-    begin
-    ActiveRecord::Base.transaction do # トランザクションを開始します。
-      change_attendances_params.each do |id, item| # idがkey,itemがvalue
-        attendance = Attendance.find(id)
+    error_messages = []
+    success = false
+    # トランザクションを開始します。
+    ActiveRecord::Base.transaction do
+      # idがkey,itemがvalue
+      change_attendances_params.each do |id, item|
         # パラメーターを代入している
+        attendance = Attendance.find(id)
         attendance.attributes = item
+
         # 変更ないレコードはスルーさせる
         # { |v| v.blank? }　valueが空ならnext　
         # has_changes_to_save? 変更を検知して true / falseを返す
         # (!マークをつけている)attendanceが変更ない(false)ならnext
-        #next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save?
+        next if item.values.all? { |v| v.blank? } || !attendance.has_changes_to_save?
+
         attendance.change_attendance_status = :applying
-        attendance.save if attendance.change_attendance_superior_id #(context: :change_attendance_update) # コンテキストattendance.rbで
-        # save!メソッド：保存に失敗したら例外が発生。保存できなかった場合の処理はrescue節で行う必要がある
-        #rescue ActiveRecord::RecordInvalid # トランザクションによるエラーの分岐です。
+        if attendance.save(context: :change_attendance_update)
+          success = true
+        else
+          error_messages.push("#{attendance.worked_on}: #{attendance.errors.full_messages.join(', ')}")
+        end
       end
     end
-    #rescue
-      #[:danger] = attendance.errors.full_messages.join(', ')
-      #flash[:danger] = "無効な入力データがあった為、更新をキャンセルしました。"
-      #flash[:danger] = attendance.errors.full_messages.to_sentence でも上と同じ
-      #redirect_to attendances_editing_one_month_user_url(date: params[:date]) and return
-    end
-    flash[:success] = '上長へ勤怠の変更を申請しました。'
+
+    flash[:success] = '上長へ勤怠の変更を申請しました。' if success
+    flash[:danger] = error_messages.join(', ') if error_messages.present? # 表示のときに改行したい場合はぐぐって見てください。
+    
     redirect_to user_url(date: params[:date])
   end
   
