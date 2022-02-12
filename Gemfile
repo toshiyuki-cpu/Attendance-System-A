@@ -9,7 +9,7 @@ gem 'enumerize'
 gem 'faker' # サンプルユーザーを複数まとめてコマンド一発で作成する
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
-gem 'puma', '~> 3.7'
+gem 'puma', '~> 4.3'
 gem 'rails', '~> 5.1.6'
 gem 'rails-i18n' # 日本語化や国際化では、rails-i18n gemを利用
 gem 'roo' # csv import
